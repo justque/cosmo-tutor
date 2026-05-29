@@ -11,7 +11,8 @@ Cosmo is a web-based AI science tutor for kids aged 5–8, built with Next.js, C
 1. **Anthropic API Key** — Get one at https://console.anthropic.com/
 2. **Supabase Account** — Create one at https://supabase.com/
 3. **Unsplash API Key** — Create one at https://unsplash.com/developers
-4. **GitHub Account** — To deploy with Vercel
+4. **Google OAuth Credentials** — (Optional) Set up in Google Cloud Console for "Sign in with Google" — See [GOOGLE_OAUTH_SETUP.md](GOOGLE_OAUTH_SETUP.md)
+5. **GitHub Account** — To deploy with Vercel
 
 ## Local Development
 
@@ -43,6 +44,9 @@ NEXT_PUBLIC_UNSPLASH_API_KEY=your-unsplash-api-key
 1. Create a new Supabase project
 2. Run the SQL migration in `supabase/migrations/001_initial_schema.sql` to create tables and RLS policies
 3. Copy your project URL and API keys from the Supabase dashboard
+4. **(Optional) Enable Google OAuth:**
+   - Follow [GOOGLE_OAUTH_SETUP.md](GOOGLE_OAUTH_SETUP.md) to add Google Sign-In support
+   - This allows parents to sign up with their Google account
 
 ### 4. Run Locally
 
