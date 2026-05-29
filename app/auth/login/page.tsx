@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
+import { GoogleAuthButton } from '@/components/GoogleAuthButton'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -39,6 +40,19 @@ export default function LoginPage() {
           <div className="text-6xl mb-4">🤖</div>
           <h1 className="text-3xl font-bold">Welcome Back</h1>
           <p className="text-gray-400 mt-2">Parent login</p>
+        </div>
+
+        <div className="space-y-4 mb-6">
+          <GoogleAuthButton text="Sign in with Google" />
+
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-slate-700"></div>
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-2 bg-slate-900 text-gray-400">Or continue with email</span>
+            </div>
+          </div>
         </div>
 
         <form onSubmit={handleLogin} className="space-y-4">
