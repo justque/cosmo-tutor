@@ -185,10 +185,16 @@ export default function DashboardPage() {
                   <p className="text-gray-400 mb-4">Age {child.age}</p>
 
                   <button
-                    onClick={() => handleStartLearning(child.id)}
-                    className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg font-semibold"
+                    onClick={() => router.push(`/adventure?childId=${child.id}`)}
+                    className="w-full px-4 py-3 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 rounded-lg font-bold text-white mb-2"
                   >
-                    Start Learning
+                    🚀 Continue Adventure
+                  </button>
+                  <button
+                    onClick={() => handleStartLearning(child.id)}
+                    className="w-full px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg font-semibold text-sm"
+                  >
+                    Free Chat Mode
                   </button>
                 </div>
               ))}

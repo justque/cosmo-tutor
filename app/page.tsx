@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
+import { supabase } from '@/lib/supabase'
 
 export default function Home() {
   const router = useRouter()
@@ -19,8 +20,15 @@ export default function Home() {
     setStars(generatedStars)
   }, [])
 
-  const handleGetStarted = () => {
-    router.push('/auth/signup')
+  const handleGetStarted = async () => {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
+    if (user) {
+      router.push('/adventure')
+    } else {
+      router.push('/auth/signup')
+    }
   }
 
   return (
@@ -65,7 +73,7 @@ export default function Home() {
               onClick={handleGetStarted}
               className="px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 rounded-lg font-bold text-lg transition-all transform hover:scale-105 active:scale-95"
             >
-              Start Learning Now ✨
+              Start the Adventure! 🚀
             </button>
 
             <button
