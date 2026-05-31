@@ -83,10 +83,6 @@ export default function DashboardPage() {
     }
   }
 
-  const handleStartLearning = (childId: string) => {
-    router.push(`/learn?childId=${childId}`)
-  }
-
   const handleLogout = async () => {
     await supabase.auth.signOut()
     router.push('/')
@@ -186,15 +182,9 @@ export default function DashboardPage() {
 
                   <button
                     onClick={() => router.push(`/adventure?childId=${child.id}`)}
-                    className="w-full px-4 py-3 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 rounded-lg font-bold text-white mb-2"
+                    className="w-full px-4 py-3 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 rounded-lg font-bold text-white"
                   >
                     🚀 Continue Adventure
-                  </button>
-                  <button
-                    onClick={() => handleStartLearning(child.id)}
-                    className="w-full px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg font-semibold text-sm"
-                  >
-                    Free Chat Mode
                   </button>
                 </div>
               ))}

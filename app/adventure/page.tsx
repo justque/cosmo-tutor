@@ -199,19 +199,13 @@ export default function AdventurePage() {
             >
               <div className="text-9xl">🏆</div>
               <h2 className="text-4xl font-bold">YOU ARE A SCIENCE LEGEND!</h2>
-              <CosmoNarrator text="You did it! You explored ALL the topics with me! You are officially the smartest space cadet I know. Want to chat freely with me anytime?" />
+              <CosmoNarrator text="You did it! You explored ALL the topics with me! You are officially the smartest space cadet I know." />
               <div className="flex justify-center gap-3">
                 <button
                   onClick={() => router.push('/dashboard')}
-                  className="px-6 py-3 bg-slate-700 hover:bg-slate-600 rounded-lg"
-                >
-                  Back to Dashboard
-                </button>
-                <button
-                  onClick={() => router.push('/learn')}
                   className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 rounded-lg font-bold"
                 >
-                  Free Chat with Cosmo
+                  Back to Dashboard
                 </button>
               </div>
             </motion.div>

@@ -24,35 +24,47 @@ export function AskCosmoPalette({ sessionId, childId, topicSlug, locationContext
   const send = async () => {
     if (!input.trim() || loading) return
     const userMsg: Msg = { role: 'user', content: input }
-    setMessages((m) => [...m, userMsg])
+    setMessages((m) => [...m, userMsg, { role: 'assistant', content: '' }])
+    const question = input
     setInput('')
     setLoading(true)
     try {
-      const res = await fetch('/api/chat', {
+      const res = await fetch('/api/chat/stream', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          sessionId,
-          childId,
-          topicSlug,
-          message: `(While exploring: ${locationContext}) ${userMsg.content}`,
-          userMessage: userMsg.content,
-        }),
+        body: JSON.stringify({ sessionId, childId, userMessage: question, locationContext }),
       })
-      const data = await res.json()
-      const reply: Msg = {
-        role: 'assistant',
-        content:
-          data.message ??
-          data.response ??
-          "I'll think about that more! Let's keep exploring.",
+      if (!res.body) throw new Error('No stream')
+      const reader = res.body.getReader()
+      const decoder = new TextDecoder()
+      let buffer = ''
+      while (true) {
+        const { value, done } = await reader.read()
+        if (done) break
+        buffer += decoder.decode(value, { stream: true })
+        const lines = buffer.split('\n\n')
+        buffer = lines.pop() ?? ''
+        for (const line of lines) {
+          if (!line.startsWith('data: ')) continue
+          try {
+            const data = JSON.parse(line.slice(6))
+            if (data.chunk) {
+              setMessages((m) => {
+                const copy = [...m]
+                const last = copy[copy.length - 1]
+                copy[copy.length - 1] = { ...last, content: last.content + data.chunk }
+                return copy
+              })
+            }
+          } catch {}
+        }
       }
-      setMessages((m) => [...m, reply])
     } catch {
-      setMessages((m) => [
-        ...m,
-        { role: 'assistant', content: "Oops, my circuits got tangled. Let's keep going!" },
-      ])
+      setMessages((m) => {
+        const copy = [...m]
+        copy[copy.length - 1] = { role: 'assistant', content: "Oops, my circuits got tangled!" }
+        return copy
+      })
     } finally {
       setLoading(false)
     }
