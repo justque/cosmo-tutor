@@ -1,14 +1,54 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getCosmoResponse, parseVisualTag } from '@/lib/claude'
 import { getSupabaseServerClient } from '@/lib/supabase'
+import { evaluateCheckpoint } from '@/lib/lessonEngine'
 
 export async function POST(req: NextRequest) {
   try {
-    const { userMessage, sessionId, childId } = await req.json()
+    const {
+      sessionId,
+      childId,
+      topicSlug,
+      message,
+      userMessage,
+      isCheckpointSubmission,
+      checkpointStepIndex,
+      selectedOptionIndex,
+      conversationHistory,
+    } = await req.json()
 
-    if (!userMessage || !sessionId || !childId) {
+    if (!sessionId || !childId) {
       return NextResponse.json(
-        { error: 'Missing required fields' },
+        { error: 'Missing session or child ID' },
+        { status: 400 }
+      )
+    }
+
+    // CHECKPOINT EVALUATION PATH
+    if (
+      isCheckpointSubmission &&
+      checkpointStepIndex !== undefined &&
+      selectedOptionIndex !== undefined
+    ) {
+      const result = evaluateCheckpoint(
+        topicSlug,
+        checkpointStepIndex,
+        selectedOptionIndex
+      )
+
+      return NextResponse.json({
+        type: 'checkpoint',
+        correct: result.correct,
+        feedback: result.feedback,
+        hint: result.hint,
+      })
+    }
+
+    // FREE-FORM CHAT PATH (existing logic)
+    const chatMessage = message || userMessage
+    if (!chatMessage) {
+      return NextResponse.json(
+        { error: 'Message is required for chat' },
         { status: 400 }
       )
     }
@@ -41,14 +81,14 @@ export async function POST(req: NextRequest) {
       .limit(10)
 
     // Call Claude
-    const response = await getCosmoResponse(userMessage, messages || [])
+    const response = await getCosmoResponse(chatMessage, messages || [])
 
     // Parse visual tag
     const { text: cleanResponse, visual } = parseVisualTag(response)
 
     // Save messages to database
     await supabase.from('messages').insert([
-      { session_id: sessionId, role: 'user', content: userMessage },
+      { session_id: sessionId, role: 'user', content: chatMessage },
       { session_id: sessionId, role: 'assistant', content: cleanResponse },
     ])
 
