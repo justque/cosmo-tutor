@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { supabase } from '@/lib/supabase'
@@ -20,6 +20,20 @@ import { CosmoNarrator } from '@/components/adventure/CosmoNarrator'
 type Mode = 'location' | 'checkpoint' | 'finished'
 
 export default function AdventurePage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center">
+          <div className="text-white text-xl">Loading your adventure...</div>
+        </div>
+      }
+    >
+      <AdventureInner />
+    </Suspense>
+  )
+}
+
+function AdventureInner() {
   const router = useRouter()
   const searchParams = useSearchParams()
 
