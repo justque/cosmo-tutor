@@ -3,6 +3,8 @@
 import { useRef, useEffect, useState } from 'react'
 import { CosmoMessage } from './CosmoMessage'
 import { VoiceButton } from './VoiceButton'
+import { LessonStep as LessonStepComponent } from './LessonStep'
+import { LessonStep as LessonStepType } from '@/lib/lessons'
 
 interface Message {
   role: 'user' | 'assistant'
@@ -17,9 +19,23 @@ interface ChatPanelProps {
   sessionId: string
   childId: string
   topicId?: string
+  isLessonMode?: boolean
+  currentLessonStep?: LessonStepType | null
+  currentStepIndex?: number
+  totalLessonSteps?: number
+  onCheckpointSubmit?: (selectedOptionIndex: number) => Promise<void>
 }
 
-export function ChatPanel({ sessionId, childId, topicId }: ChatPanelProps) {
+export function ChatPanel({
+  sessionId,
+  childId,
+  topicId,
+  isLessonMode = false,
+  currentLessonStep = null,
+  currentStepIndex = undefined,
+  totalLessonSteps = undefined,
+  onCheckpointSubmit,
+}: ChatPanelProps) {
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
@@ -91,6 +107,24 @@ export function ChatPanel({ sessionId, childId, topicId }: ChatPanelProps) {
     handleSendMessage(text)
   }
 
+  // Lesson mode: show checkpoint UI
+  if (isLessonMode && currentLessonStep && currentStepIndex !== undefined) {
+    return (
+      <div className="flex flex-col h-full bg-gradient-to-b from-slate-900 to-slate-800 text-white">
+        <div className="flex-1 overflow-y-auto p-4 flex items-center justify-center">
+          <LessonStepComponent
+            step={currentLessonStep}
+            stepNumber={currentStepIndex}
+            totalSteps={totalLessonSteps ?? 4}
+            onCheckpointSubmit={onCheckpointSubmit || (() => {})}
+            isSubmitting={loading}
+          />
+        </div>
+      </div>
+    )
+  }
+
+  // Chat mode: show messages and input
   return (
     <div className="flex flex-col h-full bg-gradient-to-b from-slate-900 to-slate-800 text-white">
       {/* Messages */}
