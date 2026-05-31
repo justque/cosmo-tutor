@@ -14,7 +14,6 @@ export async function POST(req: NextRequest) {
       isCheckpointSubmission,
       checkpointStepIndex,
       selectedOptionIndex,
-      conversationHistory,
     } = await req.json()
 
     if (!sessionId || !childId) {

@@ -133,9 +133,9 @@ export function ChatPanel({
           <div className="flex items-center justify-center h-full">
             <div className="text-center">
               <div className="text-6xl mb-4">🤖</div>
-              <p className="text-xl font-semibold">Hi! I'm Cosmo!</p>
+              <p className="text-xl font-semibold">Hi! I&apos;m Cosmo!</p>
               <p className="text-sm text-gray-300 mt-2">
-                Ask me any science question and I'll explain it in a fun way! 🚀
+                Ask me any science question and I&apos;ll explain it in a fun way! 🚀
               </p>
             </div>
           </div>

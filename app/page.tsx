@@ -1,9 +1,23 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import { useState, useEffect } from 'react'
 
 export default function Home() {
   const router = useRouter()
+  const [stars, setStars] = useState<Array<{ width: number; height: number; left: number; top: number; duration: number }>>([])
+
+  useEffect(() => {
+    const generatedStars = [...Array(50)].map(() => ({
+      width: Math.random() * 3,
+      height: Math.random() * 3,
+      left: Math.random() * 100,
+      top: Math.random() * 100,
+      duration: Math.random() * 3 + 2,
+    }))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setStars(generatedStars)
+  }, [])
 
   const handleGetStarted = () => {
     router.push('/auth/signup')
@@ -13,16 +27,16 @@ export default function Home() {
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white overflow-hidden">
       {/* Animated background stars */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        {[...Array(50)].map((_, i) => (
+        {stars.map((star, i) => (
           <div
             key={i}
             className="absolute bg-white rounded-full opacity-50"
             style={{
-              width: Math.random() * 3 + 'px',
-              height: Math.random() * 3 + 'px',
-              left: Math.random() * 100 + '%',
-              top: Math.random() * 100 + '%',
-              animation: `twinkle ${Math.random() * 3 + 2}s infinite`,
+              width: star.width + 'px',
+              height: star.height + 'px',
+              left: star.left + '%',
+              top: star.top + '%',
+              animation: `twinkle ${star.duration}s infinite`,
             }}
           />
         ))}
@@ -76,7 +90,7 @@ export default function Home() {
               <div className="text-4xl mb-3">🎤</div>
               <h3 className="font-bold text-lg mb-2">Speak & Listen</h3>
               <p className="text-gray-400 text-sm">
-                Use voice input and hear Cosmo's answers out loud!
+                Use voice input and hear Cosmo&apos;s answers out loud!
               </p>
             </div>
 

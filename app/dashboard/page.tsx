@@ -110,7 +110,7 @@ export default function DashboardPage() {
         <div className="flex justify-between items-center mb-8">
           <div>
             <h1 className="text-4xl font-bold mb-2">Parent Dashboard</h1>
-            <p className="text-gray-400">Manage your children's learning</p>
+            <p className="text-gray-400">Manage your children&apos;s learning</p>
           </div>
           <button
             onClick={handleLogout}

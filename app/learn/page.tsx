@@ -11,17 +11,6 @@ import {
   evaluateCheckpoint,
   isLessonComplete,
 } from '@/lib/lessonEngine'
-import { LessonStep } from '@/lib/lessons'
-
-interface LessonProgress {
-  id: string
-  child_id: string
-  topic_id: string
-  current_step: number
-  completed_at: string | null
-  created_at: string
-  updated_at: string
-}
 
 interface CheckpointFeedback {
   message: string
@@ -34,7 +23,6 @@ export default function LearnPage() {
   const searchParams = useSearchParams()
 
   // Auth & User State
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [childId, setChildId] = useState<string>('')
   const [sessionId, setSessionId] = useState<string>('')
 
@@ -62,8 +50,6 @@ export default function LearnPage() {
           return
         }
 
-        setIsAuthenticated(true)
-
         // Get child ID from URL params or fetch first child
         let cId: string | null = searchParams.get('childId')
 
@@ -89,7 +75,7 @@ export default function LearnPage() {
         setChildId(cId)
 
         // Get topic ID from URL params
-        let topicId: string | null = searchParams.get('topicId')
+        const topicId: string | null = searchParams.get('topicId')
 
         if (topicId) {
           setSelectedTopic(topicId)
@@ -147,7 +133,6 @@ export default function LearnPage() {
     })
 
     if (result.correct) {
-      const totalSteps = getTotalLessonSteps(selectedTopic)
       const nextStepIndex = currentStepIndex + 1
 
       // Fire-and-forget upsert to database
