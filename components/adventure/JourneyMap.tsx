@@ -13,13 +13,13 @@ export function JourneyMap({ topics, currentTopicId, completedTopicIds }: Props)
   return (
     <div className="w-full bg-slate-900/60 backdrop-blur border border-slate-700 rounded-2xl p-4">
       <p className="text-sm text-gray-400 mb-3 text-center uppercase tracking-wider">Your Journey</p>
-      <div className="flex items-center justify-between gap-2">
+      <div className="flex items-start gap-1">
         {topics.map((topic, i) => {
           const isCompleted = completedTopicIds.includes(topic.id)
           const isCurrent = topic.id === currentTopicId
           return (
-            <div key={topic.id} className="flex items-center flex-1">
-              <div className="flex flex-col items-center flex-1">
+            <div key={topic.id} className="flex items-start flex-1 min-w-0">
+              <div className="flex flex-col items-center w-full">
                 <motion.div
                   animate={isCurrent ? { scale: [1, 1.15, 1] } : {}}
                   transition={{ duration: 1.5, repeat: Infinity }}
@@ -31,10 +31,10 @@ export function JourneyMap({ topics, currentTopicId, completedTopicIds }: Props)
                       : 'bg-slate-800 border-slate-600 opacity-60'
                   }`}
                 >
-                  {isCompleted ? '✓' : topic.emoji}
+                  <span className="leading-none">{isCompleted ? '✓' : topic.emoji}</span>
                 </motion.div>
                 <p
-                  className={`text-xs mt-2 text-center font-medium ${
+                  className={`text-xs mt-2 text-center font-medium truncate w-full ${
                     isCurrent ? 'text-white' : 'text-gray-400'
                   }`}
                 >
@@ -43,7 +43,7 @@ export function JourneyMap({ topics, currentTopicId, completedTopicIds }: Props)
               </div>
               {i < topics.length - 1 && (
                 <div
-                  className={`h-1 flex-1 mx-1 rounded ${
+                  className={`h-1 flex-1 mt-7 mx-1 rounded ${
                     isCompleted ? 'bg-green-400' : 'bg-slate-700'
                   }`}
                 />
