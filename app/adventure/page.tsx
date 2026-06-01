@@ -16,8 +16,9 @@ import { LocationView } from '@/components/adventure/LocationView'
 import { CheckpointAssessment } from '@/components/adventure/CheckpointAssessment'
 import { AskCosmoPalette } from '@/components/adventure/AskCosmoPalette'
 import { CosmoNarrator } from '@/components/adventure/CosmoNarrator'
+import { TopicIntro } from '@/components/adventure/TopicIntro'
 
-type Mode = 'location' | 'checkpoint' | 'finished'
+type Mode = 'topic-intro' | 'location' | 'checkpoint' | 'finished'
 
 export default function AdventurePage() {
   return (
@@ -40,7 +41,7 @@ function AdventureInner() {
   const [loading, setLoading] = useState(true)
   const [progress, setProgress] = useState<JourneyProgress | null>(null)
   const [sessionId, setSessionId] = useState<string>('')
-  const [mode, setMode] = useState<Mode>('location')
+  const [mode, setMode] = useState<Mode>('topic-intro')
 
   useEffect(() => {
     const init = async () => {
@@ -76,10 +77,14 @@ function AdventureInner() {
       if (session && session[0]) setSessionId(session[0].id)
 
       const topic = JOURNEY.find((t) => t.id === loaded.currentTopicId)
-      if (topic && loaded.currentLocationIndex >= topic.locations.length) {
-        setMode('checkpoint')
-      } else if (loaded.completedTopicIds.length === JOURNEY.length) {
+      if (loaded.completedTopicIds.length === JOURNEY.length) {
         setMode('finished')
+      } else if (topic && loaded.currentLocationIndex >= topic.locations.length) {
+        setMode('checkpoint')
+      } else if (loaded.currentLocationIndex === 0) {
+        setMode('topic-intro')
+      } else {
+        setMode('location')
       }
 
       setLoading(false)
@@ -150,7 +155,7 @@ function AdventureInner() {
     }
     setProgress(updated)
     saveProgress(updated)
-    setMode('location')
+    setMode('topic-intro')
   }
 
   const handleCheckpointRetry = (score: number, total: number) => {
@@ -185,6 +190,10 @@ function AdventureInner() {
         />
 
         <div className="mt-8">
+          {mode === 'topic-intro' && (
+            <TopicIntro topic={currentTopic} onStart={() => setMode('location')} />
+          )}
+
           {mode === 'location' && currentLocation && (
             <LocationView
               key={currentLocation.id}

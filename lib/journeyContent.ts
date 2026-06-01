@@ -59,12 +59,19 @@ export interface Checkpoint {
   retryNarration: string
 }
 
+export interface TopicIntro {
+  tagline: string
+  narration: string
+  animationEmojis: string[]
+}
+
 export interface Topic {
   id: string
   name: string
   emoji: string
   themeColor: string
   order: number
+  intro: TopicIntro
   locations: Location[]
   checkpoint: Checkpoint
 }
@@ -76,6 +83,12 @@ export const JOURNEY: Topic[] = [
     emoji: '🚀',
     themeColor: 'indigo',
     order: 1,
+    intro: {
+      tagline: '3... 2... 1... BLAST OFF!',
+      narration:
+        "Buckle up, space cadet! We are zooming into OUTER SPACE! Get ready to meet the Sun, the planets, and the Moon. Are you ready to explore?",
+      animationEmojis: ['🚀', '⭐', '🪐', '☄️', '🌟', '🌙', '☀️', '✨'],
+    },
     locations: [
       {
         id: 'space-sun',
@@ -179,6 +192,12 @@ export const JOURNEY: Topic[] = [
     emoji: '🦁',
     themeColor: 'amber',
     order: 2,
+    intro: {
+      tagline: 'Roar! The Animal Kingdom awaits!',
+      narration:
+        "Welcome to the wild, wild ANIMAL KINGDOM! We'll meet mammals with fluffy fur and discover where every animal calls home. Let's go on a safari!",
+      animationEmojis: ['🦁', '🐘', '🐒', '🐼', '🐻', '🦒', '🐯', '🦊', '🐰', '🐶'],
+    },
     locations: [
       {
         id: 'animals-mammals',
@@ -261,6 +280,12 @@ export const JOURNEY: Topic[] = [
     emoji: '🌦️',
     themeColor: 'sky',
     order: 3,
+    intro: {
+      tagline: 'Look up at the sky!',
+      narration:
+        "Time for some WILD WEATHER! We'll see how rain is made, watch clouds dance, and even meet some thunder and lightning. Grab your raincoat!",
+      animationEmojis: ['☁️', '🌧️', '⛈️', '🌩️', '🌈', '☀️', '❄️', '💧', '🌪️', '⚡'],
+    },
     locations: [
       {
         id: 'weather-rain',
@@ -345,6 +370,12 @@ export const JOURNEY: Topic[] = [
     emoji: '🧠',
     themeColor: 'rose',
     order: 4,
+    intro: {
+      tagline: 'Inside YOU is amazing!',
+      narration:
+        "Now we go on the smallest, coolest adventure — INSIDE YOUR OWN BODY! Your heart, your brain, your lungs — they all work together as a team. Let's meet them!",
+      animationEmojis: ['❤️', '🧠', '🫁', '🦴', '👁️', '👂', '🦷', '💪', '🫀', '🧬'],
+    },
     locations: [
       {
         id: 'body-heart',
@@ -427,6 +458,12 @@ export const JOURNEY: Topic[] = [
     emoji: '🌱',
     themeColor: 'emerald',
     order: 5,
+    intro: {
+      tagline: 'Welcome to the green world!',
+      narration:
+        "Last adventure — PLANT POWER! From tiny seeds to towering trees, plants are everywhere. Let's discover how they grow and what their parts do!",
+      animationEmojis: ['🌱', '🌿', '🌳', '🌲', '🌻', '🌷', '🌹', '🍀', '🌵', '🪴'],
+    },
     locations: [
       {
         id: 'plants-growing',
