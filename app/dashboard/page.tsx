@@ -171,10 +171,10 @@ export default function DashboardPage() {
             className="font-display font-extrabold text-4xl md:text-5xl text-on-background"
             style={{ letterSpacing: '-0.02em' }}
           >
-            Your Space Cadets 🚀
+            Your Explorers 🚀
           </h1>
           <p className="mt-3 text-on-surface-variant max-w-xl mx-auto">
-            Pick a cadet to launch into their cosmic adventure, or add a new explorer to the crew.
+            Pick an explorer to launch into their cosmic adventure, or add a new explorer to the crew.
           </p>
         </div>
 
@@ -189,7 +189,7 @@ export default function DashboardPage() {
               className="chunky-button bg-primary-container text-on-primary-container font-display font-bold px-6 py-3 rounded-lg border-2 border-white/20"
               style={{ ['--chunky-shadow' as string]: '#374e00' }}
             >
-              + Add First Cadet
+              + Add First Explorer
             </button>
           </div>
         ) : (
@@ -210,7 +210,7 @@ export default function DashboardPage() {
                   {child.name}
                 </h3>
                 <p className="text-center text-on-surface-variant text-sm mb-5">
-                  Age {child.age} · Cadet
+                  Age {child.age} 
                 </p>
                 <button
                   onClick={() => router.push(`/adventure?childId=${child.id}`)}
@@ -253,7 +253,7 @@ export default function DashboardPage() {
             <form onSubmit={handleAddChild} className="space-y-5">
               <div>
                 <label className="block font-display font-bold text-sm text-on-surface-variant mb-2">
-                  Cadet Name
+                  Explorer Name
                 </label>
                 <input
                   type="text"
@@ -317,7 +317,7 @@ export default function DashboardPage() {
                   className="chunky-button flex-1 bg-primary-container text-on-primary-container font-display font-bold px-6 py-3 rounded-lg border-2 border-white/20"
                   style={{ ['--chunky-shadow' as string]: '#374e00' }}
                 >
-                  🚀 Launch Cadet
+                  🚀 Add Explorer
                 </button>
               </div>
             </form>

@@ -254,10 +254,6 @@ function AdventureInner() {
             <LocationView
               key={currentLocation.id}
               location={currentLocation}
-              topicEmoji={currentTopic.emoji}
-              topicName={currentTopic.name}
-              locationIndex={progress.currentLocationIndex}
-              totalLocations={currentTopic.locations.length}
               onComplete={handleLocationComplete}
             />
           )}

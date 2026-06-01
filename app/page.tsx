@@ -47,6 +47,22 @@ function Starfield() {
 
 export default function Home() {
   const router = useRouter()
+  const [cadetName, setCadetName] = useState<string>('Cadet')
+
+  useEffect(() => {
+    const loadCadetName = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) return
+      const { data } = await supabase
+        .from('children')
+        .select('name')
+        .eq('parent_id', user.id)
+        .order('created_at', { ascending: true })
+        .limit(1)
+      if (data && data[0]?.name) setCadetName(data[0].name)
+    }
+    loadCadetName()
+  }, [])
 
   const handleGetStarted = async () => {
     const { data: { user } } = await supabase.auth.getUser()
@@ -101,9 +117,7 @@ export default function Home() {
         </h1>
 
         <p className="mt-6 text-lg md:text-xl text-on-surface max-w-2xl">
-          Blast off with Cosmo the robot astronaut and explore the wonders of science —
-          one mission at a time. Planets, animals, weather, the human body, and plants
-          await your young space cadet.
+          Blast off with Cosmo and explore the wonders of science — one mission at a time. Planets, animals, weather, the human body, and plants await your young space explorer.
         </p>
 
         {/* CTA buttons */}
@@ -144,7 +158,7 @@ export default function Home() {
             <div className="hidden md:block absolute -left-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-surface-container/60 backdrop-blur-md rotate-45 border-l-2 border-b-2 border-primary-container/30" />
             <div className="md:hidden absolute -top-3 left-1/2 -translate-x-1/2 w-6 h-6 bg-surface-container/60 backdrop-blur-md rotate-45 border-l-2 border-t-2 border-primary-container/30" />
             <p className="font-display font-bold text-xl md:text-2xl text-on-background text-left">
-              Hey there, Cadet! I&apos;m <span className="text-primary-container">Cosmo</span>.
+              Hey there, {cadetName}! I&apos;m <span className="text-primary-container">Cosmo</span>.
               Ready to explore the universe with me?
             </p>
           </div>

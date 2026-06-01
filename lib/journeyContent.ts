@@ -95,7 +95,7 @@ export const JOURNEY: Topic[] = [
     intro: {
       tagline: '3... 2... 1... BLAST OFF!',
       narration:
-        "Buckle up, space cadet! We are zooming into OUTER SPACE! Get ready to meet the Sun, the planets, and the Moon. Are you ready to explore?",
+        "Buckle up, space explorer! We are zooming into OUTER SPACE! Get ready to meet the Sun, the planets, and the Moon. Are you ready to explore?",
       animationEmojis: ['🚀', '⭐', '🪐', '☄️', '🌟', '🌙', '☀️', '✨'],
     },
     locations: [

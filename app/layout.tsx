@@ -15,7 +15,7 @@ const beVietnam = Be_Vietnam_Pro({
 });
 
 export const metadata: Metadata = {
-  title: "Cosmo's Cosmic Adventure",
+  title: "Cosmo's Adventure",
   description: "A science learning journey for young explorers",
 };
 

@@ -17,34 +17,16 @@ function LocationVisual({ visual }: { visual: VisualKey }) {
 
 interface Props {
   location: Location
-  topicEmoji: string
-  topicName: string
-  locationIndex: number
-  totalLocations: number
   onComplete: () => void
 }
 
 type Phase = 'intro' | 'funfact' | 'game'
 
-export function LocationView({
-  location,
-  topicEmoji,
-  topicName,
-  locationIndex,
-  totalLocations,
-  onComplete,
-}: Props) {
+export function LocationView({ location, onComplete }: Props) {
   const [phase, setPhase] = useState<Phase>('intro')
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">
-      <div className="flex items-center justify-between text-sm text-gray-300">
-        <span>
-          {topicEmoji} {topicName} — Stop {locationIndex + 1} of {totalLocations}
-        </span>
-        <span className="text-2xl">{location.emoji}</span>
-      </div>
-
       <motion.h2
         key={location.id}
         initial={{ opacity: 0, y: 10 }}
