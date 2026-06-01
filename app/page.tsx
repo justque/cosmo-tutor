@@ -4,121 +4,209 @@ import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 
+interface Star {
+  size: number
+  left: number
+  top: number
+  duration: number
+  delay: number
+}
+
+function Starfield() {
+  const [stars, setStars] = useState<Star[]>([])
+  useEffect(() => {
+    setStars(
+      Array.from({ length: 110 }, () => ({
+        size: Math.random() * 3 + 1,
+        left: Math.random() * 100,
+        top: Math.random() * 100,
+        duration: Math.random() * 3 + 2,
+        delay: Math.random() * 5,
+      }))
+    )
+  }, [])
+  return (
+    <div className="space-bg">
+      {stars.map((s, i) => (
+        <span
+          key={i}
+          className="star"
+          style={{
+            width: s.size,
+            height: s.size,
+            left: `${s.left}%`,
+            top: `${s.top}%`,
+            ['--duration' as string]: `${s.duration}s`,
+            animationDelay: `${s.delay}s`,
+          } as React.CSSProperties}
+        />
+      ))}
+    </div>
+  )
+}
+
 export default function Home() {
   const router = useRouter()
-  const [stars, setStars] = useState<Array<{ width: number; height: number; left: number; top: number; duration: number }>>([])
-
-  useEffect(() => {
-    const generatedStars = [...Array(50)].map(() => ({
-      width: Math.random() * 3,
-      height: Math.random() * 3,
-      left: Math.random() * 100,
-      top: Math.random() * 100,
-      duration: Math.random() * 3 + 2,
-    }))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    setStars(generatedStars)
-  }, [])
 
   const handleGetStarted = async () => {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser()
-    if (user) {
-      router.push('/adventure')
-    } else {
-      router.push('/auth/signup')
-    }
+    const { data: { user } } = await supabase.auth.getUser()
+    router.push(user ? '/adventure' : '/auth/signup')
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white overflow-hidden">
-      {/* Animated background stars */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        {stars.map((star, i) => (
+    <>
+      <Starfield />
+
+      {/* Top App Bar */}
+      <header className="fixed top-0 inset-x-0 z-50 flex justify-between items-center px-6 h-16 bg-surface-container/80 backdrop-blur-xl border-b border-white/10 shadow-lg">
+        <span
+          className="font-display font-extrabold text-xl md:text-2xl text-primary-container"
+          style={{ textShadow: '0 2px 0 #506e00' }}
+        >
+          Cosmo&apos;s Adventure
+        </span>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => router.push('/auth/login')}
+            className="h-10 px-4 rounded-full bg-surface-container-highest text-on-surface hover:scale-105 transition-transform active:translate-y-0.5 font-display font-bold text-sm"
+          >
+            Parent Log In
+          </button>
+        </div>
+      </header>
+
+      {/* Hero */}
+      <main className="relative z-10 pt-28 pb-20 px-6 flex flex-col items-center text-center max-w-6xl mx-auto">
+        <div
+          className="text-[110px] md:text-[140px] leading-none mb-2"
+          style={{
+            filter: 'drop-shadow(0 10px 20px rgba(183,247,0,0.35))',
+            animation: 'float-y 4s ease-in-out infinite',
+          }}
+        >
+          🚀
+        </div>
+
+        <p className="font-display font-bold uppercase tracking-[0.25em] text-secondary-container text-xs mb-3">
+          A science adventure for ages 5–8
+        </p>
+
+        <h1
+          className="font-display font-extrabold text-5xl md:text-7xl leading-tight text-primary-container"
+          style={{ textShadow: '0 4px 0 #506e00', letterSpacing: '-0.02em' }}
+        >
+          Cosmo&apos;s Cosmic
+          <br />
+          Adventure
+        </h1>
+
+        <p className="mt-6 text-lg md:text-xl text-on-surface max-w-2xl">
+          Blast off with Cosmo the robot astronaut and explore the wonders of science —
+          one mission at a time. Planets, animals, weather, the human body, and plants
+          await your young space cadet.
+        </p>
+
+        {/* CTA buttons */}
+        <div className="mt-10 flex flex-col sm:flex-row gap-4 items-center">
+          <button
+            onClick={handleGetStarted}
+            className="chunky-button bg-primary-container text-on-primary-container px-8 py-4 rounded-full font-display font-extrabold text-lg border-2 border-white/20 flex items-center gap-3 hover:scale-105 transition-transform"
+            style={{ ['--chunky-shadow' as string]: '#374e00' }}
+          >
+            🚀 Start the Adventure
+          </button>
+          <button
+            onClick={() => router.push('/auth/login')}
+            className="chunky-button bg-secondary-container text-on-secondary-container px-8 py-4 rounded-full font-display font-extrabold text-lg border-2 border-white/20 hover:scale-105 transition-transform"
+            style={{ ['--chunky-shadow' as string]: '#004f54' }}
+          >
+            Parent Log In
+          </button>
+        </div>
+
+        {/* Cosmo + speech bubble */}
+        <div className="mt-20 flex flex-col md:flex-row items-center gap-6 md:gap-10 max-w-4xl w-full">
           <div
-            key={i}
-            className="absolute bg-white rounded-full opacity-50"
-            style={{
-              width: star.width + 'px',
-              height: star.height + 'px',
-              left: star.left + '%',
-              top: star.top + '%',
-              animation: `twinkle ${star.duration}s infinite`,
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Main content */}
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4">
-        <div className="text-center max-w-2xl">
-          <div className="text-8xl mb-6 animate-bounce">🤖</div>
-
-          <h1 className="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-            Meet Cosmo
-          </h1>
-
-          <p className="text-xl md:text-2xl text-gray-300 mb-6">
-            Your robot astronaut science tutor! 🚀
-          </p>
-
-          <p className="text-lg text-gray-400 mb-12 leading-relaxed">
-            Explore the wonders of science with fun explanations, cool animations,
-            and amazing discoveries. Ask Cosmo anything and learn like never before!
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <button
-              onClick={handleGetStarted}
-              className="px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 rounded-lg font-bold text-lg transition-all transform hover:scale-105 active:scale-95"
-            >
-              Start the Adventure! 🚀
-            </button>
-
-            <button
-              className="px-8 py-4 border-2 border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white rounded-lg font-bold text-lg transition-all"
-              onClick={() => router.push('/auth/login')}
-            >
-              Parent Login
-            </button>
+            className="text-[120px] md:text-[160px] flex-shrink-0"
+            style={{ animation: 'float-y 3s ease-in-out infinite', filter: 'drop-shadow(0 8px 24px rgba(0,238,252,0.35))' }}
+          >
+            🤖
           </div>
-
-          {/* Features */}
-          <div className="grid md:grid-cols-3 gap-6 mt-16">
-            <div className="bg-slate-800/50 rounded-lg p-6 border border-slate-700">
-              <div className="text-4xl mb-3">🎓</div>
-              <h3 className="font-bold text-lg mb-2">Learn Science</h3>
-              <p className="text-gray-400 text-sm">
-                Ask about space, animals, weather, your body, and more!
-              </p>
-            </div>
-
-            <div className="bg-slate-800/50 rounded-lg p-6 border border-slate-700">
-              <div className="text-4xl mb-3">🎤</div>
-              <h3 className="font-bold text-lg mb-2">Speak & Listen</h3>
-              <p className="text-gray-400 text-sm">
-                Use voice input and hear Cosmo&apos;s answers out loud!
-              </p>
-            </div>
-
-            <div className="bg-slate-800/50 rounded-lg p-6 border border-slate-700">
-              <div className="text-4xl mb-3">📊</div>
-              <h3 className="font-bold text-lg mb-2">Track Progress</h3>
-              <p className="text-gray-400 text-sm">
-                Parents can see what their kids are learning!
-              </p>
-            </div>
+          <div
+            className="relative bg-surface-container/60 backdrop-blur-md rounded-3xl border-2 border-primary-container/30 shadow-2xl p-6 md:p-8 flex-1"
+          >
+            {/* Speech bubble tail */}
+            <div className="hidden md:block absolute -left-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-surface-container/60 backdrop-blur-md rotate-45 border-l-2 border-b-2 border-primary-container/30" />
+            <div className="md:hidden absolute -top-3 left-1/2 -translate-x-1/2 w-6 h-6 bg-surface-container/60 backdrop-blur-md rotate-45 border-l-2 border-t-2 border-primary-container/30" />
+            <p className="font-display font-bold text-xl md:text-2xl text-on-background text-left">
+              Hey there, Cadet! I&apos;m <span className="text-primary-container">Cosmo</span>.
+              Ready to explore the universe with me?
+            </p>
           </div>
         </div>
-      </div>
 
-      <style>{`
-        @keyframes twinkle {
-          0%, 100% { opacity: 0.3; }
-          50% { opacity: 0.8; }
-        }
-      `}</style>
-    </div>
+        {/* Features Grid */}
+        <div className="mt-20 w-full grid grid-cols-1 md:grid-cols-3 gap-5">
+          {/* Feature 1 */}
+          <div className="bg-surface-container/60 backdrop-blur-md p-6 rounded-2xl border border-white/10 hover:border-primary-container/50 transition-colors text-left">
+            <div className="w-14 h-14 bg-primary-container/20 rounded-full flex items-center justify-center mb-4 text-3xl">
+              🎓
+            </div>
+            <span className="inline-block bg-primary-container text-on-primary-container text-xs font-display font-bold px-3 py-1 rounded-full mb-3">
+              Learn
+            </span>
+            <h3 className="font-display font-bold text-xl text-on-background mb-2">
+              5 Cosmic Topics
+            </h3>
+            <p className="text-on-surface-variant">
+              Outer space, animals, weather, the human body, and plants — all guided by Cosmo.
+            </p>
+          </div>
+
+          {/* Feature 2 */}
+          <div className="bg-surface-container/60 backdrop-blur-md p-6 rounded-2xl border border-white/10 hover:border-secondary-container/50 transition-colors text-left">
+            <div className="w-14 h-14 bg-secondary-container/20 rounded-full flex items-center justify-center mb-4 text-3xl">
+              🎮
+            </div>
+            <span className="inline-block bg-secondary-container text-on-secondary-container text-xs font-display font-bold px-3 py-1 rounded-full mb-3">
+              Play
+            </span>
+            <h3 className="font-display font-bold text-xl text-on-background mb-2">
+              Mini-Games &amp; Quizzes
+            </h3>
+            <p className="text-on-surface-variant">
+              Matching, ordering, and building puzzles at every stop. Pass the checkpoint to unlock the next world.
+            </p>
+          </div>
+
+          {/* Feature 3 */}
+          <div className="bg-surface-container/60 backdrop-blur-md p-6 rounded-2xl border border-white/10 hover:border-tertiary-container/50 transition-colors text-left">
+            <div className="w-14 h-14 bg-tertiary-container/20 rounded-full flex items-center justify-center mb-4 text-3xl">
+              💬
+            </div>
+            <span className="inline-block bg-tertiary-container text-on-tertiary-container text-xs font-display font-bold px-3 py-1 rounded-full mb-3">
+              Ask
+            </span>
+            <h3 className="font-display font-bold text-xl text-on-background mb-2">
+              Ask Cosmo Anything
+            </h3>
+            <p className="text-on-surface-variant">
+              A friendly side-panel chat answers kid questions in 1–2 sentences — concise, safe, and curious.
+            </p>
+          </div>
+        </div>
+
+        {/* Trust / COPPA strip */}
+        <div className="mt-16 max-w-2xl text-sm text-on-surface-variant bg-surface-container/40 backdrop-blur-md border border-white/5 rounded-xl px-5 py-4">
+          <strong className="text-on-background font-display">Built for kids, designed for parents.</strong>{' '}
+          Parental accounts only, COPPA-compliant, and no ads. You stay in control of every cadet&apos;s journey.
+        </div>
+
+        {/* Footer */}
+        <footer className="mt-12 text-xs text-on-surface-variant/70">
+          © {new Date().getFullYear()} Cosmo&apos;s Cosmic Adventure
+        </footer>
+      </main>
+    </>
   )
 }
