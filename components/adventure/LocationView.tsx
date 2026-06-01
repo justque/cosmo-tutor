@@ -2,9 +2,17 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import type { Location } from '@/lib/journeyContent'
+import type { Location, VisualKey } from '@/lib/journeyContent'
 import { CosmoNarrator } from './CosmoNarrator'
 import { MiniGame } from './MiniGame'
+import { SolarSystem } from './visuals/SolarSystem'
+
+function LocationVisual({ visual }: { visual: VisualKey }) {
+  switch (visual) {
+    case 'solar-system':
+      return <SolarSystem />
+  }
+}
 
 interface Props {
   location: Location
@@ -55,6 +63,7 @@ export function LocationView({
             className="space-y-6"
           >
             <CosmoNarrator text={location.introNarration} />
+            {location.visual && <LocationVisual visual={location.visual} />}
             <div className="text-center">
               <button
                 onClick={() => setPhase('funfact')}

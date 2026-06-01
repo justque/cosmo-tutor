@@ -39,6 +39,8 @@ export type GameData =
   | BuildingGameData
   | QuestionGameData
 
+export type VisualKey = 'solar-system'
+
 export interface Location {
   id: string
   name: string
@@ -46,6 +48,7 @@ export interface Location {
   introNarration: string
   funFact: string
   game: GameData
+  visual?: VisualKey
 }
 
 export interface Checkpoint {
@@ -111,8 +114,9 @@ export const JOURNEY: Topic[] = [
         id: 'space-planets',
         name: 'The Planet Parade',
         emoji: '🪐',
+        visual: 'solar-system',
         introNarration:
-          "Next stop — the planets! There are 8 planets that zoom around our Sun. They come in all sizes and colors. Some are rocky like Earth, and some are giant balls of gas like Jupiter!",
+          "Next stop — the planets! There are 8 planets that zoom around our Sun. Watch them orbit below! Tap any planet to learn more about it. Some are rocky like Earth, and some are giant balls of gas like Jupiter!",
         funFact: 'Jupiter has a big red storm that has been spinning for over 300 years!',
         game: {
           type: 'ordering',
