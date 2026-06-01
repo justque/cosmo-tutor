@@ -1,26 +1,73 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@theme {
+  /* Cosmic Adventure palette (from Stitch design system) */
+  --color-surface: #0f102f;
+  --color-surface-dim: #0f102f;
+  --color-surface-bright: #353658;
+  --color-surface-container-lowest: #090a2a;
+  --color-surface-container-low: #171838;
+  --color-surface-container: #1b1c3c;
+  --color-surface-container-high: #262747;
+  --color-surface-container-highest: #313253;
+  --color-on-surface: #e1e0ff;
+  --color-on-surface-variant: #c2caad;
+  --color-outline: #8c9479;
+  --color-primary-container: #b7f700;
+  --color-on-primary-container: #506e00;
+  --color-on-primary-fixed-variant: #374e00;
+  --color-secondary-container: #00eefc;
+  --color-on-secondary-container: #00686f;
+  --color-on-secondary-fixed-variant: #004f54;
+  --color-tertiary-container: #ffdcbd;
+  --color-on-tertiary-container: #935600;
+  --color-on-tertiary-fixed-variant: #693c00;
+  --color-background: #0f102f;
+  --color-on-background: #e1e0ff;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-display: "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-body: "Be Vietnam Pro", system-ui, sans-serif;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-background);
+  color: var(--color-on-background);
+  font-family: var(--font-body);
+}
+
+/* Space backdrop with twinkling stars */
+.space-bg {
+  background: radial-gradient(circle at 50% 50%, #1b1c3c 0%, #090a2a 100%);
+  overflow: hidden;
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+}
+
+.star {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  opacity: 0.5;
+  animation: twinkle var(--duration) ease-in-out infinite;
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+@keyframes float-y {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* Chunky tactile button (3D press effect) */
+.chunky-button {
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  box-shadow: 0 4px 0 var(--chunky-shadow, rgba(0,0,0,0.4));
+}
+.chunky-button:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 var(--chunky-shadow, rgba(0,0,0,0.4));
 }
