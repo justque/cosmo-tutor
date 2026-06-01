@@ -41,6 +41,11 @@ export type GameData =
 
 export type VisualKey = 'solar-system'
 
+export interface LocationVideo {
+  youtubeId: string
+  title: string
+}
+
 export interface Location {
   id: string
   name: string
@@ -49,6 +54,7 @@ export interface Location {
   funFact: string
   game: GameData
   visual?: VisualKey
+  video?: LocationVideo
 }
 
 export interface Checkpoint {
@@ -115,8 +121,12 @@ export const JOURNEY: Topic[] = [
         name: 'The Planet Parade',
         emoji: '🪐',
         visual: 'solar-system',
+        video: {
+          youtubeId: 'j5ueashD6w4',
+          title: 'Watch a quick tour of our Solar System!',
+        },
         introNarration:
-          "Next stop — the planets! There are 8 planets that zoom around our Sun. Watch them orbit below! Tap any planet to learn more about it. Some are rocky like Earth, and some are giant balls of gas like Jupiter!",
+          "Next stop — the planets! There are 8 planets that zoom around our Sun. Watch the video, then play with the planets below! Tap any planet to learn more about it.",
         funFact: 'Jupiter has a big red storm that has been spinning for over 300 years!',
         game: {
           type: 'ordering',
