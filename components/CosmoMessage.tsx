@@ -54,9 +54,8 @@ export function CosmoMessage({ text, visual, isCosmo }: CosmoMessageProps) {
     <div className={`flex gap-3 mb-4 ${isCosmo ? 'justify-start' : 'justify-end'}`}>
       {isCosmo && (
         <div className="flex-shrink-0">
-          <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-lg">
-            🤖
-          </div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/cosmo.png" alt="Cosmo" className="w-8 h-8 rounded-full" />
         </div>
       )}
 

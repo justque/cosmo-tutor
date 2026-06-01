@@ -87,9 +87,18 @@ export function LocationView({
             exit={{ opacity: 0 }}
             className="space-y-6"
           >
-            <div className="bg-gradient-to-br from-yellow-500/20 to-orange-500/20 border border-yellow-400/40 rounded-2xl p-6 text-center">
-              <p className="text-sm text-yellow-300 uppercase tracking-wider mb-2">Fun Fact!</p>
-              <p className="text-xl text-white">{location.funFact}</p>
+            <div className="glass-panel rounded-2xl p-6 md:p-7 border-2 border-tertiary-container/40 shadow-2xl flex gap-5 items-start">
+              <div className="w-14 h-14 flex-shrink-0 rounded-full bg-tertiary-container/25 flex items-center justify-center text-3xl">
+                💡
+              </div>
+              <div className="flex-1 text-left">
+                <span className="inline-block bg-tertiary-container text-on-tertiary-container text-[10px] font-display font-bold uppercase tracking-wider px-3 py-1 rounded-full mb-3">
+                  Fun Fact
+                </span>
+                <p className="font-display font-bold text-lg md:text-xl text-on-background leading-relaxed">
+                  {location.funFact}
+                </p>
+              </div>
             </div>
             <div className="text-center">
               <button

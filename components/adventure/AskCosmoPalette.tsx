@@ -90,7 +90,8 @@ export function AskCosmoPalette({ sessionId, childId, topicSlug, locationContext
           >
             <div className="flex items-center justify-between p-4 border-b border-slate-700">
               <div className="flex items-center gap-2">
-                <span className="text-3xl">🤖</span>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/cosmo.png" alt="Cosmo" className="w-10 h-10 rounded-full" />
                 <div>
                   <p className="text-white font-bold">Ask Cosmo</p>
                   <p className="text-xs text-gray-400">

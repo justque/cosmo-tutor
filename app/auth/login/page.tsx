@@ -37,7 +37,8 @@ export default function LoginPage() {
     <div className="min-h-screen bg-gradient-to-b from-slate-950 to-slate-900 text-white flex items-center justify-center px-4">
       <div className="max-w-md w-full">
         <div className="text-center mb-8">
-          <div className="text-6xl mb-4">🤖</div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/cosmo.png" alt="Cosmo" className="w-24 h-24 mx-auto mb-4 rounded-full" />
           <h1 className="text-3xl font-bold">Welcome Back</h1>
           <p className="text-gray-400 mt-2">Parent login</p>
         </div>

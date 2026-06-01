@@ -123,7 +123,13 @@ export default function DashboardPage() {
         <Starfield />
         <div className="min-h-screen flex items-center justify-center text-on-background">
           <div className="text-center">
-            <div className="text-6xl mb-4" style={{ animation: 'float-y 2s ease-in-out infinite' }}>🤖</div>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/cosmo.png"
+              alt="Cosmo"
+              className="w-24 h-24 mx-auto mb-4 rounded-full"
+              style={{ animation: 'float-y 2s ease-in-out infinite' }}
+            />
             <p className="font-display font-bold">Loading mission control…</p>
           </div>
         </div>

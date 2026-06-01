@@ -111,7 +111,8 @@ export function LessonStep({
         className="mb-6 p-4 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 border border-blue-500 shadow-lg"
       >
         <div className="flex gap-3 items-start">
-          <div className="text-3xl flex-shrink-0">🤖</div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/cosmo.png" alt="Cosmo" className="w-10 h-10 flex-shrink-0 rounded-full" />
           <div className="flex-1">
             <p className="text-white text-base leading-relaxed">
               {displayText}

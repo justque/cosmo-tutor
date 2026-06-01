@@ -62,6 +62,54 @@ body {
   50% { transform: translateY(-8px); }
 }
 
+/* Journey node active glow pulse */
+@keyframes pulse-glow {
+  0%, 100% { filter: drop-shadow(0 0 8px rgba(183, 247, 0, 0.6)); transform: scale(1); }
+  50% { filter: drop-shadow(0 0 22px rgba(183, 247, 0, 0.95)); transform: scale(1.06); }
+}
+.node-active {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Dashed journey path */
+.journey-path {
+  stroke-dasharray: 6 10;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 6px rgba(0, 238, 252, 0.45));
+}
+
+/* Frosted glass panel (Stitch design system) */
+.glass-panel {
+  background: rgba(27, 28, 60, 0.4);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Slow floating emoji (hero element) */
+@keyframes float-hero {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+.float-hero { animation: float-hero 4s ease-in-out infinite; }
+
+/* Cosmo gentle float + tilt */
+@keyframes cosmo-float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(2deg); }
+}
+.cosmo-float { animation: cosmo-float 5s ease-in-out infinite; }
+
+/* Typewriter cursor blink */
+@keyframes blink-caret {
+  from, to { border-color: transparent; }
+  50% { border-color: #b7f700; }
+}
+.typewriter-caret {
+  border-right: 0.15em solid #b7f700;
+  animation: blink-caret 0.75s step-end infinite;
+}
+
 /* Chunky tactile button (3D press effect) */
 .chunky-button {
   transition: transform 0.1s ease, box-shadow 0.1s ease;

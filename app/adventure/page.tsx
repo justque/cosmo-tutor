@@ -12,13 +12,15 @@ import {
   type JourneyProgress,
 } from '@/lib/journeyProgress'
 import { JourneyMap } from '@/components/adventure/JourneyMap'
+import { JourneyMapFull } from '@/components/adventure/JourneyMapFull'
+import { MissionProgress } from '@/components/adventure/MissionProgress'
 import { LocationView } from '@/components/adventure/LocationView'
 import { CheckpointAssessment } from '@/components/adventure/CheckpointAssessment'
 import { AskCosmoPalette } from '@/components/adventure/AskCosmoPalette'
 import { CosmoNarrator } from '@/components/adventure/CosmoNarrator'
 import { TopicIntro } from '@/components/adventure/TopicIntro'
 
-type Mode = 'topic-intro' | 'location' | 'checkpoint' | 'finished'
+type Mode = 'journey-map' | 'topic-intro' | 'location' | 'checkpoint' | 'finished'
 
 export default function AdventurePage() {
   return (
@@ -41,7 +43,7 @@ function AdventureInner() {
   const [loading, setLoading] = useState(true)
   const [progress, setProgress] = useState<JourneyProgress | null>(null)
   const [sessionId, setSessionId] = useState<string>('')
-  const [mode, setMode] = useState<Mode>('topic-intro')
+  const [mode, setMode] = useState<Mode>('journey-map')
 
   useEffect(() => {
     const init = async () => {
@@ -82,8 +84,10 @@ function AdventureInner() {
       } else if (topic && loaded.currentLocationIndex >= topic.locations.length) {
         setMode('checkpoint')
       } else if (loaded.currentLocationIndex === 0) {
-        setMode('topic-intro')
+        // Start of a topic — show the full journey map so the user can pick.
+        setMode('journey-map')
       } else {
+        // Mid-topic — resume directly.
         setMode('location')
       }
 
@@ -94,9 +98,16 @@ function AdventureInner() {
 
   if (loading || !progress) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center">
-        <div className="text-white text-xl">Loading your adventure...</div>
-      </div>
+      <>
+        <div className="space-bg" />
+        <div className="min-h-screen flex items-center justify-center">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <div className="text-center">
+            <img src="/cosmo.png" alt="Cosmo" className="w-24 h-24 mx-auto mb-4 rounded-full" style={{ animation: 'float-y 2s ease-in-out infinite' }} />
+            <p className="text-on-background font-display font-bold">Loading your adventure…</p>
+          </div>
+        </div>
+      </>
     )
   }
 
@@ -155,6 +166,12 @@ function AdventureInner() {
     }
     setProgress(updated)
     saveProgress(updated)
+    // Return to the full journey map so the child can see their progress and pick the next world.
+    setMode('journey-map')
+  }
+
+  const handleSelectTopic = (topicId: string) => {
+    if (topicId !== progress.currentTopicId) return
     setMode('topic-intro')
   }
 
@@ -169,27 +186,66 @@ function AdventureInner() {
     setMode('location')
   }
 
+  const isLearningMode = mode === 'topic-intro' || mode === 'location' || mode === 'checkpoint'
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white">
-      <div className="max-w-5xl mx-auto px-4 py-6 space-y-6">
-        <div className="flex items-center justify-between">
+    <div className="min-h-screen text-on-background relative">
+      <div className="space-bg" />
+      {/* Top App Bar */}
+      <header className="fixed top-0 inset-x-0 z-40 flex justify-between items-center px-6 h-16 bg-surface-container/80 backdrop-blur-xl border-b border-white/10 shadow-lg">
+        <button
+          onClick={() => router.push('/dashboard')}
+          className="h-10 px-4 rounded-full bg-surface-container-highest text-on-surface hover:scale-105 transition-transform active:translate-y-0.5 font-display font-bold text-sm flex items-center gap-1"
+        >
+          ← Dashboard
+        </button>
+        <span
+          className="font-display font-extrabold text-lg md:text-xl text-primary-container"
+          style={{ textShadow: '0 2px 0 #506e00' }}
+        >
+          Cosmo&apos;s Adventure
+        </span>
+        {isLearningMode ? (
           <button
-            onClick={() => router.push('/dashboard')}
-            className="text-sm text-gray-400 hover:text-white"
+            onClick={() => setMode('journey-map')}
+            className="h-10 px-4 rounded-full bg-secondary-container text-on-secondary-container hover:scale-105 transition-transform active:translate-y-0.5 font-display font-bold text-sm"
+            title="Back to journey map"
           >
-            ← Back to Dashboard
+            🗺️ Map
           </button>
-          <h1 className="text-2xl font-bold">Cosmo&apos;s Cosmic Adventure 🚀</h1>
-          <div className="w-32" />
-        </div>
+        ) : (
+          <div className="w-24" />
+        )}
+      </header>
 
-        <JourneyMap
-          topics={JOURNEY}
-          currentTopicId={progress.currentTopicId}
-          completedTopicIds={progress.completedTopicIds}
-        />
+      <div className="max-w-5xl mx-auto px-4 pt-24 pb-12 space-y-6">
+        {/* Minimized navigator + mission progress (visible only during learning) */}
+        {isLearningMode && (
+          <div className="space-y-3">
+            <JourneyMap
+              topics={JOURNEY}
+              currentTopicId={progress.currentTopicId}
+              completedTopicIds={progress.completedTopicIds}
+            />
+            <MissionProgress
+              topicName={currentTopic.name}
+              current={Math.min(progress.currentLocationIndex, currentTopic.locations.length)}
+              total={currentTopic.locations.length}
+              inCheckpoint={mode === 'checkpoint'}
+            />
+          </div>
+        )}
 
-        <div className="mt-8">
+        <div className={isLearningMode ? 'mt-6' : ''}>
+          {mode === 'journey-map' && (
+            <JourneyMapFull
+              topics={JOURNEY}
+              currentTopicId={progress.currentTopicId}
+              completedTopicIds={progress.completedTopicIds}
+              onSelect={handleSelectTopic}
+            />
+          )}
+
           {mode === 'topic-intro' && (
             <TopicIntro topic={currentTopic} onStart={() => setMode('location')} />
           )}
@@ -221,12 +277,15 @@ function AdventureInner() {
               className="max-w-3xl mx-auto text-center space-y-6"
             >
               <div className="text-9xl">🏆</div>
-              <h2 className="text-4xl font-bold">YOU ARE A SCIENCE LEGEND!</h2>
+              <h2 className="font-display font-extrabold text-4xl text-primary-container" style={{ textShadow: '0 3px 0 #506e00' }}>
+                YOU ARE A SCIENCE LEGEND!
+              </h2>
               <CosmoNarrator text="You did it! You explored ALL the topics with me! You are officially the smartest space cadet I know." />
               <div className="flex justify-center gap-3">
                 <button
                   onClick={() => router.push('/dashboard')}
-                  className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 rounded-lg font-bold"
+                  className="chunky-button bg-primary-container text-on-primary-container font-display font-bold px-6 py-3 rounded-lg border-2 border-white/20"
+                  style={{ ['--chunky-shadow' as string]: '#374e00' }}
                 >
                   Back to Dashboard
                 </button>

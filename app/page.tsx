@@ -127,10 +127,15 @@ export default function Home() {
         {/* Cosmo + speech bubble */}
         <div className="mt-20 flex flex-col md:flex-row items-center gap-6 md:gap-10 max-w-4xl w-full">
           <div
-            className="text-[120px] md:text-[160px] flex-shrink-0"
+            className="flex-shrink-0"
             style={{ animation: 'float-y 3s ease-in-out infinite', filter: 'drop-shadow(0 8px 24px rgba(0,238,252,0.35))' }}
           >
-            🤖
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/cosmo.png"
+              alt="Cosmo"
+              className="w-32 h-32 md:w-44 md:h-44 rounded-full"
+            />
           </div>
           <div
             className="relative bg-surface-container/60 backdrop-blur-md rounded-3xl border-2 border-primary-container/30 shadow-2xl p-6 md:p-8 flex-1"

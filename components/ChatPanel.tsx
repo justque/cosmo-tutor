@@ -132,7 +132,8 @@ export function ChatPanel({
         {messages.length === 0 && (
           <div className="flex items-center justify-center h-full">
             <div className="text-center">
-              <div className="text-6xl mb-4">🤖</div>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/cosmo.png" alt="Cosmo" className="w-24 h-24 mx-auto mb-4 rounded-full" />
               <p className="text-xl font-semibold">Hi! I&apos;m Cosmo!</p>
               <p className="text-sm text-gray-300 mt-2">
                 Ask me any science question and I&apos;ll explain it in a fun way! 🚀

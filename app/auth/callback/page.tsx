@@ -35,7 +35,8 @@ export default function CallbackPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-950 to-slate-900 flex items-center justify-center">
       <div className="text-white text-center">
-        <div className="text-4xl mb-4 animate-bounce">🤖</div>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/cosmo.png" alt="Cosmo" className="w-20 h-20 mx-auto mb-4 rounded-full animate-bounce" />
         <p>Setting up your account...</p>
       </div>
     </div>
