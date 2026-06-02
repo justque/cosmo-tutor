@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 
 interface DinoCard {
@@ -9,6 +10,7 @@ interface DinoCard {
   diet: 'Plants' | 'Meat' | 'Fish'
   era: string
   superpower: string
+  searchQuery: string
   color: string
 }
 
@@ -20,6 +22,7 @@ const CARDS: DinoCard[] = [
     diet: 'Meat',
     era: 'Cretaceous',
     superpower: 'Banana-sized teeth and a bite stronger than a car crushing!',
+    searchQuery: 'tyrannosaurus rex fossil',
     color: 'from-rose-500 to-red-700',
   },
   {
@@ -29,6 +32,7 @@ const CARDS: DinoCard[] = [
     diet: 'Plants',
     era: 'Jurassic',
     superpower: 'A neck as long as a school bus to reach the tallest treetops!',
+    searchQuery: 'brachiosaurus dinosaur',
     color: 'from-emerald-500 to-green-700',
   },
   {
@@ -38,6 +42,7 @@ const CARDS: DinoCard[] = [
     diet: 'Plants',
     era: 'Cretaceous',
     superpower: 'Three sharp horns + a bony frill — like a living shield!',
+    searchQuery: 'triceratops dinosaur',
     color: 'from-amber-500 to-orange-700',
   },
   {
@@ -47,6 +52,7 @@ const CARDS: DinoCard[] = [
     diet: 'Plants',
     era: 'Jurassic',
     superpower: 'Diamond plates on its back and a spiky tail to swing!',
+    searchQuery: 'stegosaurus dinosaur',
     color: 'from-cyan-500 to-sky-700',
   },
   {
@@ -56,6 +62,7 @@ const CARDS: DinoCard[] = [
     diet: 'Meat',
     era: 'Cretaceous',
     superpower: 'Turkey-sized but lightning fast — with feathers and claws!',
+    searchQuery: 'velociraptor dinosaur',
     color: 'from-fuchsia-500 to-purple-700',
   },
   {
@@ -65,95 +72,85 @@ const CARDS: DinoCard[] = [
     diet: 'Plants',
     era: 'Cretaceous',
     superpower: 'A living tank — armored body and a club tail to swing!',
-    color: 'from-slate-500 to-zinc-700',
+    searchQuery: 'ankylosaurus dinosaur',
+    color: 'from-slate-400 to-zinc-700',
   },
 ]
 
+// Session cache so we don't refetch when re-mounting in dev / review mode.
+const imageCache = new Map<string, string>()
+
+function useDinoImage(query: string): string | null {
+  const [url, setUrl] = useState<string | null>(() => imageCache.get(query) ?? null)
+
+  useEffect(() => {
+    if (imageCache.has(query)) {
+      setUrl(imageCache.get(query)!)
+      return
+    }
+    const key = process.env.NEXT_PUBLIC_UNSPLASH_API_KEY
+    if (!key) return
+    let cancelled = false
+    fetch(
+      `https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&per_page=3&orientation=landscape&content_filter=high&client_id=${key}`
+    )
+      .then((r) => r.json())
+      .then((data) => {
+        const first = data?.results?.[0]?.urls?.small
+        if (cancelled || !first) return
+        imageCache.set(query, first)
+        setUrl(first)
+      })
+      .catch(() => {})
+    return () => {
+      cancelled = true
+    }
+  }, [query])
+
+  return url
+}
+
 function DinoSilhouette({ id }: { id: string }) {
-  // Stylized SVG silhouettes for each dino — kid-friendly chunky shapes.
   const common = 'w-full h-full'
   switch (id) {
     case 'trex':
       return (
         <svg viewBox="0 0 100 60" className={common}>
-          <path
-            d="M 10 50 Q 10 30 25 28 L 30 18 Q 35 8 50 12 Q 65 14 70 25 L 75 30 L 90 32 L 88 36 L 75 38 L 78 50 L 72 50 L 70 42 L 50 44 L 48 50 L 42 50 L 44 42 Q 22 42 18 50 Z"
-            fill="currentColor"
-          />
-          <circle cx="62" cy="22" r="1.2" fill="white" />
+          <path d="M 10 50 Q 10 30 25 28 L 30 18 Q 35 8 50 12 Q 65 14 70 25 L 75 30 L 90 32 L 88 36 L 75 38 L 78 50 L 72 50 L 70 42 L 50 44 L 48 50 L 42 50 L 44 42 Q 22 42 18 50 Z" fill="currentColor" />
         </svg>
       )
     case 'brachio':
       return (
         <svg viewBox="0 0 100 60" className={common}>
-          <path
-            d="M 10 50 Q 10 30 30 28 Q 50 28 55 20 Q 58 8 68 6 Q 78 6 80 16 Q 82 24 76 28 Q 72 32 78 40 L 88 42 L 86 46 L 78 46 L 78 50 L 72 50 L 70 44 L 35 44 L 32 50 L 26 50 L 28 44 Q 14 44 14 50 Z"
-            fill="currentColor"
-          />
-          <circle cx="72" cy="12" r="1" fill="white" />
+          <path d="M 10 50 Q 10 30 30 28 Q 50 28 55 20 Q 58 8 68 6 Q 78 6 80 16 Q 82 24 76 28 Q 72 32 78 40 L 88 42 L 86 46 L 78 46 L 78 50 L 72 50 L 70 44 L 35 44 L 32 50 L 26 50 L 28 44 Q 14 44 14 50 Z" fill="currentColor" />
         </svg>
       )
     case 'tricer':
       return (
         <svg viewBox="0 0 100 60" className={common}>
-          <path
-            d="M 12 50 Q 12 32 30 30 L 35 22 Q 40 14 60 14 Q 78 14 84 22 L 90 18 L 88 26 L 82 30 Q 84 36 78 40 L 86 40 L 84 46 L 76 48 L 70 50 L 66 42 L 36 42 L 30 50 L 22 50 L 24 42 Q 14 44 14 50 Z"
-            fill="currentColor"
-          />
-          {/* horns */}
-          <path d="M 50 16 L 48 6 L 52 6 Z" fill="currentColor" />
-          <path d="M 60 16 L 60 4 L 64 8 Z" fill="currentColor" />
-          {/* frill */}
-          <path d="M 70 14 Q 90 4 88 22" fill="currentColor" />
-          <circle cx="76" cy="22" r="1" fill="white" />
+          <path d="M 12 50 Q 12 32 30 30 L 35 22 Q 40 14 60 14 Q 78 14 84 22 L 90 18 L 88 26 L 82 30 Q 84 36 78 40 L 86 40 L 84 46 L 76 48 L 70 50 L 66 42 L 36 42 L 30 50 L 22 50 L 24 42 Q 14 44 14 50 Z" fill="currentColor" />
         </svg>
       )
     case 'stego':
       return (
         <svg viewBox="0 0 100 60" className={common}>
-          <path
-            d="M 10 50 Q 12 36 24 32 L 30 26 Q 36 22 56 22 Q 76 22 82 30 L 90 30 L 88 36 L 80 38 L 78 50 L 72 50 L 70 42 L 36 42 L 30 50 L 22 50 L 26 40 Q 14 42 14 50 Z"
-            fill="currentColor"
-          />
-          {/* plates */}
+          <path d="M 10 50 Q 12 36 24 32 L 30 26 Q 36 22 56 22 Q 76 22 82 30 L 90 30 L 88 36 L 80 38 L 78 50 L 72 50 L 70 42 L 36 42 L 30 50 L 22 50 L 26 40 Q 14 42 14 50 Z" fill="currentColor" />
           {[34, 44, 54, 64, 74].map((x, i) => (
-            <path
-              key={i}
-              d={`M ${x} 24 L ${x - 4} 12 L ${x + 4} 12 Z`}
-              fill="currentColor"
-            />
+            <path key={i} d={`M ${x} 24 L ${x - 4} 12 L ${x + 4} 12 Z`} fill="currentColor" />
           ))}
-          {/* tail spikes */}
-          <path d="M 12 36 L 4 32 L 4 40 Z" fill="currentColor" />
-          <circle cx="78" cy="28" r="1" fill="white" />
         </svg>
       )
     case 'velo':
       return (
         <svg viewBox="0 0 100 60" className={common}>
-          <path
-            d="M 14 50 Q 14 38 26 36 L 30 28 Q 34 22 48 22 Q 62 22 66 28 L 70 28 L 70 22 L 74 22 L 72 30 L 78 32 L 76 38 L 70 38 L 70 50 L 64 50 L 64 42 L 44 42 L 40 50 L 32 50 L 34 42 Q 18 44 18 50 Z"
-            fill="currentColor"
-          />
-          {/* feather tuft */}
-          <path d="M 28 22 L 24 14 L 32 16 Z" fill="currentColor" />
-          <circle cx="58" cy="28" r="1" fill="white" />
+          <path d="M 14 50 Q 14 38 26 36 L 30 28 Q 34 22 48 22 Q 62 22 66 28 L 70 28 L 70 22 L 74 22 L 72 30 L 78 32 L 76 38 L 70 38 L 70 50 L 64 50 L 64 42 L 44 42 L 40 50 L 32 50 L 34 42 Q 18 44 18 50 Z" fill="currentColor" />
         </svg>
       )
     case 'anky':
       return (
         <svg viewBox="0 0 100 60" className={common}>
-          <path
-            d="M 6 46 Q 8 32 26 28 Q 50 24 76 28 Q 86 30 88 38 Q 86 46 76 46 L 70 46 L 70 50 L 62 50 L 62 46 L 36 46 L 34 50 L 26 50 L 26 46 Q 12 48 6 46 Z"
-            fill="currentColor"
-          />
-          {/* armor bumps */}
-          {[28, 38, 48, 58, 68].map((x, i) => (
-            <circle key={i} cx={x} cy="26" r="2" fill="currentColor" />
-          ))}
-          {/* tail club */}
+          <path d="M 6 46 Q 8 32 26 28 Q 50 24 76 28 Q 86 30 88 38 Q 86 46 76 46 L 70 46 L 70 50 L 62 50 L 62 46 L 36 46 L 34 50 L 26 50 L 26 46 Q 12 48 6 46 Z" fill="currentColor" />
           <circle cx="92" cy="38" r="6" fill="currentColor" />
-          <circle cx="78" cy="34" r="1" fill="white" />
         </svg>
       )
     default:
@@ -161,12 +158,35 @@ function DinoSilhouette({ id }: { id: string }) {
   }
 }
 
+function DinoCardArtwork({ card }: { card: DinoCard }) {
+  const url = useDinoImage(card.searchQuery)
+  return (
+    <div className={`relative bg-gradient-to-br ${card.color} h-36 overflow-hidden`}>
+      {url ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={url}
+          alt={card.name}
+          className="w-full h-full object-cover"
+          loading="lazy"
+        />
+      ) : (
+        <div className="flex items-center justify-center w-full h-full p-3 text-white/95">
+          <DinoSilhouette id={card.id} />
+        </div>
+      )}
+      {/* Bottom gradient for label legibility (not used here but keeps depth) */}
+      <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
+    </div>
+  )
+}
+
 export function DinoWalk() {
   return (
     <div className="w-full space-y-4">
       {/* Animated jungle scene */}
       <div className="relative w-full aspect-[16/9] rounded-2xl overflow-hidden border border-emerald-800/50">
-        {/* Jurassic sky */}
+        {/* Sky */}
         <div
           className="absolute inset-0"
           style={{
@@ -281,11 +301,7 @@ export function DinoWalk() {
             whileHover={{ y: -4 }}
             className="relative rounded-2xl overflow-hidden border border-white/15 shadow-lg"
           >
-            <div className={`bg-gradient-to-br ${card.color} p-3 flex items-center justify-center h-28`}>
-              <div className="w-full h-full text-white/95">
-                <DinoSilhouette id={card.id} />
-              </div>
-            </div>
+            <DinoCardArtwork card={card} />
             <div className="bg-surface-container p-3 space-y-1">
               <p className="font-display font-extrabold text-on-background text-base leading-tight">
                 {card.name}
