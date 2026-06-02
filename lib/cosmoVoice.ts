@@ -8,6 +8,9 @@
 // Cache MP3 blob URLs per text so re-narrating the same line is instant.
 const audioCache = new Map<string, string>()
 let currentAudio: HTMLAudioElement | null = null
+// Monotonic token so that audio fetches whose request was cancelled (e.g. by
+// React strict-mode's double-invocation) don't start playing when they resolve.
+let speechGeneration = 0
 
 export interface SpeakOptions {
   // Called repeatedly with a 0..1 progress ratio as audio plays.
@@ -71,10 +74,14 @@ export async function speakAsCosmo(text: string, opts: SpeakOptions = {}) {
     return
   }
 
-  // Stop anything currently playing.
+  // Stop anything currently playing and claim a new generation token.
   stopCosmoSpeech()
+  const myGen = ++speechGeneration
 
   const url = await fetchAudioUrl(clean)
+  // If we were superseded (or stopped) while the fetch was pending, abort.
+  if (myGen !== speechGeneration) return
+
   if (!url) {
     fallbackSpeak(clean, opts)
     return
@@ -106,6 +113,8 @@ export async function speakAsCosmo(text: string, opts: SpeakOptions = {}) {
 }
 
 export function stopCosmoSpeech() {
+  // Bump generation so any in-flight speakAsCosmo bail out when fetch resolves.
+  speechGeneration++
   if (typeof window === 'undefined') return
   if ('speechSynthesis' in window) window.speechSynthesis.cancel()
   if (currentAudio) {
