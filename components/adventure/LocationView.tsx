@@ -6,12 +6,33 @@ import type { Location, VisualKey } from '@/lib/journeyContent'
 import { CosmoNarrator } from './CosmoNarrator'
 import { MiniGame } from './MiniGame'
 import { SolarSystem } from './visuals/SolarSystem'
+import { SunFlare } from './visuals/SunFlare'
+import { MoonPhases } from './visuals/MoonPhases'
+import { Constellations } from './visuals/Constellations'
+import { RocketLaunch } from './visuals/RocketLaunch'
+import { MarsRover } from './visuals/MarsRover'
+import { CometSwoop } from './visuals/CometSwoop'
+import { BlackHole } from './visuals/BlackHole'
 import { YouTubeEmbed } from './YouTubeEmbed'
 
 function LocationVisual({ visual }: { visual: VisualKey }) {
   switch (visual) {
     case 'solar-system':
       return <SolarSystem />
+    case 'sun-flare':
+      return <SunFlare />
+    case 'moon-phases':
+      return <MoonPhases />
+    case 'constellations':
+      return <Constellations />
+    case 'rocket-launch':
+      return <RocketLaunch />
+    case 'mars-rover':
+      return <MarsRover />
+    case 'comet-swoop':
+      return <CometSwoop />
+    case 'black-hole':
+      return <BlackHole />
   }
 }
 

@@ -39,7 +39,15 @@ export type GameData =
   | BuildingGameData
   | QuestionGameData
 
-export type VisualKey = 'solar-system'
+export type VisualKey =
+  | 'solar-system'
+  | 'sun-flare'
+  | 'moon-phases'
+  | 'constellations'
+  | 'rocket-launch'
+  | 'mars-rover'
+  | 'comet-swoop'
+  | 'black-hole'
 
 export interface LocationVideo {
   youtubeId: string
@@ -103,9 +111,10 @@ export const JOURNEY: Topic[] = [
         id: 'space-sun',
         name: 'The Blazing Sun',
         emoji: '☀️',
+        visual: 'sun-flare',
         introNarration:
-          "3... 2... 1... WHOOSH! Our rocket has zoomed past the clouds, past the blue sky, and into the dark velvet of outer space. Look out the window — that giant blazing ball is the SUN! The Sun is a STAR, a humongous ball of glowing hot gas. It blasts out light and warmth that travels all the way to Earth, helping every plant, animal, and YOU stay alive. Without the Sun, our whole planet would be a dark, frozen ice cube!",
-        funFact: 'The Sun is so big that 1 million Earths could fit inside it!',
+          "3... 2... 1... WHOOSH! Our rocket has zoomed past the clouds, past the blue sky, and into the dark velvet of outer space. Look out the window — that giant blazing ball is the SUN! The Sun is a STAR — a humongous spinning ball of glowing hot gas, mostly hydrogen and helium. Inside the Sun's core, the temperature is a mind-melting 27 million degrees Fahrenheit — hot enough to smash tiny atoms together and burst out energy as light and warmth. That light takes about 8 whole minutes to travel all the way to Earth, helping every plant grow, every animal hunt, and YOU wake up to a bright sunny morning. Without the Sun, our whole planet would be a dark, frozen ice cube floating in the dark!",
+        funFact: 'The Sun is so big that 1 million Earths could fit inside it — and it sends a solar wind of tiny particles racing through space at 1 million miles per hour!',
         game: {
           type: 'question',
           instruction: 'Quick question, space cadet!',
@@ -126,8 +135,8 @@ export const JOURNEY: Topic[] = [
           title: 'Watch a quick tour of our Solar System!',
         },
         introNarration:
-          "Now that we've said hello to the Sun, let's meet its 8 best friends — the PLANETS! Planets are giant balls of rock or swirly gas, and they all ZOOM around the Sun in their own giant circles. Some planets are tiny and rocky like Mercury, some are HUGE and gassy like Jupiter, and one very special blue-and-green planet is the place we call home: Earth! Watch this quick tour, then tap any planet below to learn its secret.",
-        funFact: 'Jupiter has a big red storm that has been spinning for over 300 years!',
+          "Now that we've said hello to the Sun, let's meet its 8 best friends — the PLANETS! Planets are giant balls of rock or swirly gas, and they all ZOOM around the Sun in their own giant circles called ORBITS. The first four — Mercury, Venus, Earth, and Mars — are little rocky planets like the one you live on. The next four — Jupiter, Saturn, Uranus, and Neptune — are GIANT balls of gas, so big that hundreds of Earths could fit inside! Saturn even has shimmering rings made of ice and rock zooming around it. Watch the quick tour, then tap any planet below to learn its secret. Pinch your fingers, drag the speed slider, and see them race around the Sun!",
+        funFact: 'Jupiter has a big red storm that has been spinning for over 300 years — it is bigger than Earth!',
         game: {
           type: 'ordering',
           instruction: 'Put the planets in order from CLOSEST to FARTHEST from the Sun!',
@@ -142,12 +151,31 @@ export const JOURNEY: Topic[] = [
         },
       },
       {
+        id: 'space-mars',
+        name: 'Red Planet Mars',
+        emoji: '🔴',
+        visual: 'mars-rover',
+        introNarration:
+          "Speaking of planets — let's pay a special visit to MARS, the rusty Red Planet! Mars is our next-door neighbor, and it's red because the dirt all over its surface is full of IRON that has rusted, just like an old bicycle left out in the rain. Mars has the BIGGEST volcano in the whole solar system — a giant called Olympus Mons that is three times taller than Mount Everest! It even has two tiny lumpy moons named Phobos and Deimos. Right now, real robot ROVERS are driving around on Mars, taking photos, drilling rocks, and looking for clues that tiny life might once have lived there. One day soon, real human astronauts might walk on Mars too. Could that be YOU?",
+        funFact: 'A day on Mars is only 40 minutes longer than a day on Earth — so a Martian afternoon would feel just like yours!',
+        game: {
+          type: 'question',
+          instruction: 'Mars question!',
+          question: 'Why is Mars red?',
+          options: ['It is on fire', 'Its dirt is full of rust', 'It is shy', 'Its sky is red'],
+          correctIndex: 1,
+          celebrationMessage: 'Yes! Rusty iron dirt makes Mars look red!',
+          hintOnWrong: 'Think about what happens to a metal bike left out in the rain!',
+        },
+      },
+      {
         id: 'space-moon',
         name: 'Our Moon',
         emoji: '🌙',
+        visual: 'moon-phases',
         introNarration:
-          "Whew — after zooming past all 8 planets, we're cruising back toward our home, Earth. And look right outside the rocket window! That bright, glowing ball is the MOON, Earth's best buddy. Here's something tricky — the Moon doesn't make its own light! It shines because sunlight bounces off it like a giant night-light. Twelve brave humans have actually walked on the Moon and left their footprints up there. Cool, huh?",
-        funFact: 'The Moon is moving away from Earth a tiny bit every year!',
+          "Whew — after zooming past all 8 planets, we're cruising back toward our home, Earth. And look right outside the rocket window! That bright, glowing ball is the MOON, Earth's best buddy. Here's a sneaky secret — the Moon doesn't actually make its own light! It shines because sunlight bounces off its dusty gray surface like a giant night-light. The Moon goes around Earth once every 27 days, and as it travels, the Sun lights up different parts of it. That's why the Moon seems to change shape! These are called PHASES — from invisible New Moon, to a thin crescent, to a glowing Full Moon, then back again. Tap each moon below to watch the cycle unfold!",
+        funFact: 'Twelve brave humans have walked on the Moon, and their footprints are STILL there because there is no wind to blow them away!',
         game: {
           type: 'matching',
           instruction: 'Match each space thing to what it does!',
@@ -163,9 +191,10 @@ export const JOURNEY: Topic[] = [
         id: 'space-stars',
         name: 'Twinkle Stars',
         emoji: '⭐',
+        visual: 'constellations',
         introNarration:
-          "When the Sun sets behind Earth and the sky goes dark, something magical appears: thousands of twinkly STARS! Here's the wildest part — every single star is actually a giant Sun, just like ours. They look tiny because they're SO far away that their light takes years and years to reach us. Sometimes stars team up to make sky pictures called CONSTELLATIONS — like the Big Dipper, which looks like a giant soup spoon!",
-        funFact: 'There are more stars in the sky than grains of sand on every beach on Earth!',
+          "When the Sun sets behind Earth and the sky goes dark, something magical appears: thousands of twinkly STARS! Here's the wildest part — every single star is actually a giant Sun, just like ours. They look tiny because they are SO far away that their light takes YEARS and years to reach us. Some of the stars you see tonight stopped shining long, long ago — but their light is still zooming across space to your eyes! Long ago, people noticed that some stars team up to make sky pictures called CONSTELLATIONS — like the Big Dipper (a giant soup spoon), Orion's Belt (three stars in a perfect row), and Cassiopeia (a queen on her throne). Tap the buttons below to draw each one in the sky!",
+        funFact: 'There are more stars in the sky than grains of sand on every beach on Earth — over a billion trillion!',
         game: {
           type: 'question',
           instruction: 'Starry question!',
@@ -177,12 +206,50 @@ export const JOURNEY: Topic[] = [
         },
       },
       {
+        id: 'space-comets',
+        name: 'Comets & Asteroids',
+        emoji: '☄️',
+        visual: 'comet-swoop',
+        introNarration:
+          "Look up there — WHOOSH! What is that streaking through the stars? It's a COMET! Comets are like dirty cosmic snowballs made of ice, rock, and dust, leftover from when the planets were born. When a comet gets close to the Sun, the warmth boils away its ice, leaving a long sparkly TAIL that stretches for millions of miles. And those rocky lumps tumbling below? Those are ASTEROIDS — chunks of space rock that didn't quite become planets. Most of them hang out in a giant ring between Mars and Jupiter called the Asteroid Belt. Some are tiny like a pebble; others are the size of a whole city. Cool but scary, right?",
+        funFact: 'A famous comet named Halley swings past Earth only once every 76 years — the next visit is in 2061!',
+        game: {
+          type: 'matching',
+          instruction: 'Match each cosmic visitor to what it is!',
+          pairs: [
+            { id: 'p1', left: 'Comet', right: 'Icy snowball with a tail' },
+            { id: 'p2', left: 'Asteroid', right: 'Chunk of space rock' },
+            { id: 'p3', left: 'Meteor', right: 'Shooting star streak' },
+          ],
+          celebrationMessage: 'Space rock expert!',
+        },
+      },
+      {
+        id: 'space-blackholes',
+        name: 'Black Holes & Galaxies',
+        emoji: '🌌',
+        visual: 'black-hole',
+        introNarration:
+          "Buckle up, because we are about to meet the SPOOKIEST thing in space — a BLACK HOLE! A black hole is a place where gravity pulls SO hard that not even light can escape. That's why it looks like a perfect dark circle in the middle of the glow! Black holes form when a giant star runs out of fuel and squishes itself smaller, smaller, smaller. Don't worry — they are very, very far away. And speaking of far... the Sun, all 8 planets, and billions of other stars all live together in a giant swirly group called a GALAXY. Our galaxy is called the MILKY WAY, and it looks like a glowing river of starlight across the night sky. Beyond it are billions MORE galaxies. Space is HUGE!",
+        funFact: 'There is a giant black hole at the center of our Milky Way galaxy — it is 4 million times heavier than the Sun!',
+        game: {
+          type: 'question',
+          instruction: 'Galaxy quiz!',
+          question: 'What is the name of our galaxy?',
+          options: ['Chocolate Bar', 'Milky Way', 'Cosmic River', 'Big Burger'],
+          correctIndex: 1,
+          celebrationMessage: 'Yes! We live in the MILKY WAY galaxy!',
+          hintOnWrong: 'It sounds like a yummy candy bar...',
+        },
+      },
+      {
         id: 'space-rockets',
         name: 'Rockets & Astronauts',
         emoji: '🚀',
+        visual: 'rocket-launch',
         introNarration:
-          "We've toured the Sun, the planets, the Moon, and the stars — but hey, wait... how did we even GET out here?! With a ROCKET! Rockets are giant tubes that blast roaring hot fire out their bottoms, and that fire PUSHES them up, up, UP into space. The brave humans riding inside are called ASTRONAUTS, and once they reach space, they FLOAT around because there's no gravity to pull them down. Let's count down a launch!",
-        funFact: 'Astronauts grow about 2 inches taller in space because there is no gravity squishing them!',
+          "We've toured the Sun, the planets, the Moon, the stars, and even the spooky black holes — but hey, wait... how did we even GET out here?! With a ROCKET! Rockets are giant tubes that blast roaring hot fire out their bottoms, and that fire PUSHES them up, up, UP into space. The faster a rocket flies, the higher it climbs — it has to zoom 25 times faster than the speediest jet to break free of Earth's gravity! The brave humans riding inside are called ASTRONAUTS. Once they reach space, they FLOAT around because there's no gravity to pull them down. They sleep in zipped-up sleeping bags strapped to the wall, drink juice from special pouches, and sometimes step OUTSIDE in big puffy spacesuits to fix things. Ready? Let's count down a launch — tap the rocket button below!",
+        funFact: 'Astronauts grow about 2 inches taller in space because there is no gravity squishing them — then they shrink back when they come home!',
         game: {
           type: 'ordering',
           instruction: 'Put a rocket launch in order!',
@@ -202,12 +269,12 @@ export const JOURNEY: Topic[] = [
       topicId: 'space',
       title: 'Space Captain Test! 🚀',
       introNarration:
-        "Wow, you finished all the space stops! Now let's see if you remember everything. Answer these 3 questions to earn your Space Captain badge!",
-      passingScore: 2,
+        "Wow, you finished all 8 space stops! Now let's see if you remember everything. Answer these 5 questions to earn your Space Captain badge!",
+      passingScore: 3,
       questions: [
         {
           type: 'question',
-          instruction: 'Question 1 of 3',
+          instruction: 'Question 1 of 5',
           question: 'How many planets go around our Sun?',
           options: ['5', '8', '12', '100'],
           correctIndex: 1,
@@ -216,7 +283,7 @@ export const JOURNEY: Topic[] = [
         },
         {
           type: 'question',
-          instruction: 'Question 2 of 3',
+          instruction: 'Question 2 of 5',
           question: 'What goes around the Earth?',
           options: ['The Sun', 'The Moon', 'Mars', 'Jupiter'],
           correctIndex: 1,
@@ -225,12 +292,30 @@ export const JOURNEY: Topic[] = [
         },
         {
           type: 'question',
-          instruction: 'Question 3 of 3',
+          instruction: 'Question 3 of 5',
           question: 'The Sun is a...',
           options: ['Planet', 'Star', 'Moon', 'Comet'],
           correctIndex: 1,
           celebrationMessage: 'Correct!',
           hintOnWrong: 'It is the same kind of thing you see twinkling at night!',
+        },
+        {
+          type: 'question',
+          instruction: 'Question 4 of 5',
+          question: 'Which planet is called the Red Planet?',
+          options: ['Venus', 'Saturn', 'Mars', 'Mercury'],
+          correctIndex: 2,
+          celebrationMessage: 'Correct!',
+          hintOnWrong: 'Its rusty dirt makes it look red!',
+        },
+        {
+          type: 'question',
+          instruction: 'Question 5 of 5',
+          question: 'What is the name of our galaxy?',
+          options: ['Milky Way', 'Andromeda', 'Cosmic Pizza', 'Big Dipper'],
+          correctIndex: 0,
+          celebrationMessage: 'Correct!',
+          hintOnWrong: 'It sounds like a yummy candy bar!',
         },
       ],
       successNarration: "You did it! You are officially a Space Captain! Ready to explore Earth's animals next?",
