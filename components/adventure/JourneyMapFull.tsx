@@ -19,15 +19,15 @@ function getState(topic: Topic, currentTopicId: string, completed: string[]): No
 }
 
 // Pixel-perfect anchor points (% of canvas) over each themed island in
-// /public/world-map.png — Moon (Outer Space), Jungle (Animals),
-// Cloud-island (Weather), Heart-lab (Body), Greenhouse-dome (Plants).
-const ISLAND_POSITIONS: Array<{ x: number; y: number }> = [
-  { x: 18, y: 22 },  // Outer Space (rocky moon)
-  { x: 43, y: 32 },  // Animal Kingdom (lush jungle)
-  { x: 82, y: 26 },  // Weather Wonders (cloud sky island)
-  { x: 15, y: 65 },  // Human Body (heart-shaped lab)
-  { x: 72, y: 75 },  // Plant Power (greenhouse dome)
-]
+// /public/world-map.png — keyed by topic id so reordering topics doesn't
+// re-shuffle which island each one lives on.
+const ISLAND_POSITIONS: Record<string, { x: number; y: number }> = {
+  space: { x: 18, y: 22 },    // rocky moon
+  animals: { x: 43, y: 32 },  // lush jungle
+  weather: { x: 82, y: 26 },  // cloud sky island
+  body: { x: 15, y: 65 },     // heart-shaped lab
+  plants: { x: 72, y: 75 },   // greenhouse dome
+}
 
 const SUBTITLES: Record<NodeState, string> = {
   current: 'CURRENT MISSION',
@@ -71,7 +71,7 @@ export function JourneyMapFull({ topics, currentTopicId, completedTopicIds, onSe
         {/* Topic nodes — overlaid precisely on each illustrated island */}
         {topics.map((topic, i) => {
           const state = getState(topic, currentTopicId, completedTopicIds)
-          const point = ISLAND_POSITIONS[i % ISLAND_POSITIONS.length]
+          const point = ISLAND_POSITIONS[topic.id] ?? { x: 50, y: 50 }
           const clickable = state === 'current' || state === 'completed'
           return (
             <motion.div

@@ -104,7 +104,7 @@ export interface Topic {
   checkpoint: Checkpoint
 }
 
-export const JOURNEY: Topic[] = [
+const RAW_JOURNEY: Topic[] = [
   {
     id: 'space',
     name: 'Outer Space',
@@ -774,7 +774,7 @@ export const JOURNEY: Topic[] = [
           hintOnWrong: 'It is the big bright thing in the sky during the day!',
         },
       ],
-      successNarration: "Wonderful! You are a Weather Wizard! Next up: YOUR BODY!",
+      successNarration: "Wonderful! You are a Weather Wizard! Next up: PLANT POWER!",
       retryNarration: "You are close! One more try, weather friend!",
     },
   },
@@ -783,7 +783,7 @@ export const JOURNEY: Topic[] = [
     name: 'The Human Body',
     emoji: '🧠',
     themeColor: 'rose',
-    order: 4,
+    order: 5,
     intro: {
       tagline: 'Inside YOU is amazing!',
       narration:
@@ -884,7 +884,7 @@ export const JOURNEY: Topic[] = [
       id: 'cp-body',
       topicId: 'body',
       title: 'Body Boss Test! 🧠',
-      introNarration: "Last topic before you finish — let's see what you know about YOUR body!",
+      introNarration: "Final test! If you pass, you become a SCIENCE LEGEND!",
       passingScore: 2,
       questions: [
         {
@@ -915,7 +915,7 @@ export const JOURNEY: Topic[] = [
           hintOnWrong: 'Take a big breath — feel your chest go up!',
         },
       ],
-      successNarration: "Incredible! You are a Body Boss! One last adventure: PLANTS!",
+      successNarration: "YOU DID IT! You are officially a SCIENCE LEGEND! Thanks for adventuring with me!",
       retryNarration: "Almost! Your brain is working hard — try again!",
     },
   },
@@ -924,11 +924,11 @@ export const JOURNEY: Topic[] = [
     name: 'Plant Power',
     emoji: '🌱',
     themeColor: 'emerald',
-    order: 5,
+    order: 4,
     intro: {
       tagline: 'Welcome to the green world!',
       narration:
-        "Last adventure — PLANT POWER! From tiny seeds to towering trees, plants are everywhere. Let's discover how they grow and what their parts do!",
+        "Time for PLANT POWER! From tiny seeds to towering trees, plants are everywhere on Earth. Let's discover how they grow and what their parts do!",
       animationEmojis: ['🌱', '🌿', '🌳', '🌲', '🌻', '🌷', '🌹', '🍀', '🌵', '🪴'],
     },
     locations: [
@@ -1026,7 +1026,7 @@ export const JOURNEY: Topic[] = [
       id: 'cp-plants',
       topicId: 'plants',
       title: 'Plant Master Test! 🌱',
-      introNarration: "Final test! If you pass, you will be a SCIENCE LEGEND!",
+      introNarration: "Plant Master Test! Get these right and one last adventure awaits — YOUR BODY!",
       passingScore: 2,
       questions: [
         {
@@ -1057,8 +1057,11 @@ export const JOURNEY: Topic[] = [
           hintOnWrong: 'Something green that grows!',
         },
       ],
-      successNarration: "YOU DID IT! You are officially a SCIENCE LEGEND! Thanks for adventuring with me!",
-      retryNarration: "One more try! You are SO close to being a legend!",
+      successNarration: "Magnificent! You are a Plant Master! One last adventure: YOUR BODY!",
+      retryNarration: "One more try! Cosmo believes in you!",
     },
   },
 ]
+
+// Exposed to the app sorted by `order` so consumers can iterate naturally.
+export const JOURNEY: Topic[] = [...RAW_JOURNEY].sort((a, b) => a.order - b.order)
