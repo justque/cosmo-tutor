@@ -1,18 +1,34 @@
-// Cosmo's voice — a humorous, high-pitched boy's voice using the browser's
-// SpeechSynthesis API. Picks a child/boy voice when available (e.g. macOS
-// "Junior"), otherwise pitches up a default English voice for a kid-friendly,
-// goofy effect.
+// Cosmo's voice — a warm, natural female teacher voice using the browser's
+// SpeechSynthesis API. Prefers high-quality "premium"/"enhanced" female
+// voices when available (e.g. macOS "Ava", "Samantha"), with neutral pitch
+// and rate for smooth, natural delivery.
 
 let cachedVoice: SpeechSynthesisVoice | null | undefined
 
-const BOY_VOICE_NAMES = [
-  'Junior', // macOS — actual child voice
-  'Google UK English Male',
+// Ranked best-first. Premium/neural voices first, then standard.
+const TEACHER_VOICE_NAMES = [
+  'Ava (Premium)',
+  'Ava (Enhanced)',
+  'Ava',
+  'Samantha (Premium)',
+  'Samantha (Enhanced)',
+  'Samantha',
+  'Allison (Premium)',
+  'Allison (Enhanced)',
+  'Allison',
+  'Susan (Premium)',
+  'Susan (Enhanced)',
+  'Susan',
+  'Karen (Premium)',
+  'Karen',
+  'Moira (Premium)',
+  'Moira',
+  'Serena (Premium)',
+  'Serena',
+  'Microsoft Aria Online (Natural) - English (United States)',
+  'Microsoft Jenny Online (Natural) - English (United States)',
+  'Google UK English Female',
   'Google US English',
-  'Daniel',
-  'Aaron',
-  'Fred',
-  'Rishi',
 ]
 
 function pickVoice(): SpeechSynthesisVoice | null {
@@ -20,17 +36,18 @@ function pickVoice(): SpeechSynthesisVoice | null {
   const voices = window.speechSynthesis.getVoices()
   if (voices.length === 0) return null
 
-  for (const name of BOY_VOICE_NAMES) {
+  for (const name of TEACHER_VOICE_NAMES) {
     const match = voices.find((v) => v.name === name)
     if (match) return match
   }
-  const childish = voices.find((v) => /child|kid|boy|junior/i.test(v.name))
-  if (childish) return childish
-  return (
-    voices.find((v) => v.lang.startsWith('en') && /male/i.test(v.name)) ||
-    voices.find((v) => v.lang.startsWith('en')) ||
-    voices[0]
+  // Heuristic: any English female-sounding voice (Premium/Enhanced preferred)
+  const enFemale = voices.filter(
+    (v) => v.lang.startsWith('en') && /female|samantha|ava|allison|susan|karen|moira|serena|aria|jenny|zira|joanna|salli|kimberly/i.test(v.name)
   )
+  const premium = enFemale.find((v) => /premium|enhanced|natural/i.test(v.name))
+  if (premium) return premium
+  if (enFemale[0]) return enFemale[0]
+  return voices.find((v) => v.lang.startsWith('en')) || voices[0]
 }
 
 function getVoice(): SpeechSynthesisVoice | null {
@@ -70,8 +87,8 @@ export function speakAsCosmo(text: string, opts: SpeakOptions = {}) {
   const utter = new SpeechSynthesisUtterance(clean)
   const voice = getVoice()
   if (voice) utter.voice = voice
-  utter.pitch = 1.6 // High and squeaky — kid-like
-  utter.rate = 1.1  // Slightly fast — enthusiastic
+  utter.pitch = 1.05 // Slightly warm, natural female register
+  utter.rate = 0.98  // Calm, teacherly pace
   utter.volume = 1
 
   utter.onboundary = (event) => {
