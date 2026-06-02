@@ -78,6 +78,18 @@ body {
   filter: drop-shadow(0 0 6px rgba(0, 238, 252, 0.45));
 }
 
+/* Stardust connection path — draws itself once on mount */
+@keyframes stardust-draw {
+  to { stroke-dashoffset: 0; }
+}
+.stardust-path {
+  stroke-dasharray: 12 14;
+  stroke-dashoffset: 2600;
+  stroke-linecap: round;
+  animation: stardust-draw 4s ease-in-out forwards;
+  filter: drop-shadow(0 0 8px rgba(183, 247, 0, 0.5));
+}
+
 /* Frosted glass panel (Stitch design system) */
 .glass-panel {
   background: rgba(27, 28, 60, 0.4);

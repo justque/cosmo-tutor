@@ -1,6 +1,5 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import type { Topic } from '@/lib/journeyContent'
 
@@ -11,47 +10,6 @@ interface Props {
   onSelect: (topicId: string) => void
 }
 
-interface Star {
-  size: number
-  left: number
-  top: number
-  duration: number
-  delay: number
-}
-
-function Starfield() {
-  const [stars, setStars] = useState<Star[]>([])
-  useEffect(() => {
-    setStars(
-      Array.from({ length: 80 }, () => ({
-        size: Math.random() * 2.5 + 0.5,
-        left: Math.random() * 100,
-        top: Math.random() * 100,
-        duration: Math.random() * 3 + 2,
-        delay: Math.random() * 5,
-      }))
-    )
-  }, [])
-  return (
-    <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-2xl">
-      {stars.map((s, i) => (
-        <span
-          key={i}
-          className="star"
-          style={{
-            width: s.size,
-            height: s.size,
-            left: `${s.left}%`,
-            top: `${s.top}%`,
-            ['--duration' as string]: `${s.duration}s`,
-            animationDelay: `${s.delay}s`,
-          } as React.CSSProperties}
-        />
-      ))}
-    </div>
-  )
-}
-
 type NodeState = 'completed' | 'current' | 'locked'
 
 function getState(topic: Topic, currentTopicId: string, completed: string[]): NodeState {
@@ -60,83 +18,71 @@ function getState(topic: Topic, currentTopicId: string, completed: string[]): No
   return 'locked'
 }
 
-// Alternating x positions so the path curves left/right between nodes.
-const xPositions = [50, 70, 30, 65, 50]
+// Pixel-perfect anchor points (% of canvas) over each themed island in
+// /public/world-map.png — Moon (Outer Space), Jungle (Animals),
+// Cloud-island (Weather), Heart-lab (Body), Greenhouse-dome (Plants).
+const ISLAND_POSITIONS: Array<{ x: number; y: number }> = [
+  { x: 18, y: 22 },  // Outer Space (rocky moon)
+  { x: 43, y: 32 },  // Animal Kingdom (lush jungle)
+  { x: 82, y: 26 },  // Weather Wonders (cloud sky island)
+  { x: 30, y: 70 },  // Human Body (heart-shaped lab)
+  { x: 72, y: 75 },  // Plant Power (greenhouse dome)
+]
+
+const SUBTITLES: Record<NodeState, string> = {
+  current: 'CURRENT MISSION',
+  completed: 'COMPLETED',
+  locked: 'LOCKED',
+}
 
 export function JourneyMapFull({ topics, currentTopicId, completedTopicIds, onSelect }: Props) {
-  // Build a smooth SVG path connecting the node centers.
-  const ROW_HEIGHT = 200
-  const PATH_TOP = 80
-  const points = topics.map((_, i) => ({
-    x: xPositions[i % xPositions.length],
-    y: PATH_TOP + i * ROW_HEIGHT,
-  }))
-  const pathD = points
-    .map((p, i) => {
-      if (i === 0) return `M ${p.x} ${p.y}`
-      const prev = points[i - 1]
-      const midY = (prev.y + p.y) / 2
-      return `C ${prev.x} ${midY}, ${p.x} ${midY}, ${p.x} ${p.y}`
-    })
-    .join(' ')
-
-  const totalHeight = PATH_TOP + (topics.length - 1) * ROW_HEIGHT + 120
-
   return (
-    <div className="relative w-full max-w-2xl mx-auto rounded-2xl overflow-hidden">
-      <Starfield />
-
+    <div className="relative w-full max-w-5xl mx-auto rounded-3xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.6)] border border-white/10">
       {/* Heading */}
-      <div className="relative z-10 text-center pt-6 pb-8 px-6">
+      <div className="relative z-20 text-center px-6 pt-6 pb-4 bg-gradient-to-b from-surface-container/90 to-transparent">
         <p className="font-display font-bold uppercase tracking-[0.25em] text-secondary-container text-xs mb-2">
-          Choose Your Mission
+          Cosmo&apos;s World Map
         </p>
         <h2
           className="font-display font-extrabold text-3xl md:text-4xl text-primary-container"
           style={{ textShadow: '0 3px 0 #506e00' }}
         >
-          The Cosmic Journey
+          Choose Your Mission
         </h2>
         <p className="mt-2 text-sm text-on-surface-variant">
-          Tap the glowing planet to begin. Worlds unlock as you progress.
+          Tap a glowing world to begin. Completed worlds can be replayed any time.
         </p>
       </div>
 
-      {/* Winding journey */}
-      <div
-        className="relative z-10 mx-auto"
-        style={{ height: totalHeight, width: '100%', maxWidth: 480 }}
-      >
-        {/* Dashed SVG path */}
-        <svg
-          className="absolute inset-0 w-full h-full pointer-events-none"
-          viewBox={`0 0 100 ${totalHeight}`}
-          preserveAspectRatio="none"
-        >
-          <path
-            d={pathD}
-            fill="none"
-            stroke="rgba(255,255,255,0.2)"
-            strokeWidth="0.6"
-            className="journey-path"
-          />
-        </svg>
+      {/* Map canvas — illustrated background, 16:9 aspect */}
+      <div className="relative w-full" style={{ aspectRatio: '16 / 9' }}>
+        {/* Illustrated mission map */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/world-map.png"
+          alt="Cosmo's world map"
+          className="absolute inset-0 w-full h-full object-cover"
+          draggable={false}
+        />
 
-        {/* Nodes */}
+        {/* Subtle vignette so node labels are legible */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/10 pointer-events-none" />
+
+        {/* Topic nodes — overlaid precisely on each illustrated island */}
         {topics.map((topic, i) => {
           const state = getState(topic, currentTopicId, completedTopicIds)
-          const point = points[i]
+          const point = ISLAND_POSITIONS[i % ISLAND_POSITIONS.length]
           const clickable = state === 'current' || state === 'completed'
           return (
             <motion.div
               key={topic.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.08, type: 'spring', stiffness: 220, damping: 18 }}
-              className="absolute flex flex-col items-center"
+              initial={{ opacity: 0, scale: 0.6 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.15 + i * 0.1, type: 'spring', stiffness: 200, damping: 16 }}
+              className="absolute flex flex-col items-center gap-2 z-10"
               style={{
                 left: `${point.x}%`,
-                top: point.y,
+                top: `${point.y}%`,
                 transform: 'translate(-50%, -50%)',
               }}
             >
@@ -146,10 +92,10 @@ export function JourneyMapFull({ topics, currentTopicId, completedTopicIds, onSe
                 aria-label={topic.name}
                 className={
                   state === 'current'
-                    ? 'node-active relative w-24 h-24 rounded-full bg-primary-container border-4 border-white/25 flex items-center justify-center text-5xl chunky-button hover:scale-110 transition-transform'
+                    ? 'node-active relative w-[88px] h-[88px] rounded-full bg-primary-container border-4 border-white flex items-center justify-center text-5xl chunky-button hover:scale-110 transition-transform shadow-2xl'
                     : state === 'completed'
-                    ? 'relative w-20 h-20 rounded-full bg-primary-container/30 border-4 border-primary-container/60 flex items-center justify-center text-4xl hover:scale-105 transition-transform cursor-pointer'
-                    : 'relative w-20 h-20 rounded-full bg-surface-container-highest border-4 border-white/10 flex items-center justify-center text-3xl opacity-60 grayscale-[0.6] cursor-not-allowed'
+                    ? 'relative w-[72px] h-[72px] rounded-full bg-primary-container/40 backdrop-blur-sm border-4 border-primary-container/80 flex items-center justify-center text-3xl hover:scale-110 transition-all shadow-xl cursor-pointer'
+                    : 'relative w-[72px] h-[72px] rounded-full bg-surface-container-highest/70 backdrop-blur-md border-4 border-white/30 flex items-center justify-center text-3xl shadow-lg opacity-90 cursor-not-allowed'
                 }
                 style={
                   state === 'current'
@@ -160,7 +106,7 @@ export function JourneyMapFull({ topics, currentTopicId, completedTopicIds, onSe
                 {state === 'completed' ? (
                   <span
                     className="text-primary-container font-extrabold"
-                    style={{ filter: 'drop-shadow(0 0 12px rgba(183,247,0,0.8))' }}
+                    style={{ filter: 'drop-shadow(0 0 12px rgba(183,247,0,0.9))' }}
                   >
                     ✓
                   </span>
@@ -168,31 +114,17 @@ export function JourneyMapFull({ topics, currentTopicId, completedTopicIds, onSe
                   <span className="leading-none">{topic.emoji}</span>
                 )}
 
-                {state === 'current' && (
-                  <div className="absolute -top-2 -right-2 w-9 h-9 rounded-full bg-secondary-container text-on-secondary-container border-2 border-white/30 flex items-center justify-center text-base shadow-lg">
-                    ★
-                  </div>
-                )}
-
                 {state === 'locked' && (
                   <div className="absolute inset-0 flex items-center justify-center bg-black/40 rounded-full">
-                    <span className="text-white text-xl">🔒</span>
+                    <span className="text-white text-2xl">🔒</span>
                   </div>
                 )}
               </button>
 
-              {/* Label pill */}
-              <div
-                className={`mt-3 px-4 py-1.5 rounded-full border backdrop-blur-md shadow-xl ${
-                  state === 'current'
-                    ? 'bg-surface-container/80 border-white/20'
-                    : state === 'completed'
-                    ? 'bg-surface-container/60 border-white/10'
-                    : 'bg-surface-container/40 border-white/5'
-                }`}
-              >
-                <span
-                  className={`font-display font-bold text-sm whitespace-nowrap ${
+              {/* Glass-panel label pill */}
+              <div className="glass-panel px-3 py-1 rounded-xl text-center shadow-lg min-w-max">
+                <p
+                  className={`font-display font-bold text-xs sm:text-sm whitespace-nowrap ${
                     state === 'current'
                       ? 'text-primary-container'
                       : state === 'completed'
@@ -201,7 +133,10 @@ export function JourneyMapFull({ topics, currentTopicId, completedTopicIds, onSe
                   }`}
                 >
                   {topic.name}
-                </span>
+                </p>
+                <p className="text-[9px] font-display font-bold uppercase tracking-wider text-on-surface-variant/80 mt-px">
+                  {SUBTITLES[state]}
+                </p>
               </div>
             </motion.div>
           )
