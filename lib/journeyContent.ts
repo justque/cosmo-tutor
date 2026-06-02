@@ -48,6 +48,9 @@ export type VisualKey =
   | 'mars-rover'
   | 'comet-swoop'
   | 'black-hole'
+  | 'saturn-rings'
+  | 'jupiter-moons'
+  | 'space-station'
   | 'mammal-parade'
   | 'habitat-zones'
   | 'bird-flock'
@@ -159,6 +162,44 @@ export const JOURNEY: Topic[] = [
         },
       },
       {
+        id: 'space-saturn',
+        name: "Saturn's Sparkly Rings",
+        emoji: '🪐',
+        visual: 'saturn-rings',
+        introNarration:
+          "Now zoom out to one of the most jaw-dropping planets in our solar system: SATURN! Saturn is a giant gas planet, almost as big as Jupiter, but what makes it FAMOUS is its dazzling RINGS. Those rings look like a glowing record spinning around Saturn — and they are made of TRILLIONS of icy chunks! Some pieces are tiny like specks of dust, others are as big as a house. The rings stretch 175,000 miles wide but are only about 30 feet thick — so thin that if you stood on the edge, you could almost see through them! Tiny moons called shepherd moons swim in the gaps and keep the rings tidy. Here's the sad-but-amazing twist: in about 100 million years, all that ice will rain down onto Saturn and the rings will vanish forever. So we're SO lucky to see them today!",
+        funFact: 'Saturn is the only planet that could FLOAT in a giant bathtub — it is less dense than water!',
+        game: {
+          type: 'question',
+          instruction: 'Saturn quiz!',
+          question: "What are Saturn's rings made of?",
+          options: ['Cotton candy', 'Icy rocks', 'Plastic', 'Stars'],
+          correctIndex: 1,
+          celebrationMessage: 'Yes! Trillions of icy chunks make the rings!',
+          hintOnWrong: 'It is something cold you might find in your freezer!',
+        },
+      },
+      {
+        id: 'space-jupiter',
+        name: 'Jupiter & Its Moons',
+        emoji: '🟠',
+        visual: 'jupiter-moons',
+        introNarration:
+          "Hold on tight — we're zooming to the KING of all planets: JUPITER! Jupiter is so huge that ALL the other planets in our solar system could fit inside it. It's a giant swirly ball of gas with stormy bands of clouds, and the most famous spot is the GREAT RED SPOT — a hurricane bigger than Earth that has been spinning for over 350 years! Jupiter is also the planet with the MOST moons: 95 known so far! The four biggest are called the Galilean moons because Galileo spotted them through his telescope 400 years ago. Tap them to meet each one — Io with its volcanoes, frozen Europa with a hidden ocean, mighty Ganymede (the BIGGEST moon in the whole solar system, bigger than Mercury!), and cratered Callisto.",
+        funFact: 'Jupiter has a faint ring system too — it is just very hard to see because it is made of dark dust!',
+        game: {
+          type: 'matching',
+          instruction: 'Match each Jupiter moon to its special trait!',
+          pairs: [
+            { id: 'p1', left: 'Io', right: 'Most volcanoes' },
+            { id: 'p2', left: 'Europa', right: 'Hidden ocean' },
+            { id: 'p3', left: 'Ganymede', right: 'Biggest moon' },
+            { id: 'p4', left: 'Callisto', right: 'Most craters' },
+          ],
+          celebrationMessage: 'Galilean moon expert!',
+        },
+      },
+      {
         id: 'space-mars',
         name: 'Red Planet Mars',
         emoji: '🔴',
@@ -251,6 +292,29 @@ export const JOURNEY: Topic[] = [
         },
       },
       {
+        id: 'space-iss',
+        name: 'Living in Space',
+        emoji: '🛰️',
+        visual: 'space-station',
+        introNarration:
+          "Wait — did you know that RIGHT NOW, there are real humans LIVING in space? Look up at the night sky and you might spot a tiny moving dot — that's the INTERNATIONAL SPACE STATION, or ISS, a giant floating science lab the size of a football field, zooming 250 miles above Earth at 17,500 miles per hour. It circles our planet so fast that astronauts on board see 16 SUNRISES every day! Inside, they float because they are constantly falling around Earth (gravity still works — they just keep missing the ground). They sleep in zipped sleeping bags strapped to the wall so they don't bonk into things, drink juice from special pouches, eat sticky food, and even step OUTSIDE in puffy spacesuits to fix the station. Tap the cards below to peek at life floating in orbit!",
+        funFact: 'The ISS has been continuously occupied by humans since the year 2000 — so for over 25 years, someone has always been living in space!',
+        game: {
+          type: 'question',
+          instruction: 'Space station quiz!',
+          question: 'Why do astronauts float inside the ISS?',
+          options: [
+            'There is no gravity in space',
+            'The station is falling around Earth',
+            'They wear special floating shoes',
+            'The air is extra fluffy',
+          ],
+          correctIndex: 1,
+          celebrationMessage: 'Yes! They are constantly falling — like a roller coaster that never lands!',
+          hintOnWrong: 'Gravity actually still works up there — what matters is they keep missing Earth!',
+        },
+      },
+      {
         id: 'space-rockets',
         name: 'Rockets & Astronauts',
         emoji: '🚀',
@@ -277,12 +341,12 @@ export const JOURNEY: Topic[] = [
       topicId: 'space',
       title: 'Space Captain Test! 🚀',
       introNarration:
-        "Wow, you finished all 8 space stops! Now let's see if you remember everything. Answer these 5 questions to earn your Space Captain badge!",
-      passingScore: 3,
+        "Wow, you finished all 11 space stops! Now let's see if you remember everything. Answer these 6 questions to earn your Space Captain badge!",
+      passingScore: 4,
       questions: [
         {
           type: 'question',
-          instruction: 'Question 1 of 5',
+          instruction: 'Question 1 of 6',
           question: 'How many planets go around our Sun?',
           options: ['5', '8', '12', '100'],
           correctIndex: 1,
@@ -291,16 +355,7 @@ export const JOURNEY: Topic[] = [
         },
         {
           type: 'question',
-          instruction: 'Question 2 of 5',
-          question: 'What goes around the Earth?',
-          options: ['The Sun', 'The Moon', 'Mars', 'Jupiter'],
-          correctIndex: 1,
-          celebrationMessage: 'Correct!',
-          hintOnWrong: 'It glows at night...',
-        },
-        {
-          type: 'question',
-          instruction: 'Question 3 of 5',
+          instruction: 'Question 2 of 6',
           question: 'The Sun is a...',
           options: ['Planet', 'Star', 'Moon', 'Comet'],
           correctIndex: 1,
@@ -309,16 +364,39 @@ export const JOURNEY: Topic[] = [
         },
         {
           type: 'question',
-          instruction: 'Question 4 of 5',
-          question: 'Which planet is called the Red Planet?',
-          options: ['Venus', 'Saturn', 'Mars', 'Mercury'],
+          instruction: 'Question 3 of 6',
+          question: 'Which planet has the most amazing icy rings?',
+          options: ['Mercury', 'Earth', 'Saturn', 'Neptune'],
           correctIndex: 2,
           celebrationMessage: 'Correct!',
-          hintOnWrong: 'Its rusty dirt makes it look red!',
+          hintOnWrong: 'Trillions of ice chunks make its famous sparkly belt!',
         },
         {
           type: 'question',
-          instruction: 'Question 5 of 5',
+          instruction: 'Question 4 of 6',
+          question: 'Which is the BIGGEST planet in our solar system?',
+          options: ['Mars', 'Jupiter', 'Earth', 'Pluto'],
+          correctIndex: 1,
+          celebrationMessage: 'Correct!',
+          hintOnWrong: 'Its Great Red Spot is bigger than Earth!',
+        },
+        {
+          type: 'question',
+          instruction: 'Question 5 of 6',
+          question: 'Why do astronauts float in the ISS?',
+          options: [
+            'There is no gravity in space',
+            'They are constantly falling around Earth',
+            'They wear floating shoes',
+            'The air is fluffier',
+          ],
+          correctIndex: 1,
+          celebrationMessage: 'Correct!',
+          hintOnWrong: 'Gravity still works — they just keep missing the ground!',
+        },
+        {
+          type: 'question',
+          instruction: 'Question 6 of 6',
           question: 'What is the name of our galaxy?',
           options: ['Milky Way', 'Andromeda', 'Cosmic Pizza', 'Big Dipper'],
           correctIndex: 0,

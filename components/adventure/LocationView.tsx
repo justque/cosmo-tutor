@@ -13,6 +13,9 @@ import { RocketLaunch } from './visuals/RocketLaunch'
 import { MarsRover } from './visuals/MarsRover'
 import { CometSwoop } from './visuals/CometSwoop'
 import { BlackHole } from './visuals/BlackHole'
+import { SaturnRings } from './visuals/SaturnRings'
+import { JupiterMoons } from './visuals/JupiterMoons'
+import { SpaceStation } from './visuals/SpaceStation'
 import { MammalParade } from './visuals/MammalParade'
 import { HabitatZones } from './visuals/HabitatZones'
 import { BirdFlock } from './visuals/BirdFlock'
@@ -41,6 +44,12 @@ function LocationVisual({ visual }: { visual: VisualKey }) {
       return <CometSwoop />
     case 'black-hole':
       return <BlackHole />
+    case 'saturn-rings':
+      return <SaturnRings />
+    case 'jupiter-moons':
+      return <JupiterMoons />
+    case 'space-station':
+      return <SpaceStation />
     case 'mammal-parade':
       return <MammalParade />
     case 'habitat-zones':
