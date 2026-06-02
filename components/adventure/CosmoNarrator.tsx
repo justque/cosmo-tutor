@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
+import { speakAsCosmo, stopCosmoSpeech } from '@/lib/cosmoVoice'
 
 interface Props {
   text: string
@@ -13,6 +14,11 @@ interface Props {
 export function CosmoNarrator({ text, onComplete, speed = 16, instant = false }: Props) {
   const [displayed, setDisplayed] = useState(instant ? text : '')
   const [done, setDone] = useState(instant)
+
+  useEffect(() => {
+    speakAsCosmo(text)
+    return () => stopCosmoSpeech()
+  }, [text])
 
   useEffect(() => {
     if (instant) {
