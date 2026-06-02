@@ -5,12 +5,15 @@ import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import { AppGuard } from '@/components/AppGuard'
 import { SwitchProfileButton } from '@/components/SwitchProfileButton'
+import { SetPinModal } from '@/components/picker/SetPinModal'
 
 interface Child {
   id: string
   name: string
   age: number
   avatar_emoji: string
+  pin_hash: string | null
+  pin_locked_until: string | null
 }
 
 interface Star {
@@ -65,6 +68,7 @@ export default function DashboardPage() {
   const [newChildName, setNewChildName] = useState('')
   const [newChildAge, setNewChildAge] = useState('')
   const [newChildEmoji, setNewChildEmoji] = useState('🧒')
+  const [pinModalChild, setPinModalChild] = useState<Child | null>(null)
 
   useEffect(() => {
     const fetchChildren = async () => {
@@ -76,7 +80,7 @@ export default function DashboardPage() {
         }
         const { data } = await supabase
           .from('children')
-          .select('*')
+          .select('id, name, age, avatar_emoji, pin_hash, pin_locked_until')
           .eq('parent_id', user.id)
         if (data) setChildren(data)
         setLoading(false)
@@ -101,7 +105,7 @@ export default function DashboardPage() {
           age: parseInt(newChildAge),
           avatar_emoji: newChildEmoji,
         }])
-        .select()
+        .select('id, name, age, avatar_emoji, pin_hash, pin_locked_until')
       if (data) {
         setChildren([...children, data[0]])
         setNewChildName('')
@@ -183,6 +187,12 @@ export default function DashboardPage() {
           </p>
         </div>
 
+        {children.some((c) => !c.pin_hash) && (
+          <div className="glass-panel rounded-2xl border-2 border-tertiary-container/50 p-4 mb-4 text-on-background">
+            Set a PIN for each child so they can play on their own.
+          </div>
+        )}
+
         {/* Cadet Grid */}
         {children.length === 0 && !showAddForm ? (
           <div className="bg-surface-container/60 backdrop-blur-md rounded-2xl p-10 text-center border border-white/10 shadow-xl">
@@ -224,6 +234,23 @@ export default function DashboardPage() {
                 >
                   🚀 Launch Adventure
                 </button>
+                <div className="flex gap-2 mt-2">
+                  <button
+                    onClick={() => setPinModalChild(child)}
+                    className="px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container text-xs font-display font-bold"
+                  >
+                    {child.pin_hash ? 'Change PIN' : 'Set PIN'}
+                  </button>
+                  {child.pin_locked_until &&
+                    new Date(child.pin_locked_until).getTime() > Date.now() && (
+                      <button
+                        onClick={() => setPinModalChild(child)}
+                        className="px-3 py-1 rounded-full bg-tertiary-container text-on-tertiary-container text-xs font-display font-bold"
+                      >
+                        Reset PIN
+                      </button>
+                    )}
+                </div>
               </div>
             ))}
 
@@ -334,6 +361,23 @@ export default function DashboardPage() {
           <strong className="text-on-background font-display">Privacy Notice:</strong> Cosmo is designed for children under 13. All data is collected under parental consent per COPPA regulations. We do not share personal information with third parties.
         </div>
       </main>
+      {pinModalChild && (
+        <SetPinModal
+          childId={pinModalChild.id}
+          childName={pinModalChild.name}
+          onCancel={() => setPinModalChild(null)}
+          onSuccess={async () => {
+            setPinModalChild(null)
+            const { data: { user } } = await supabase.auth.getUser()
+            if (!user) return
+            const { data } = await supabase
+              .from('children')
+              .select('id, name, age, avatar_emoji, pin_hash, pin_locked_until')
+              .eq('parent_id', user.id)
+            if (data) setChildren(data)
+          }}
+        />
+      )}
     </>
     </AppGuard>
   )
