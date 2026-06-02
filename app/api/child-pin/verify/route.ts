@@ -3,7 +3,7 @@ import { getRouteSupabase } from '@/lib/supabaseRouteSession'
 import { isValidPin } from '@/lib/pinFormat'
 
 export async function POST(req: Request) {
-  const supabase = getRouteSupabase()
+  const supabase = await getRouteSupabase()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return NextResponse.json({ error: 'unauthorized' }, { status: 401 })
 
