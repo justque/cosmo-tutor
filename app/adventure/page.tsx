@@ -19,6 +19,8 @@ import { CheckpointAssessment } from '@/components/adventure/CheckpointAssessmen
 import { AskCosmoPalette } from '@/components/adventure/AskCosmoPalette'
 import { CosmoNarrator } from '@/components/adventure/CosmoNarrator'
 import { TopicIntro } from '@/components/adventure/TopicIntro'
+import { AppGuard } from '@/components/AppGuard'
+import { SwitchProfileButton } from '@/components/SwitchProfileButton'
 
 type Mode = 'journey-map' | 'topic-intro' | 'location' | 'checkpoint' | 'finished'
 
@@ -229,16 +231,12 @@ function AdventureInner() {
   const isLearningMode = mode === 'topic-intro' || mode === 'location' || mode === 'checkpoint'
 
   return (
+    <AppGuard kind="kid" childId={progress.childId}>
     <div className="min-h-screen text-on-background relative">
       <div className="space-bg" />
       {/* Top App Bar */}
       <header className="fixed top-0 inset-x-0 z-40 flex justify-between items-center px-6 h-16 bg-surface-container/80 backdrop-blur-xl border-b border-white/10 shadow-lg">
-        <button
-          onClick={() => router.push('/dashboard')}
-          className="h-10 px-4 rounded-full bg-surface-container-highest text-on-surface hover:scale-105 transition-transform active:translate-y-0.5 font-display font-bold text-sm flex items-center gap-1"
-        >
-          ← Dashboard
-        </button>
+        <SwitchProfileButton />
         <span
           className="font-display font-extrabold text-lg md:text-xl text-primary-container"
           style={{ textShadow: '0 2px 0 #506e00' }}
@@ -353,5 +351,6 @@ function AdventureInner() {
         />
       )}
     </div>
+    </AppGuard>
   )
 }

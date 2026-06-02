@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
+import { AppGuard } from '@/components/AppGuard'
+import { SwitchProfileButton } from '@/components/SwitchProfileButton'
 
 interface Child {
   id: string
@@ -138,6 +140,7 @@ export default function DashboardPage() {
   }
 
   return (
+    <AppGuard kind="parent">
     <>
       <Starfield />
 
@@ -151,13 +154,15 @@ export default function DashboardPage() {
             Cosmo&apos;s Adventure
           </span>
         </div>
-        <button
-          onClick={handleLogout}
-          className="h-10 px-4 rounded-full flex items-center gap-2 bg-surface-container-highest text-on-surface hover:scale-105 transition-transform active:translate-y-0.5 font-display font-bold text-sm"
-          aria-label="Log out"
-        >
-          <span>Log Out</span>
-        </button>
+        <div className="flex gap-2">
+          <SwitchProfileButton />
+          <button
+            onClick={handleLogout}
+            className="h-10 px-4 rounded-full bg-surface-container-highest text-on-surface font-display font-bold text-sm"
+          >
+            Sign out
+          </button>
+        </div>
       </header>
 
       {/* Main */}
@@ -330,5 +335,6 @@ export default function DashboardPage() {
         </div>
       </main>
     </>
+    </AppGuard>
   )
 }
