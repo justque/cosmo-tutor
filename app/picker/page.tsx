@@ -33,6 +33,7 @@ export default function PickerPage() {
   const [children, setChildren] = useState<Child[]>([])
   const [loading, setLoading] = useState(true)
   const [modal, setModal] = useState<Modal>(null)
+  const [hasPassword, setHasPassword] = useState(true)
 
   useEffect(() => {
     const init = async () => {
@@ -41,6 +42,9 @@ export default function PickerPage() {
         router.replace('/auth/login')
         return
       }
+      setHasPassword(
+        (user.identities ?? []).some((i) => i.provider === 'email')
+      )
       const { data } = await supabase
         .from('children')
         .select('id, name, age, avatar_emoji, pin_hash')
@@ -196,15 +200,23 @@ export default function PickerPage() {
 
       {modal?.kind === 'parent-password' && (
         <ParentPasswordModal
+          hasPassword={hasPassword}
           onCancel={() => setModal(null)}
-          onSuccess={onParentVerified}
+          onSuccess={() => {
+            if (!hasPassword) setHasPassword(true)
+            onParentVerified()
+          }}
         />
       )}
 
       {modal?.kind === 'set-pin-needs-parent' && (
         <ParentPasswordModal
+          hasPassword={hasPassword}
           onCancel={() => setModal(null)}
-          onSuccess={onParentVerified}
+          onSuccess={() => {
+            if (!hasPassword) setHasPassword(true)
+            onParentVerified()
+          }}
         />
       )}
 

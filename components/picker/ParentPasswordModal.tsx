@@ -2,19 +2,24 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
+import { supabase } from '@/lib/supabase'
 
 interface Props {
+  // Detected at picker-load time: true if the user already has a Supabase
+  // password identity, false if they signed up via OAuth and have not yet
+  // chosen a parent password.
+  hasPassword: boolean
   onCancel: () => void
   onSuccess: () => void
 }
 
-export function ParentPasswordModal({ onCancel, onSuccess }: Props) {
+export function ParentPasswordModal({ hasPassword, onCancel, onSuccess }: Props) {
   const [password, setPassword] = useState('')
+  const [confirm, setConfirm] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
 
-  const submit = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const submitVerify = async () => {
     if (!password) return
     setBusy(true)
     setError(null)
@@ -33,6 +38,32 @@ export function ParentPasswordModal({ onCancel, onSuccess }: Props) {
     }
   }
 
+  const submitCreate = async () => {
+    if (password.length < 8) {
+      setError('Use at least 8 characters')
+      return
+    }
+    if (password !== confirm) {
+      setError("Passwords don't match")
+      return
+    }
+    setBusy(true)
+    setError(null)
+    const { error: upErr } = await supabase.auth.updateUser({ password })
+    setBusy(false)
+    if (upErr) {
+      setError(upErr.message)
+      return
+    }
+    onSuccess()
+  }
+
+  const submit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (hasPassword) submitVerify()
+    else submitCreate()
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -46,16 +77,30 @@ export function ParentPasswordModal({ onCancel, onSuccess }: Props) {
         className="glass-panel rounded-2xl border-2 border-white/15 p-6 max-w-sm w-full space-y-4"
       >
         <h2 className="font-display font-extrabold text-on-background text-xl text-center">
-          Parent password
+          {hasPassword ? 'Parent password' : 'Set a parent password'}
         </h2>
+        {!hasPassword && (
+          <p className="text-sm text-on-surface-variant text-center">
+            One-time setup — kids will never need this. Use at least 8 characters.
+          </p>
+        )}
         <input
           type="password"
           autoFocus
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           className="w-full h-12 rounded-xl bg-surface-container-high border border-white/10 px-4 text-on-background font-display"
-          placeholder="••••••••"
+          placeholder={hasPassword ? '••••••••' : 'New password'}
         />
+        {!hasPassword && (
+          <input
+            type="password"
+            value={confirm}
+            onChange={(e) => setConfirm(e.target.value)}
+            className="w-full h-12 rounded-xl bg-surface-container-high border border-white/10 px-4 text-on-background font-display"
+            placeholder="Confirm password"
+          />
+        )}
         {error && (
           <p className="text-sm text-rose-400 font-display font-bold text-center">
             {error}
@@ -71,10 +116,10 @@ export function ParentPasswordModal({ onCancel, onSuccess }: Props) {
           </button>
           <button
             type="submit"
-            disabled={busy || !password}
+            disabled={busy || !password || (!hasPassword && !confirm)}
             className="px-4 py-2 rounded-full bg-primary-container text-on-primary-container font-display font-extrabold disabled:opacity-50"
           >
-            {busy ? '…' : 'Unlock'}
+            {busy ? '…' : hasPassword ? 'Unlock' : 'Save & Unlock'}
           </button>
         </div>
       </motion.form>
