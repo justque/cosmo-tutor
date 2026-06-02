@@ -50,6 +50,14 @@ export default function Home() {
   const [cadetName, setCadetName] = useState<string>('Cadet')
 
   useEffect(() => {
+    const check = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) router.replace('/picker')
+    }
+    check()
+  }, [router])
+
+  useEffect(() => {
     const loadCadetName = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return
