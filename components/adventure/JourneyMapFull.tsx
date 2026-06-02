@@ -25,7 +25,7 @@ const ISLAND_POSITIONS: Array<{ x: number; y: number }> = [
   { x: 18, y: 22 },  // Outer Space (rocky moon)
   { x: 43, y: 32 },  // Animal Kingdom (lush jungle)
   { x: 82, y: 26 },  // Weather Wonders (cloud sky island)
-  { x: 30, y: 70 },  // Human Body (heart-shaped lab)
+  { x: 15, y: 65 },  // Human Body (heart-shaped lab)
   { x: 72, y: 75 },  // Plant Power (greenhouse dome)
 ]
 
