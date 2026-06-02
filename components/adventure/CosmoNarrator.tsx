@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import { speakAsCosmo, stopCosmoSpeech } from '@/lib/cosmoVoice'
+import { speakAsCosmo, stopCosmoSpeech, hasSpeech } from '@/lib/cosmoVoice'
 
 interface Props {
   text: string
@@ -11,14 +11,9 @@ interface Props {
   instant?: boolean
 }
 
-export function CosmoNarrator({ text, onComplete, speed = 16, instant = false }: Props) {
+export function CosmoNarrator({ text, onComplete, speed = 45, instant = false }: Props) {
   const [displayed, setDisplayed] = useState(instant ? text : '')
   const [done, setDone] = useState(instant)
-
-  useEffect(() => {
-    speakAsCosmo(text)
-    return () => stopCosmoSpeech()
-  }, [text])
 
   useEffect(() => {
     if (instant) {
@@ -27,8 +22,33 @@ export function CosmoNarrator({ text, onComplete, speed = 16, instant = false }:
       onComplete?.()
       return
     }
+
     setDisplayed('')
     setDone(false)
+
+    // Prefer voice-synced reveal: words appear as Cosmo speaks them.
+    if (hasSpeech()) {
+      let ended = false
+      speakAsCosmo(text, {
+        onBoundary: (charIndex) => {
+          setDisplayed(text.slice(0, charIndex))
+        },
+        onEnd: () => {
+          ended = true
+          setDisplayed(text)
+          setDone(true)
+          onComplete?.()
+        },
+      })
+      return () => {
+        stopCosmoSpeech()
+        if (!ended) {
+          // If component unmounts mid-speech, leave whatever was visible.
+        }
+      }
+    }
+
+    // Fallback: time-based typewriter when speech is unavailable.
     let i = 0
     const interval = setInterval(() => {
       i++
@@ -43,6 +63,7 @@ export function CosmoNarrator({ text, onComplete, speed = 16, instant = false }:
   }, [text, speed, onComplete, instant])
 
   const skip = () => {
+    stopCosmoSpeech()
     setDisplayed(text)
     setDone(true)
     onComplete?.()

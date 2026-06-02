@@ -24,9 +24,7 @@ function pickVoice(): SpeechSynthesisVoice | null {
     const match = voices.find((v) => v.name === name)
     if (match) return match
   }
-  const childish = voices.find((v) =>
-    /child|kid|boy|junior/i.test(v.name)
-  )
+  const childish = voices.find((v) => /child|kid|boy|junior/i.test(v.name))
   if (childish) return childish
   return (
     voices.find((v) => v.lang.startsWith('en') && /male/i.test(v.name)) ||
@@ -43,19 +41,29 @@ function getVoice(): SpeechSynthesisVoice | null {
 }
 
 // Strip emojis, markdown, and stage cues so TTS doesn't read them out.
+// We strip in-place (keep length identical to the original where possible)
+// so SpeechSynthesis charIndex maps cleanly back to the original string.
 function cleanForSpeech(text: string): string {
   return text
-    .replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{1F000}-\u{1F02F}]/gu, '')
-    .replace(/\*+/g, '')
-    .replace(/[_~`]/g, '')
-    .replace(/\s+/g, ' ')
-    .trim()
+    .replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{1F000}-\u{1F02F}]/gu, ' ')
+    .replace(/[\*_~`]/g, ' ')
 }
 
-export function speakAsCosmo(text: string) {
-  if (typeof window === 'undefined' || !('speechSynthesis' in window)) return
+export interface SpeakOptions {
+  onBoundary?: (charIndex: number) => void
+  onEnd?: () => void
+}
+
+export function speakAsCosmo(text: string, opts: SpeakOptions = {}) {
+  if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
+    opts.onEnd?.()
+    return
+  }
   const clean = cleanForSpeech(text)
-  if (!clean) return
+  if (!clean.trim()) {
+    opts.onEnd?.()
+    return
+  }
 
   window.speechSynthesis.cancel()
 
@@ -65,6 +73,17 @@ export function speakAsCosmo(text: string) {
   utter.pitch = 1.6 // High and squeaky — kid-like
   utter.rate = 1.1  // Slightly fast — enthusiastic
   utter.volume = 1
+
+  utter.onboundary = (event) => {
+    // Advance to the end of the spoken word/segment so the displayed text
+    // stays just ahead of the voice instead of trailing behind.
+    const end = event.charIndex + (event.charLength || 0)
+    opts.onBoundary?.(Math.min(end, text.length))
+  }
+  utter.onend = () => {
+    opts.onBoundary?.(text.length)
+    opts.onEnd?.()
+  }
 
   // Voices may load asynchronously — try once now, and again after voiceschanged.
   if (!voice && typeof window.speechSynthesis.onvoiceschanged !== 'undefined') {
@@ -81,4 +100,8 @@ export function speakAsCosmo(text: string) {
 export function stopCosmoSpeech() {
   if (typeof window === 'undefined' || !('speechSynthesis' in window)) return
   window.speechSynthesis.cancel()
+}
+
+export function hasSpeech(): boolean {
+  return typeof window !== 'undefined' && 'speechSynthesis' in window
 }
