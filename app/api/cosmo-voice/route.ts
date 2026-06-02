@@ -7,7 +7,7 @@ import { NextRequest, NextResponse } from 'next/server'
 const TTS_ENDPOINT = 'https://texttospeech.googleapis.com/v1/text:synthesize'
 
 // Chirp 3 HD female voice — warm, natural, good for a teacher persona.
-const DEFAULT_VOICE = 'en-US-Chirp3-HD-Kore'
+const DEFAULT_VOICE = 'en-US-Chirp3-HD-Sulafat'
 const LANGUAGE_CODE = 'en-US'
 
 export async function POST(req: NextRequest) {
