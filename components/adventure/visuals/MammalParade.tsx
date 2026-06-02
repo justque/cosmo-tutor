@@ -112,8 +112,17 @@ export function MammalParade() {
         />
       </svg>
 
-      {/* Tall acacia tree on left for the giraffe */}
-      <div className="absolute" style={{ left: '6%', bottom: '32%', fontSize: 90 }}>
+      {/* Acacia trees scattered across the savanna */}
+      <div className="absolute" style={{ left: '4%', bottom: '32%', fontSize: 96 }}>
+        🌳
+      </div>
+      <div className="absolute" style={{ left: '40%', bottom: '34%', fontSize: 72, opacity: 0.9 }}>
+        🌳
+      </div>
+      <div className="absolute" style={{ right: '24%', bottom: '34%', fontSize: 80, opacity: 0.95 }}>
+        🌳
+      </div>
+      <div className="absolute" style={{ right: '4%', bottom: '32%', fontSize: 90 }}>
         🌳
       </div>
 
@@ -121,7 +130,7 @@ export function MammalParade() {
       <div
         className="absolute"
         style={{
-          right: '14%',
+          right: '12%',
           bottom: '18%',
           width: 130,
           height: 50,
@@ -131,11 +140,6 @@ export function MammalParade() {
           boxShadow: '0 8px 20px rgba(0,0,0,0.4)',
         }}
       />
-
-      {/* Hanging vine for monkey */}
-      <div className="absolute" style={{ right: '4%', top: '20%', fontSize: 60, opacity: 0.85 }}>
-        🌴
-      </div>
 
       {/* Ground gradient */}
       <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-amber-900 via-amber-700 to-transparent" />
@@ -159,14 +163,17 @@ export function MammalParade() {
         🦒
       </motion.button>
 
-      {/* MONKEY — swinging on the right palm */}
+      {/* MONKEY — hopping on the ground */}
       <motion.button
-        animate={{ rotate: [-12, 12, -12] }}
-        transition={{ duration: 2, repeat: Infinity }}
+        animate={{ y: [0, -10, 0], rotate: [-4, 4, -4] }}
+        transition={{
+          y: { duration: 0.8, repeat: Infinity },
+          rotate: { duration: 1.6, repeat: Infinity },
+        }}
         onClick={() => setSelected(MAMMALS.monkey)}
         aria-label="Monkey"
         className="absolute text-5xl cursor-pointer hover:scale-110 transition-transform"
-        style={{ right: '8%', top: '32%', transformOrigin: 'top center' }}
+        style={{ left: '76%', bottom: '8%' }}
       >
         🐒
       </motion.button>
