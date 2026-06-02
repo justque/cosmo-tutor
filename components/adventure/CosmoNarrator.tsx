@@ -28,13 +28,12 @@ export function CosmoNarrator({ text, onComplete, speed = 45, instant = false }:
 
     // Prefer voice-synced reveal: words appear as Cosmo speaks them.
     if (hasSpeech()) {
-      let ended = false
       speakAsCosmo(text, {
-        onBoundary: (charIndex) => {
-          setDisplayed(text.slice(0, charIndex))
+        onProgress: (ratio) => {
+          const upto = Math.floor(ratio * text.length)
+          setDisplayed(text.slice(0, upto))
         },
         onEnd: () => {
-          ended = true
           setDisplayed(text)
           setDone(true)
           onComplete?.()
@@ -42,9 +41,6 @@ export function CosmoNarrator({ text, onComplete, speed = 45, instant = false }:
       })
       return () => {
         stopCosmoSpeech()
-        if (!ended) {
-          // If component unmounts mid-speech, leave whatever was visible.
-        }
       }
     }
 

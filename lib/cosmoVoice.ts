@@ -1,124 +1,120 @@
-// Cosmo's voice — a warm, natural female teacher voice using the browser's
-// SpeechSynthesis API. Prefers high-quality "premium"/"enhanced" female
-// voices when available (e.g. macOS "Ava", "Samantha"), with neutral pitch
-// and rate for smooth, natural delivery.
+// Cosmo's voice — Google Cloud TTS (Chirp 3 HD) via /api/cosmo-voice.
+// Plays MP3 through an HTMLAudioElement and exposes timeupdate progress so
+// the typewriter can reveal text in sync with the audio.
+//
+// Falls back to the browser's SpeechSynthesis API if the server route fails
+// (e.g. missing GOOGLE_TTS_API_KEY in local dev).
 
-let cachedVoice: SpeechSynthesisVoice | null | undefined
+// Cache MP3 blob URLs per text so re-narrating the same line is instant.
+const audioCache = new Map<string, string>()
+let currentAudio: HTMLAudioElement | null = null
 
-// Ranked best-first. Premium/neural voices first, then standard.
-const TEACHER_VOICE_NAMES = [
-  'Ava (Premium)',
-  'Ava (Enhanced)',
-  'Ava',
-  'Samantha (Premium)',
-  'Samantha (Enhanced)',
-  'Samantha',
-  'Allison (Premium)',
-  'Allison (Enhanced)',
-  'Allison',
-  'Susan (Premium)',
-  'Susan (Enhanced)',
-  'Susan',
-  'Karen (Premium)',
-  'Karen',
-  'Moira (Premium)',
-  'Moira',
-  'Serena (Premium)',
-  'Serena',
-  'Microsoft Aria Online (Natural) - English (United States)',
-  'Microsoft Jenny Online (Natural) - English (United States)',
-  'Google UK English Female',
-  'Google US English',
-]
-
-function pickVoice(): SpeechSynthesisVoice | null {
-  if (typeof window === 'undefined' || !('speechSynthesis' in window)) return null
-  const voices = window.speechSynthesis.getVoices()
-  if (voices.length === 0) return null
-
-  for (const name of TEACHER_VOICE_NAMES) {
-    const match = voices.find((v) => v.name === name)
-    if (match) return match
-  }
-  // Heuristic: any English female-sounding voice (Premium/Enhanced preferred)
-  const enFemale = voices.filter(
-    (v) => v.lang.startsWith('en') && /female|samantha|ava|allison|susan|karen|moira|serena|aria|jenny|zira|joanna|salli|kimberly/i.test(v.name)
-  )
-  const premium = enFemale.find((v) => /premium|enhanced|natural/i.test(v.name))
-  if (premium) return premium
-  if (enFemale[0]) return enFemale[0]
-  return voices.find((v) => v.lang.startsWith('en')) || voices[0]
+export interface SpeakOptions {
+  // Called repeatedly with a 0..1 progress ratio as audio plays.
+  onProgress?: (ratio: number) => void
+  onEnd?: () => void
 }
 
-function getVoice(): SpeechSynthesisVoice | null {
-  if (cachedVoice !== undefined) return cachedVoice ?? null
-  const v = pickVoice()
-  if (v) cachedVoice = v
-  return v
-}
-
-// Strip emojis, markdown, and stage cues so TTS doesn't read them out.
-// We strip in-place (keep length identical to the original where possible)
-// so SpeechSynthesis charIndex maps cleanly back to the original string.
+// Strip emojis and markdown so TTS reads only the words.
 function cleanForSpeech(text: string): string {
   return text
     .replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{1F000}-\u{1F02F}]/gu, ' ')
     .replace(/[\*_~`]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
 }
 
-export interface SpeakOptions {
-  onBoundary?: (charIndex: number) => void
-  onEnd?: () => void
+async function fetchAudioUrl(text: string): Promise<string | null> {
+  const cached = audioCache.get(text)
+  if (cached) return cached
+
+  try {
+    const res = await fetch('/api/cosmo-voice', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text }),
+    })
+    if (!res.ok) return null
+    const blob = await res.blob()
+    const url = URL.createObjectURL(blob)
+    audioCache.set(text, url)
+    return url
+  } catch {
+    return null
+  }
 }
 
-export function speakAsCosmo(text: string, opts: SpeakOptions = {}) {
+function fallbackSpeak(text: string, opts: SpeakOptions) {
   if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
     opts.onEnd?.()
     return
   }
+  window.speechSynthesis.cancel()
+  const utter = new SpeechSynthesisUtterance(text)
+  utter.pitch = 1.05
+  utter.rate = 0.98
+  utter.onboundary = (event) => {
+    const end = event.charIndex + (event.charLength || 0)
+    opts.onProgress?.(Math.min(end / text.length, 1))
+  }
+  utter.onend = () => {
+    opts.onProgress?.(1)
+    opts.onEnd?.()
+  }
+  window.speechSynthesis.speak(utter)
+}
+
+export async function speakAsCosmo(text: string, opts: SpeakOptions = {}) {
   const clean = cleanForSpeech(text)
-  if (!clean.trim()) {
+  if (!clean) {
     opts.onEnd?.()
     return
   }
 
-  window.speechSynthesis.cancel()
+  // Stop anything currently playing.
+  stopCosmoSpeech()
 
-  const utter = new SpeechSynthesisUtterance(clean)
-  const voice = getVoice()
-  if (voice) utter.voice = voice
-  utter.pitch = 1.05 // Slightly warm, natural female register
-  utter.rate = 0.98  // Calm, teacherly pace
-  utter.volume = 1
-
-  utter.onboundary = (event) => {
-    // Advance to the end of the spoken word/segment so the displayed text
-    // stays just ahead of the voice instead of trailing behind.
-    const end = event.charIndex + (event.charLength || 0)
-    opts.onBoundary?.(Math.min(end, text.length))
-  }
-  utter.onend = () => {
-    opts.onBoundary?.(text.length)
-    opts.onEnd?.()
+  const url = await fetchAudioUrl(clean)
+  if (!url) {
+    fallbackSpeak(clean, opts)
+    return
   }
 
-  // Voices may load asynchronously — try once now, and again after voiceschanged.
-  if (!voice && typeof window.speechSynthesis.onvoiceschanged !== 'undefined') {
-    window.speechSynthesis.onvoiceschanged = () => {
-      cachedVoice = undefined
-      const v = getVoice()
-      if (v) utter.voice = v
+  const audio = new Audio(url)
+  currentAudio = audio
+  audio.addEventListener('timeupdate', () => {
+    if (audio.duration > 0) {
+      opts.onProgress?.(Math.min(audio.currentTime / audio.duration, 1))
     }
-  }
+  })
+  audio.addEventListener('ended', () => {
+    opts.onProgress?.(1)
+    opts.onEnd?.()
+    if (currentAudio === audio) currentAudio = null
+  })
+  audio.addEventListener('error', () => {
+    if (currentAudio === audio) currentAudio = null
+    fallbackSpeak(clean, opts)
+  })
 
-  window.speechSynthesis.speak(utter)
+  try {
+    await audio.play()
+  } catch {
+    if (currentAudio === audio) currentAudio = null
+    fallbackSpeak(clean, opts)
+  }
 }
 
 export function stopCosmoSpeech() {
-  if (typeof window === 'undefined' || !('speechSynthesis' in window)) return
-  window.speechSynthesis.cancel()
+  if (typeof window === 'undefined') return
+  if ('speechSynthesis' in window) window.speechSynthesis.cancel()
+  if (currentAudio) {
+    currentAudio.pause()
+    currentAudio.currentTime = 0
+    currentAudio = null
+  }
 }
 
 export function hasSpeech(): boolean {
-  return typeof window !== 'undefined' && 'speechSynthesis' in window
+  return typeof window !== 'undefined'
 }
