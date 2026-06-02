@@ -231,7 +231,7 @@ export default function DashboardPage() {
                 <div className="w-16 h-16 rounded-full bg-surface-container-highest border-2 border-white/10 flex items-center justify-center text-3xl mb-3">
                   +
                 </div>
-                <span className="font-display font-bold">Add Cadet</span>
+                <span className="font-display font-bold">Add Explorer</span>
               </button>
             )}
           </div>

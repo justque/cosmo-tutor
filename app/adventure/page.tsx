@@ -44,6 +44,9 @@ function AdventureInner() {
   const [progress, setProgress] = useState<JourneyProgress | null>(null)
   const [sessionId, setSessionId] = useState<string>('')
   const [mode, setMode] = useState<Mode>('journey-map')
+  // Review state — when set, the user is revisiting a previously-completed topic.
+  const [reviewTopicId, setReviewTopicId] = useState<string | null>(null)
+  const [reviewLocationIndex, setReviewLocationIndex] = useState(0)
 
   useEffect(() => {
     const init = async () => {
@@ -111,17 +114,37 @@ function AdventureInner() {
     )
   }
 
-  const currentTopic = JOURNEY.find((t) => t.id === progress.currentTopicId)!
-  const currentLocation = currentTopic.locations[progress.currentLocationIndex]
+  const isReview = reviewTopicId !== null
+  const activeTopic = isReview
+    ? JOURNEY.find((t) => t.id === reviewTopicId)!
+    : JOURNEY.find((t) => t.id === progress.currentTopicId)!
+  const activeLocationIndex = isReview ? reviewLocationIndex : progress.currentLocationIndex
+  const activeLocation = activeTopic.locations[activeLocationIndex]
+
+  const exitReview = () => {
+    setReviewTopicId(null)
+    setReviewLocationIndex(0)
+    setMode('journey-map')
+  }
 
   const handleLocationComplete = () => {
+    if (isReview) {
+      const nextIndex = reviewLocationIndex + 1
+      if (nextIndex >= activeTopic.locations.length) {
+        setMode('checkpoint')
+      } else {
+        setReviewLocationIndex(nextIndex)
+      }
+      return
+    }
+
     const newCompletedLocations = [
       ...progress.completedLocationIds,
-      currentLocation.id,
+      activeLocation.id,
     ]
     const nextLocationIndex = progress.currentLocationIndex + 1
 
-    if (nextLocationIndex >= currentTopic.locations.length) {
+    if (nextLocationIndex >= activeTopic.locations.length) {
       const updated: JourneyProgress = {
         ...progress,
         currentLocationIndex: nextLocationIndex,
@@ -142,9 +165,14 @@ function AdventureInner() {
   }
 
   const handleCheckpointPassed = (score: number, total: number) => {
-    logCheckpointAttempt(progress.childId, currentTopic.id, score, total, true)
-    const completedTopics = [...progress.completedTopicIds, currentTopic.id]
-    const nextTopic = JOURNEY.find((t) => t.order === currentTopic.order + 1)
+    if (isReview) {
+      // Review checkpoint just returns to map without mutating progress.
+      exitReview()
+      return
+    }
+    logCheckpointAttempt(progress.childId, activeTopic.id, score, total, true)
+    const completedTopics = [...progress.completedTopicIds, activeTopic.id]
+    const nextTopic = JOURNEY.find((t) => t.order === activeTopic.order + 1)
 
     if (!nextTopic) {
       const finished: JourneyProgress = {
@@ -171,12 +199,24 @@ function AdventureInner() {
   }
 
   const handleSelectTopic = (topicId: string) => {
-    if (topicId !== progress.currentTopicId) return
-    setMode('topic-intro')
+    if (topicId === progress.currentTopicId) {
+      setReviewTopicId(null)
+      setReviewLocationIndex(0)
+      setMode('topic-intro')
+    } else if (progress.completedTopicIds.includes(topicId)) {
+      // Replay a finished topic in review mode — no progress is mutated.
+      setReviewTopicId(topicId)
+      setReviewLocationIndex(0)
+      setMode('topic-intro')
+    }
   }
 
   const handleCheckpointRetry = (score: number, total: number) => {
-    logCheckpointAttempt(progress.childId, currentTopic.id, score, total, false)
+    if (isReview) {
+      exitReview()
+      return
+    }
+    logCheckpointAttempt(progress.childId, activeTopic.id, score, total, false)
     const updated: JourneyProgress = {
       ...progress,
       currentLocationIndex: 0,
@@ -207,11 +247,11 @@ function AdventureInner() {
         </span>
         {isLearningMode ? (
           <button
-            onClick={() => setMode('journey-map')}
+            onClick={isReview ? exitReview : () => setMode('journey-map')}
             className="h-10 px-4 rounded-full bg-secondary-container text-on-secondary-container hover:scale-105 transition-transform active:translate-y-0.5 font-display font-bold text-sm"
-            title="Back to journey map"
+            title={isReview ? 'Exit review' : 'Back to journey map'}
           >
-            🗺️ Map
+            {isReview ? '🔁 Exit Review' : '🗺️ Map'}
           </button>
         ) : (
           <div className="w-24" />
@@ -222,15 +262,22 @@ function AdventureInner() {
         {/* Minimized navigator + mission progress (visible only during learning) */}
         {isLearningMode && (
           <div className="space-y-3">
+            {isReview && (
+              <div className="text-center">
+                <span className="inline-block bg-secondary-container text-on-secondary-container text-[10px] font-display font-extrabold uppercase tracking-[0.25em] px-3 py-1 rounded-full">
+                  🔁 Review Mode · {activeTopic.name}
+                </span>
+              </div>
+            )}
             <JourneyMap
               topics={JOURNEY}
-              currentTopicId={progress.currentTopicId}
+              currentTopicId={isReview ? activeTopic.id : progress.currentTopicId}
               completedTopicIds={progress.completedTopicIds}
             />
             <MissionProgress
-              topicName={currentTopic.name}
-              current={Math.min(progress.currentLocationIndex, currentTopic.locations.length)}
-              total={currentTopic.locations.length}
+              topicName={activeTopic.name}
+              current={Math.min(activeLocationIndex, activeTopic.locations.length)}
+              total={activeTopic.locations.length}
               inCheckpoint={mode === 'checkpoint'}
             />
           </div>
@@ -247,22 +294,24 @@ function AdventureInner() {
           )}
 
           {mode === 'topic-intro' && (
-            <TopicIntro topic={currentTopic} onStart={() => setMode('location')} />
+            <TopicIntro topic={activeTopic} onStart={() => setMode('location')} isReview={isReview} />
           )}
 
-          {mode === 'location' && currentLocation && (
+          {mode === 'location' && activeLocation && (
             <LocationView
-              key={currentLocation.id}
-              location={currentLocation}
+              key={`${activeTopic.id}-${activeLocation.id}-${isReview ? 'r' : 'p'}`}
+              location={activeLocation}
               onComplete={handleLocationComplete}
+              isReview={isReview}
             />
           )}
 
           {mode === 'checkpoint' && (
             <CheckpointAssessment
-              checkpoint={currentTopic.checkpoint}
+              checkpoint={activeTopic.checkpoint}
               onPassed={handleCheckpointPassed}
               onRetry={handleCheckpointRetry}
+              isReview={isReview}
             />
           )}
 
@@ -295,11 +344,11 @@ function AdventureInner() {
         <AskCosmoPalette
           sessionId={sessionId}
           childId={progress.childId}
-          topicSlug={currentTopic.id}
+          topicSlug={activeTopic.id}
           locationContext={
-            mode === 'location' && currentLocation
-              ? `${currentTopic.name} — ${currentLocation.name}`
-              : `${currentTopic.name} — Checkpoint`
+            mode === 'location' && activeLocation
+              ? `${activeTopic.name} — ${activeLocation.name}`
+              : `${activeTopic.name} — Checkpoint`
           }
         />
       )}

@@ -10,6 +10,7 @@ interface Props {
   checkpoint: Checkpoint
   onPassed: (score: number, total: number) => void
   onRetry: (score: number, total: number) => void
+  isReview?: boolean
 }
 
 type Phase = 'intro' | 'questions' | 'result'
@@ -62,10 +63,39 @@ function CheckpointQuestion({
   )
 }
 
-export function CheckpointAssessment({ checkpoint, onPassed, onRetry }: Props) {
+export function CheckpointAssessment({ checkpoint, onPassed, onRetry, isReview = false }: Props) {
   const [phase, setPhase] = useState<Phase>('intro')
   const [questionIndex, setQuestionIndex] = useState(0)
   const [answers, setAnswers] = useState<number[]>([])
+
+  if (isReview) {
+    const total = checkpoint.questions.length
+    return (
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="max-w-3xl mx-auto text-center space-y-6"
+      >
+        <div
+          className="text-7xl text-primary-container"
+          style={{ filter: 'drop-shadow(0 0 22px rgba(183,247,0,0.7))' }}
+        >
+          🏆
+        </div>
+        <h2 className="font-display font-extrabold text-3xl text-on-background">
+          Checkpoint Already Passed!
+        </h2>
+        <CosmoNarrator text={checkpoint.successNarration} instant />
+        <button
+          onClick={() => onPassed(total, total)}
+          className="chunky-button bg-primary-container text-on-primary-container font-display font-extrabold px-8 py-4 rounded-full border-2 border-white/20"
+          style={{ ['--chunky-shadow' as string]: '#374e00' }}
+        >
+          Back to Journey Map 🗺️
+        </button>
+      </motion.div>
+    )
+  }
 
   const handleAnswered = (selectedIndex: number) => {
     const next = [...answers, selectedIndex]

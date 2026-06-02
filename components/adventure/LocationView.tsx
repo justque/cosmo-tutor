@@ -18,11 +18,12 @@ function LocationVisual({ visual }: { visual: VisualKey }) {
 interface Props {
   location: Location
   onComplete: () => void
+  isReview?: boolean
 }
 
 type Phase = 'intro' | 'funfact' | 'game'
 
-export function LocationView({ location, onComplete }: Props) {
+export function LocationView({ location, onComplete, isReview = false }: Props) {
   const [phase, setPhase] = useState<Phase>('intro')
 
   return (
@@ -45,7 +46,7 @@ export function LocationView({ location, onComplete }: Props) {
             exit={{ opacity: 0 }}
             className="space-y-6"
           >
-            <CosmoNarrator text={location.introNarration} />
+            <CosmoNarrator text={location.introNarration} instant={isReview} />
             {location.video && (
               <YouTubeEmbed videoId={location.video.youtubeId} title={location.video.title} />
             )}
@@ -101,7 +102,31 @@ export function LocationView({ location, onComplete }: Props) {
             exit={{ opacity: 0 }}
             className="bg-slate-900/60 backdrop-blur border border-slate-700 rounded-2xl p-6"
           >
-            <MiniGame game={location.game} onCorrect={onComplete} />
+            {isReview ? (
+              <div className="text-center space-y-5">
+                <div
+                  className="text-6xl text-primary-container"
+                  style={{ filter: 'drop-shadow(0 0 18px rgba(183,247,0,0.7))' }}
+                >
+                  ✓
+                </div>
+                <p className="font-display font-extrabold text-2xl text-on-background">
+                  You aced this mission!
+                </p>
+                <p className="text-on-surface-variant text-sm">
+                  Your answer is saved. Keep reviewing or tap the next mission.
+                </p>
+                <button
+                  onClick={onComplete}
+                  className="chunky-button bg-primary-container text-on-primary-container font-display font-extrabold px-7 py-3 rounded-full border-2 border-white/20"
+                  style={{ ['--chunky-shadow' as string]: '#374e00' }}
+                >
+                  Next →
+                </button>
+              </div>
+            ) : (
+              <MiniGame game={location.game} onCorrect={onComplete} />
+            )}
           </motion.div>
         )}
       </AnimatePresence>

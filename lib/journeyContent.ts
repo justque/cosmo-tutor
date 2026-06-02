@@ -104,7 +104,7 @@ export const JOURNEY: Topic[] = [
         name: 'The Blazing Sun',
         emoji: '☀️',
         introNarration:
-          "Whoa, look at that! That giant glowing ball is the Sun! The Sun is a HUGE star, way bigger than Earth. It gives us light and warmth every single day. Without the Sun, we would be frozen ice cubes!",
+          "3... 2... 1... WHOOSH! Our rocket has zoomed past the clouds, past the blue sky, and into the dark velvet of outer space. Look out the window — that giant blazing ball is the SUN! The Sun is a STAR, a humongous ball of glowing hot gas. It blasts out light and warmth that travels all the way to Earth, helping every plant, animal, and YOU stay alive. Without the Sun, our whole planet would be a dark, frozen ice cube!",
         funFact: 'The Sun is so big that 1 million Earths could fit inside it!',
         game: {
           type: 'question',
@@ -126,7 +126,7 @@ export const JOURNEY: Topic[] = [
           title: 'Watch a quick tour of our Solar System!',
         },
         introNarration:
-          "Next stop — the planets! There are 8 planets that zoom around our Sun. Watch the video, then play with the planets below! Tap any planet to learn more about it.",
+          "Now that we've said hello to the Sun, let's meet its 8 best friends — the PLANETS! Planets are giant balls of rock or swirly gas, and they all ZOOM around the Sun in their own giant circles. Some planets are tiny and rocky like Mercury, some are HUGE and gassy like Jupiter, and one very special blue-and-green planet is the place we call home: Earth! Watch this quick tour, then tap any planet below to learn its secret.",
         funFact: 'Jupiter has a big red storm that has been spinning for over 300 years!',
         game: {
           type: 'ordering',
@@ -146,7 +146,7 @@ export const JOURNEY: Topic[] = [
         name: 'Our Moon',
         emoji: '🌙',
         introNarration:
-          "Next stop — the Moon! The Moon is Earth's best friend. It goes around our planet over and over. People have even walked on the Moon!",
+          "Whew — after zooming past all 8 planets, we're cruising back toward our home, Earth. And look right outside the rocket window! That bright, glowing ball is the MOON, Earth's best buddy. Here's something tricky — the Moon doesn't make its own light! It shines because sunlight bounces off it like a giant night-light. Twelve brave humans have actually walked on the Moon and left their footprints up there. Cool, huh?",
         funFact: 'The Moon is moving away from Earth a tiny bit every year!',
         game: {
           type: 'matching',
@@ -164,7 +164,7 @@ export const JOURNEY: Topic[] = [
         name: 'Twinkle Stars',
         emoji: '⭐',
         introNarration:
-          "Look up at night and you'll see thousands of TWINKLY stars! Stars are giant balls of glowing gas, just like our Sun — but they look tiny because they are SO far away. Some stars team up to make pictures called constellations!",
+          "When the Sun sets behind Earth and the sky goes dark, something magical appears: thousands of twinkly STARS! Here's the wildest part — every single star is actually a giant Sun, just like ours. They look tiny because they're SO far away that their light takes years and years to reach us. Sometimes stars team up to make sky pictures called CONSTELLATIONS — like the Big Dipper, which looks like a giant soup spoon!",
         funFact: 'There are more stars in the sky than grains of sand on every beach on Earth!',
         game: {
           type: 'question',
@@ -181,7 +181,7 @@ export const JOURNEY: Topic[] = [
         name: 'Rockets & Astronauts',
         emoji: '🚀',
         introNarration:
-          "How do people GET to space? In a ROCKET! Rockets blast off with a huge BOOM and fly faster than a jet. The brave people who ride them are called astronauts, and they float because there's no gravity up there!",
+          "We've toured the Sun, the planets, the Moon, and the stars — but hey, wait... how did we even GET out here?! With a ROCKET! Rockets are giant tubes that blast roaring hot fire out their bottoms, and that fire PUSHES them up, up, UP into space. The brave humans riding inside are called ASTRONAUTS, and once they reach space, they FLOAT around because there's no gravity to pull them down. Let's count down a launch!",
         funFact: 'Astronauts grow about 2 inches taller in space because there is no gravity squishing them!',
         game: {
           type: 'ordering',
@@ -255,7 +255,7 @@ export const JOURNEY: Topic[] = [
         name: 'Mighty Mammals',
         emoji: '🐘',
         introNarration:
-          "Welcome to the Animal Kingdom! First, let's meet the MAMMALS. Mammals have fur or hair, and most baby mammals drink milk from their mommy. You are a mammal too!",
+          "Back on Earth! Let's swap our space helmets for safari hats — we're off to explore the wild ANIMAL KINGDOM. Earth has MILLIONS of different animals, so we'll start with one super fluffy family: the MAMMALS. Mammals are warm-bodied, have FUR or HAIR, breathe air, and most baby mammals drink milk from their mom. Here's a secret — YOU are a mammal too! Dogs, cats, lions, whales, and you are all in the same furry family.",
         funFact: 'Blue whales are the biggest mammals — bigger than 3 school buses!',
         game: {
           type: 'question',
@@ -272,7 +272,7 @@ export const JOURNEY: Topic[] = [
         name: 'Animal Homes',
         emoji: '🏞️',
         introNarration:
-          "Animals live in different places called HABITATS! Fish live in water, birds make nests in trees, and polar bears live on icy snow. Every animal has its perfect home!",
+          "Now that we've met the mammals, here's a big question — where do all the animals LIVE? The special place each animal calls home is called a HABITAT. A polar bear's habitat is freezing icy snow. A monkey's habitat is the warm leafy jungle. A fish's habitat is a wet, salty ocean. Every animal has a body perfectly built for its own habitat. A polar bear has thick fur for the cold, and a monkey has long arms for swinging in trees!",
         funFact: 'A camel can go a whole week without drinking water!',
         game: {
           type: 'matching',
@@ -290,7 +290,7 @@ export const JOURNEY: Topic[] = [
         name: 'Feathered Friends',
         emoji: '🦜',
         introNarration:
-          "Tweet tweet! Time to meet the BIRDS! Birds have feathers, lay eggs, and most of them can FLY. From tiny hummingbirds to giant eagles, birds zoom through the sky on their wings!",
+          "Speaking of habitats — let's look UP at the sky habitat! Tweet tweet, that's the BIRDS calling. Birds have something no other animal has: FEATHERS — light, fluffy, perfect for flying. They also hatch from eggs and they have beaks instead of teeth. From the tiny hummingbird (the size of your thumb!) to giant eagles that soar above mountains, birds are masters of the sky.",
         funFact: 'The hummingbird flaps its wings 80 times every SECOND!',
         game: {
           type: 'question',
@@ -307,7 +307,7 @@ export const JOURNEY: Topic[] = [
         name: 'Ocean Wonders',
         emoji: '🐠',
         introNarration:
-          "Splash! Below the waves live some of the COOLEST creatures on Earth. Wiggly octopuses, smiley dolphins, gentle whales, and zillions of colorful fish all call the ocean home!",
+          "Birds rule the sky — now let's dive DOWN into the ocean habitat! SPLASH! Below the waves live some of the strangest, most beautiful animals on the planet. Wiggly octopuses with 8 arms can squeeze through tiny cracks. Smiley dolphins talk to each other in clicks and whistles. Giant whales sing songs that travel for miles underwater. And rainbow-colored fish dart between coral reefs like little swimming jewels!",
         funFact: 'An octopus has 3 hearts and BLUE blood!',
         game: {
           type: 'matching',
@@ -325,7 +325,7 @@ export const JOURNEY: Topic[] = [
         name: 'Cool Reptiles',
         emoji: '🦎',
         introNarration:
-          "Hissss! Reptiles like snakes, lizards, and turtles have scaly skin and lay eggs. They are COLD-BLOODED, which means they love sunbathing on rocks to warm up!",
+          "Splash — back on dry land! Time to meet the COLD-BLOODED crew: the REPTILES. Snakes that slither, lizards that dart, turtles that go slow and steady, and crocodiles that smile with sharp teeth — they all have SCALY skin and lay eggs. Here's the trick: reptile bodies can't make their own heat like mammal bodies can. So they sunbathe on warm rocks to power up, and slow down when it's cold. Pretty smart, right?",
         funFact: 'A baby chameleon can change colors just minutes after it hatches!',
         game: {
           type: 'question',
@@ -395,7 +395,7 @@ export const JOURNEY: Topic[] = [
         name: 'The Water Cycle',
         emoji: '💧',
         introNarration:
-          "Did you know water goes on a JOURNEY too? The Sun heats water in oceans and lakes. The water floats UP as steam, makes clouds, and then falls back down as rain! This is called the water cycle!",
+          "Look UP at the sky, cadet! Sunshine, clouds, rain — but where does it all come from? Here's a magical secret: water goes on a forever JOURNEY called the WATER CYCLE. The Sun heats up oceans and lakes, the warm water rises UP as invisible steam, it gathers into fluffy clouds, and when the clouds get heavy enough — SPLASH! — it rains back down. Then the whole journey starts over again. The water you drank today might've been a raindrop yesterday!",
         funFact: 'The water you drink today might be the same water a dinosaur drank long ago!',
         game: {
           type: 'ordering',
@@ -415,7 +415,7 @@ export const JOURNEY: Topic[] = [
         name: 'Stormy Skies',
         emoji: '⛈️',
         introNarration:
-          "BOOM! Thunderstorms are wild! Lightning is a giant spark of electricity in the sky. Thunder is the LOUD sound lightning makes. You see lightning first because light travels faster than sound!",
+          "Sometimes those rain clouds get extra HUGE and dark — and then the sky throws a wild party called a THUNDERSTORM! Inside a storm cloud, billions of tiny ice crystals rub against each other so fast they make ELECTRICITY. That electricity ZAPS down as LIGHTNING, a giant blue-white spark hotter than the Sun! The lightning is SO hot it makes the air explode, and that explosion is the loud BOOM of THUNDER. You always see lightning before you hear thunder because light zooms faster than sound!",
         funFact: 'Lightning is hotter than the surface of the Sun!',
         game: {
           type: 'question',
@@ -432,7 +432,7 @@ export const JOURNEY: Topic[] = [
         name: 'Cloud Watching',
         emoji: '☁️',
         introNarration:
-          "Look up! Clouds are made of TINY water drops and ice crystals. Some are fluffy like cotton balls, some are wispy like cat tails, and some are dark and stormy. Each shape tells you what the weather will do!",
+          "Now that the storm has passed, let's look at the CLOUDS more closely. Did you know clouds are made of millions of itty-bitty water drops and ice crystals floating in the air? Even though clouds look soft and pillowy, a regular puffy cloud can weigh as much as a hundred elephants! Different cloud shapes tell you different weather stories: fluffy white = sunny day, dark gray = rain coming, and thin wispy ones way up high mean fair skies ahead.",
         funFact: 'A small puffy cloud can weigh as much as a HUNDRED elephants!',
         game: {
           type: 'matching',
@@ -450,7 +450,7 @@ export const JOURNEY: Topic[] = [
         name: 'Four Seasons',
         emoji: '🍂',
         introNarration:
-          "Earth has four SEASONS that take turns all year! Spring brings flowers, summer is hot and sunny, autumn paints leaves orange, and winter blankets everything in cold snow!",
+          "Clouds and storms come and go each day — but Earth's weather also changes in a BIGGER pattern across the whole year. We call these the four SEASONS! In SPRING, flowers bloom and animals wake up. SUMMER is hot and sunny — perfect for swimming. In FALL, the leaves turn fiery orange and red, then float down. WINTER blankets everything in cold, white snow. The seasons take turns because Earth is TILTED like a spinning top, and that little tilt is the secret recipe for our seasons!",
         funFact: 'Earth is tilted! That tilt is what gives us our seasons.',
         game: {
           type: 'ordering',
@@ -470,7 +470,7 @@ export const JOURNEY: Topic[] = [
         name: 'Snowflake Magic',
         emoji: '❄️',
         introNarration:
-          "When it gets really cold, rain freezes into beautiful SNOWFLAKES! Every single snowflake has 6 sides, and no two snowflakes are exactly the same. They're tiny works of art falling from the sky!",
+          "And speaking of winter — when the air gets really REALLY cold, the rain freezes into something straight out of a fairy tale: SNOWFLAKES! Each snowflake is a teeny six-sided star made of ice crystals. And here's the wildest thing of all: NO TWO SNOWFLAKES have ever been exactly the same. Every single one is a unique tiny work of art quietly drifting down from the clouds. Catch one on your tongue — it's a one-of-a-kind treasure!",
         funFact: 'The biggest snowflake ever recorded was 15 inches wide — bigger than a frisbee!',
         game: {
           type: 'question',
@@ -540,7 +540,7 @@ export const JOURNEY: Topic[] = [
         name: 'The Mighty Heart',
         emoji: '❤️',
         introNarration:
-          "Put your hand on your chest — feel that THUMP THUMP? That's your heart! Your heart is a muscle that pumps blood all around your body, all day, every day, without ever taking a break!",
+          "Ready for the smallest, coolest adventure yet? We're going INSIDE your own body! Put your hand right on your chest. Feel that? THUMP THUMP, THUMP THUMP. That's your HEART! Your heart is a tireless muscle about the size of your fist. Its full-time job is to PUMP blood through your whole body — like a tiny brave engine that NEVER takes a break, not even when you're sleeping. Your heart is the captain of Team You!",
         funFact: 'Your heart beats about 100,000 times every day!',
         game: {
           type: 'question',
@@ -557,7 +557,7 @@ export const JOURNEY: Topic[] = [
         name: 'The Big Brain',
         emoji: '🧠',
         introNarration:
-          "Up in your head is your BRAIN! Your brain is like a super computer. It helps you think, remember, see, hear, and even wiggle your toes! Right now, your brain is learning new things!",
+          "Now let's travel UP from your heart, all the way to your head. There, snuggled safely inside your skull, is the BOSS of your whole body: your BRAIN! Your brain is like a squishy supercomputer. It tells your heart to pump, your legs to run, your eyes to blink, and even helps you remember your best friend's name. Right this second, your brain is doing something amazing — it's learning all about ITSELF!",
         funFact: 'Your brain has more connections than there are stars in the sky!',
         game: {
           type: 'matching',
@@ -575,7 +575,7 @@ export const JOURNEY: Topic[] = [
         name: 'The Skeleton Crew',
         emoji: '🦴',
         introNarration:
-          "Inside your body is a SKELETON made of bones! Bones are super strong and they hold you up. Without bones, you'd be a wiggly blob! You have 206 bones — that's a LOT!",
+          "Your brain is the boss and your heart is the engine — but how do you stand up tall? With your skeleton! Inside your body is a strong frame made of 206 BONES, all working together. Without bones, you'd flop down like a wet noodle! Some bones are SUPER tiny — the smallest one is inside your ear and is smaller than a grain of rice. The biggest is in your leg, and it helps you run, jump, and dance. Bones are awesome!",
         funFact: 'Babies are born with about 300 bones — some fuse together as they grow!',
         game: {
           type: 'question',
@@ -592,7 +592,7 @@ export const JOURNEY: Topic[] = [
         name: 'Five Super Senses',
         emoji: '👁️',
         introNarration:
-          "You have FIVE super-powers called SENSES! You SEE with your eyes, HEAR with your ears, SMELL with your nose, TASTE with your tongue, and TOUCH with your skin. Your senses help you understand the world!",
+          "Okay! Bones hold you up, your heart pumps, and your brain bosses everything — but how do you actually KNOW what's happening around you? With FIVE super-powers called SENSES! You SEE with your eyes, HEAR with your ears, SMELL with your nose, TASTE with your tongue, and FEEL with your skin. Each sense rushes little messages up to your brain, faster than a text message, so you always know what's going on in the world. Your senses are like Team You's spies!",
         funFact: 'Your tongue has about 10,000 tiny taste buds!',
         game: {
           type: 'matching',
@@ -611,7 +611,7 @@ export const JOURNEY: Topic[] = [
         name: 'The Big Breath',
         emoji: '🫁',
         introNarration:
-          "Breathe in... breathe out... that's your LUNGS at work! Lungs are like two big balloons in your chest. They suck in air so your body can get oxygen — the gas that keeps you alive!",
+          "There's one last hero to meet on Team You! Take a big breath in... and slowly out. That was your LUNGS at work! Lungs are like two big squishy balloons inside your chest. When you breathe in, they grab OXYGEN from the air — the magic gas your blood carries to every part of your body, including your heart and brain. Without lungs, the whole team would run out of fuel. So next time you take a deep breath — thank your lungs!",
         funFact: 'You take about 20,000 breaths every single day!',
         game: {
           type: 'question',
@@ -681,7 +681,7 @@ export const JOURNEY: Topic[] = [
         name: 'How Plants Grow',
         emoji: '🌱',
         introNarration:
-          "Did you know plants EAT sunlight? Plants need 3 things to grow: SUN, WATER, and SOIL. Their roots drink water, their leaves catch sunlight, and they grow up, up, UP!",
+          "Look around! Green leaves, soft grass, towering trees — plants are EVERYWHERE on Earth. But how does a tiny seed turn into a giant plant? Here's the recipe: plants need just 3 ingredients! SUNLIGHT to make food, WATER to drink, and SOIL to grow in. Roots slurp up the water, leaves catch the sunlight, and slowly... slowly... they grow up, up, UP. The wildest secret? Plants actually EAT sunlight — they're the only living things that can!",
         funFact: 'The tallest tree in the world is taller than the Statue of Liberty!',
         game: {
           type: 'ordering',
@@ -701,7 +701,7 @@ export const JOURNEY: Topic[] = [
         name: 'Parts of a Plant',
         emoji: '🌻',
         introNarration:
-          "Plants have parts that work as a team! ROOTS grab water from the ground. The STEM holds everything up. LEAVES make food from sunlight. And FLOWERS make seeds for new plants!",
+          "Now that we know what plants NEED, let's meet the team that does all the work! Every plant has 4 parts working together. The ROOTS dig down deep into the soil and slurp up water like a thousand little straws. The STEM stands tall and carries water up to the top. The LEAVES are flat green solar panels that catch sunlight and turn it into food. And the FLOWERS are where new SEEDS are made to start the next generation. Teamwork!",
         funFact: 'Some plants can eat bugs! Like the Venus flytrap!',
         game: {
           type: 'question',
@@ -718,7 +718,7 @@ export const JOURNEY: Topic[] = [
         name: 'Pretty Flowers',
         emoji: '🌸',
         introNarration:
-          "FLOWERS aren't just pretty — they have a secret job! Their bright colors and sweet smells call BEES and butterflies to come visit. The bees carry tiny dust called pollen from flower to flower, helping new plants grow!",
+          "Let's zoom in on those FLOWERS for a closer look! Flowers aren't just pretty — they have a secret sneaky mission. Their bright colors and sweet smells are like a sign saying 'BEES, COME HERE!' When a bee lands to slurp sugary nectar, it accidentally collects yellow dust called POLLEN on its furry legs. When the bee flies to the next flower, the pollen drops off, and that's how new seeds start! Bees and flowers are best friends helping each other.",
         funFact: 'A single sunflower can have up to 2,000 tiny seeds inside it!',
         game: {
           type: 'question',
@@ -735,7 +735,7 @@ export const JOURNEY: Topic[] = [
         name: 'Seed Travelers',
         emoji: '🌰',
         introNarration:
-          "SEEDS are baby plants in little packages! But how do they get to new places? Some FLY on the wind like tiny parachutes. Some HITCH a ride on animal fur. And some get gobbled up by birds, then planted in their poop! 💩",
+          "After bees help flowers make SEEDS, here's the next big question — how do seeds get to NEW places to grow? Plants can't walk, so they got SUPER clever! Some seeds have tiny fluffy parachutes and FLY on the wind for miles. Some seeds are sticky burrs that hitchhike on the fur of animals walking by. And some seeds are bright tasty berries that birds gobble up, then... ahem... plant in their poop! 💩 Seeds are sneaky little travelers.",
         funFact: 'A coconut seed can FLOAT across an entire ocean before growing into a tree!',
         game: {
           type: 'matching',
@@ -753,7 +753,7 @@ export const JOURNEY: Topic[] = [
         name: 'Tall Trees',
         emoji: '🌳',
         introNarration:
-          "Trees are GIANTS of the plant world! They can grow for hundreds of years and become taller than a building. Their leaves make OXYGEN for us to breathe, and their branches are home to birds, squirrels, and bugs!",
+          "When a tiny seed lands in the perfect spot — sunny, watered, snuggled into rich soil — it can grow into the biggest plant of all: a TREE! Trees can live for hundreds, even THOUSANDS of years and grow taller than tall buildings. They give us shade on hot days, fruit to eat, and cozy homes for birds, squirrels, and bugs. And best of all? Their leaves make OXYGEN — the same magic gas your lungs LOVE. Thank you, trees!",
         funFact: 'The oldest tree in the world is over 5,000 years old — older than the pyramids!',
         game: {
           type: 'question',

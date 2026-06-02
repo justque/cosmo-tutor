@@ -7,6 +7,7 @@ import type { Topic } from '@/lib/journeyContent'
 interface Props {
   topic: Topic
   onStart: () => void
+  isReview?: boolean
 }
 
 interface FloatingEmoji {
@@ -19,9 +20,9 @@ interface FloatingEmoji {
   drift: number
 }
 
-export function TopicIntro({ topic, onStart }: Props) {
+export function TopicIntro({ topic, onStart, isReview = false }: Props) {
   const [floaters, setFloaters] = useState<FloatingEmoji[]>([])
-  const [typed, setTyped] = useState('')
+  const [typed, setTyped] = useState(isReview ? topic.intro.narration : '')
 
   useEffect(() => {
     const emojis = topic.intro.animationEmojis
@@ -38,8 +39,12 @@ export function TopicIntro({ topic, onStart }: Props) {
     )
   }, [topic.id, topic.intro.animationEmojis])
 
-  // Typewriter narration
+  // Typewriter narration (instant during review)
   useEffect(() => {
+    if (isReview) {
+      setTyped(topic.intro.narration)
+      return
+    }
     setTyped('')
     const full = topic.intro.narration
     let i = 0
@@ -47,9 +52,9 @@ export function TopicIntro({ topic, onStart }: Props) {
       i++
       setTyped(full.slice(0, i))
       if (i >= full.length) clearInterval(id)
-    }, 30)
+    }, 22)
     return () => clearInterval(id)
-  }, [topic.id, topic.intro.narration])
+  }, [topic.id, topic.intro.narration, isReview])
 
   const typingDone = typed.length === topic.intro.narration.length
 
@@ -153,7 +158,7 @@ export function TopicIntro({ topic, onStart }: Props) {
           className="chunky-button mt-10 bg-primary-container text-on-primary-container px-10 py-5 rounded-full font-display font-extrabold text-xl md:text-2xl border-2 border-white/20 flex items-center gap-3"
           style={{ ['--chunky-shadow' as string]: '#374e00' }}
         >
-          Start Adventure 🚀
+          {isReview ? 'Replay Adventure 🔁' : 'Start Adventure 🚀'}
         </motion.button>
 
         {/* Mission preview grid */}
