@@ -13,6 +13,14 @@ import { RocketLaunch } from './visuals/RocketLaunch'
 import { MarsRover } from './visuals/MarsRover'
 import { CometSwoop } from './visuals/CometSwoop'
 import { BlackHole } from './visuals/BlackHole'
+import { MammalParade } from './visuals/MammalParade'
+import { HabitatZones } from './visuals/HabitatZones'
+import { BirdFlock } from './visuals/BirdFlock'
+import { BugGarden } from './visuals/BugGarden'
+import { OceanReef } from './visuals/OceanReef'
+import { ReptileRock } from './visuals/ReptileRock'
+import { FrogPond } from './visuals/FrogPond'
+import { DinoWalk } from './visuals/DinoWalk'
 import { YouTubeEmbed } from './YouTubeEmbed'
 
 function LocationVisual({ visual }: { visual: VisualKey }) {
@@ -33,6 +41,22 @@ function LocationVisual({ visual }: { visual: VisualKey }) {
       return <CometSwoop />
     case 'black-hole':
       return <BlackHole />
+    case 'mammal-parade':
+      return <MammalParade />
+    case 'habitat-zones':
+      return <HabitatZones />
+    case 'bird-flock':
+      return <BirdFlock />
+    case 'bug-garden':
+      return <BugGarden />
+    case 'ocean-reef':
+      return <OceanReef />
+    case 'reptile-rock':
+      return <ReptileRock />
+    case 'frog-pond':
+      return <FrogPond />
+    case 'dino-walk':
+      return <DinoWalk />
   }
 }
 

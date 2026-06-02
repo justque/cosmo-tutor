@@ -48,6 +48,14 @@ export type VisualKey =
   | 'mars-rover'
   | 'comet-swoop'
   | 'black-hole'
+  | 'mammal-parade'
+  | 'habitat-zones'
+  | 'bird-flock'
+  | 'bug-garden'
+  | 'ocean-reef'
+  | 'reptile-rock'
+  | 'frog-pond'
+  | 'dino-walk'
 
 export interface LocationVideo {
   youtubeId: string
@@ -339,9 +347,10 @@ export const JOURNEY: Topic[] = [
         id: 'animals-mammals',
         name: 'Mighty Mammals',
         emoji: '🐘',
+        visual: 'mammal-parade',
         introNarration:
-          "Back on Earth! Let's swap our space helmets for safari hats — we're off to explore the wild ANIMAL KINGDOM. Earth has MILLIONS of different animals, so we'll start with one super fluffy family: the MAMMALS. Mammals are warm-bodied, have FUR or HAIR, breathe air, and most baby mammals drink milk from their mom. Here's a secret — YOU are a mammal too! Dogs, cats, lions, whales, and you are all in the same furry family.",
-        funFact: 'Blue whales are the biggest mammals — bigger than 3 school buses!',
+          "Back on Earth! Let's swap our space helmets for safari hats — we're off to explore the wild ANIMAL KINGDOM. Earth has over 8 MILLION different kinds of animals, so we'll start with one super fluffy family: the MAMMALS. Mammals share four big things in common: they have FUR or HAIR, they are WARM-blooded (their bodies make their own heat like little furnaces), they breathe AIR with lungs, and most baby mammals drink MILK from their mom. Mammals come in every shape — tiny mouse-sized bats, enormous blue whales bigger than three school buses, fluffy puppies, even slow-poke sloths that nap upside-down! Here's the secret of secrets — YOU are a mammal too. Dogs, cats, lions, whales, and you are all in the same warm, furry family.",
+        funFact: 'Blue whales are the biggest mammals — and the biggest animal EVER to live on Earth, bigger even than the dinosaurs!',
         game: {
           type: 'question',
           instruction: 'Spot the mammal!',
@@ -356,9 +365,10 @@ export const JOURNEY: Topic[] = [
         id: 'animals-habitats',
         name: 'Animal Homes',
         emoji: '🏞️',
+        visual: 'habitat-zones',
         introNarration:
-          "Now that we've met the mammals, here's a big question — where do all the animals LIVE? The special place each animal calls home is called a HABITAT. A polar bear's habitat is freezing icy snow. A monkey's habitat is the warm leafy jungle. A fish's habitat is a wet, salty ocean. Every animal has a body perfectly built for its own habitat. A polar bear has thick fur for the cold, and a monkey has long arms for swinging in trees!",
-        funFact: 'A camel can go a whole week without drinking water!',
+          "Now that we've met the mammals, here's a big question — where do all the animals LIVE? The special place each animal calls home is called a HABITAT. Some habitats are freezing cold, some are baking hot, some are wet, some are dry — and every single animal has a body PERFECTLY designed for its own habitat. A polar bear has SO much thick fur and even a layer of fat to stay cozy in the icy Arctic. A camel has humps that store fat for snacks and can drink 30 gallons of water at once in the burning desert. A jungle monkey has super-long arms to swing from vine to vine, and fish have GILLS to breathe underwater. Tap each habitat below to meet its champion!",
+        funFact: 'A camel can drink 30 gallons of water in just 13 minutes — that\'s 480 cups in the time you eat a snack!',
         game: {
           type: 'matching',
           instruction: 'Match each animal to its home!',
@@ -366,6 +376,7 @@ export const JOURNEY: Topic[] = [
             { id: 'p1', left: 'Fish', right: 'Ocean' },
             { id: 'p2', left: 'Polar Bear', right: 'Arctic ice' },
             { id: 'p3', left: 'Monkey', right: 'Jungle trees' },
+            { id: 'p4', left: 'Camel', right: 'Desert sand' },
           ],
           celebrationMessage: 'Every animal back home safely!',
         },
@@ -374,9 +385,10 @@ export const JOURNEY: Topic[] = [
         id: 'animals-birds',
         name: 'Feathered Friends',
         emoji: '🦜',
+        visual: 'bird-flock',
         introNarration:
-          "Speaking of habitats — let's look UP at the sky habitat! Tweet tweet, that's the BIRDS calling. Birds have something no other animal has: FEATHERS — light, fluffy, perfect for flying. They also hatch from eggs and they have beaks instead of teeth. From the tiny hummingbird (the size of your thumb!) to giant eagles that soar above mountains, birds are masters of the sky.",
-        funFact: 'The hummingbird flaps its wings 80 times every SECOND!',
+          "Look UP into the SKY habitat — tweet tweet, that's the BIRDS calling! Birds have something no other animal on Earth has: FEATHERS, soft and fluffy and perfect for flying. They hatch from hard-shelled eggs, they have hollow bones that make them light enough to soar, and they have BEAKS instead of teeth — different shapes for different snacks. From the tiny hummingbird (no bigger than your thumb!) to bald eagles soaring above mountains, birds are masters of the sky. Some birds even fly together in a V-shape, taking turns at the front to share the work — just like cyclists in a race!",
+        funFact: 'The hummingbird flaps its wings 80 times every SECOND — so fast they hum like a tiny motor!',
         game: {
           type: 'question',
           instruction: 'Bird brain question!',
@@ -388,12 +400,34 @@ export const JOURNEY: Topic[] = [
         },
       },
       {
+        id: 'animals-bugs',
+        name: 'Buzzing Bugs',
+        emoji: '🐝',
+        visual: 'bug-garden',
+        introNarration:
+          "Look DOWN at the grass and flowers — buzz buzz, flutter flutter! There are MORE INSECTS on Earth than every other animal combined. Insects have 3 body parts (head, chest, belly), 6 legs, and most have antennae for smelling and feeling. Bees buzz from flower to flower collecting sugary nectar and helping plants make seeds. Butterflies start life as wriggly caterpillars, then build a chrysalis and transform into colorful flying jewels — that's called METAMORPHOSIS! Ants are mighty for their size — they can lift things 50 times heavier than themselves. That's like YOU lifting a hippo!",
+        funFact: 'There are 10 quintillion insects alive on Earth right now — that\'s 1.4 billion bugs for every single person!',
+        game: {
+          type: 'ordering',
+          instruction: 'Put a butterfly\'s life cycle in order!',
+          items: [
+            { id: 'egg', label: 'Egg', emoji: '🥚' },
+            { id: 'caterpillar', label: 'Caterpillar', emoji: '🐛' },
+            { id: 'chrysalis', label: 'Chrysalis', emoji: '🛏️' },
+            { id: 'butterfly', label: 'Butterfly', emoji: '🦋' },
+          ],
+          correctOrder: ['egg', 'caterpillar', 'chrysalis', 'butterfly'],
+          celebrationMessage: 'Magnificent metamorphosis!',
+        },
+      },
+      {
         id: 'animals-ocean',
         name: 'Ocean Wonders',
         emoji: '🐠',
+        visual: 'ocean-reef',
         introNarration:
-          "Birds rule the sky — now let's dive DOWN into the ocean habitat! SPLASH! Below the waves live some of the strangest, most beautiful animals on the planet. Wiggly octopuses with 8 arms can squeeze through tiny cracks. Smiley dolphins talk to each other in clicks and whistles. Giant whales sing songs that travel for miles underwater. And rainbow-colored fish dart between coral reefs like little swimming jewels!",
-        funFact: 'An octopus has 3 hearts and BLUE blood!',
+          "SPLASH! Let's dive DOWN into the OCEAN — the biggest habitat on the planet, covering 70% of Earth! Below the waves live some of the strangest, most beautiful animals you can imagine. Wiggly octopuses have 8 arms, 3 hearts, BLUE blood, and can squeeze through cracks the size of a coin. Smiley dolphins talk to each other in clicks and whistles, and they sleep with only HALF their brain at a time. Giant whales sing deep songs that travel for hundreds of miles underwater. Rainbow-colored fish dart between coral reefs like little swimming jewels. And glowing jellyfish drift through the dark like ghosts. The ocean is FULL of magic!",
+        funFact: 'An octopus has 3 hearts and BLUE blood — and can taste with its arms!',
         game: {
           type: 'matching',
           instruction: 'Match each ocean animal to its special trick!',
@@ -401,6 +435,7 @@ export const JOURNEY: Topic[] = [
             { id: 'p1', left: 'Octopus', right: '8 wiggly arms' },
             { id: 'p2', left: 'Dolphin', right: 'Super smart swimmer' },
             { id: 'p3', left: 'Shark', right: 'Lots of sharp teeth' },
+            { id: 'p4', left: 'Whale', right: 'Sings songs for miles' },
           ],
           celebrationMessage: 'You are a sea-creature genius!',
         },
@@ -409,9 +444,10 @@ export const JOURNEY: Topic[] = [
         id: 'animals-reptiles',
         name: 'Cool Reptiles',
         emoji: '🦎',
+        visual: 'reptile-rock',
         introNarration:
-          "Splash — back on dry land! Time to meet the COLD-BLOODED crew: the REPTILES. Snakes that slither, lizards that dart, turtles that go slow and steady, and crocodiles that smile with sharp teeth — they all have SCALY skin and lay eggs. Here's the trick: reptile bodies can't make their own heat like mammal bodies can. So they sunbathe on warm rocks to power up, and slow down when it's cold. Pretty smart, right?",
-        funFact: 'A baby chameleon can change colors just minutes after it hatches!',
+          "Splash — back on dry land! Time to meet the COLD-BLOODED crew: the REPTILES. Snakes that slither, lizards that dart, turtles that move slow and steady, and crocodiles that smile with very sharp teeth — they all have SCALY skin and most lay eggs. Here's the trick that makes reptiles special: their bodies can't make their own heat like mammals can. So they sunbathe on warm rocks to power UP, then slow down and rest when it's cold. Reptile super-powers? Some snakes have venom strong enough to make their dinner sleepy. Some lizards can drop their tail to escape (it grows back!). And chameleons can change color RIGHT in front of your eyes!",
+        funFact: 'A baby chameleon can change colors just minutes after it hatches — born ready to disguise!',
         game: {
           type: 'question',
           instruction: 'Reptile riddle!',
@@ -422,17 +458,56 @@ export const JOURNEY: Topic[] = [
           hintOnWrong: 'Reptiles are COLD-blooded — they need help to feel toasty!',
         },
       },
+      {
+        id: 'animals-amphibians',
+        name: 'Pond Amphibians',
+        emoji: '🐸',
+        visual: 'frog-pond',
+        introNarration:
+          "Hop on over to the POND for one of the most amazing animal groups: AMPHIBIANS. Amphibians are double-trouble — they can live BOTH in water AND on land! That's actually what their name means in Greek: 'two lives.' Frogs, toads, salamanders, and newts are all amphibians. They have smooth, slimy skin (which helps them breathe!), they hatch from jelly-soft eggs in the water, and they go through a wild change as they grow. A baby frog is called a TADPOLE — it has a tail and lives underwater. Then slowly it sprouts legs, loses its tail, hops onto land, and BOOP — it's a frog! That's another kind of metamorphosis. Magic!",
+        funFact: 'A frog drinks water by SOAKING it through its skin — like a tiny living sponge!',
+        game: {
+          type: 'ordering',
+          instruction: 'Put the frog life cycle in order!',
+          items: [
+            { id: 'egg', label: 'Frog egg', emoji: '🥚' },
+            { id: 'tadpole', label: 'Tadpole', emoji: '🐟' },
+            { id: 'legs', label: 'Tadpole with legs', emoji: '🦵' },
+            { id: 'frog', label: 'Frog', emoji: '🐸' },
+          ],
+          correctOrder: ['egg', 'tadpole', 'legs', 'frog'],
+          celebrationMessage: 'Hop, hop, hooray!',
+        },
+      },
+      {
+        id: 'animals-dinosaurs',
+        name: 'Mighty Dinosaurs',
+        emoji: '🦖',
+        visual: 'dino-walk',
+        introNarration:
+          "ROAR! Hop in our time-machine — we're going back 65 million years to meet the most LEGENDARY animals ever: the DINOSAURS! Dinosaurs were giant reptile-cousins who ruled the Earth for 165 MILLION years (humans have only been around for a couple hundred thousand). Some, like Tyrannosaurus Rex, had bone-crushing jaws and sharp teeth the size of bananas. Others like the long-necked Brachiosaurus were as tall as buildings but only ate plants. Some had armor plates, some had spikes, some had feathers, and some even flew! Then one day, a HUGE space rock crashed into Earth and changed the weather forever. Most dinosaurs went extinct... but their tiny cousins — BIRDS — are still here today. Yep, every bird you see is a baby T-Rex!",
+        funFact: 'A T-Rex tooth was longer than a banana — and it could grow a new one every time one fell out!',
+        game: {
+          type: 'question',
+          instruction: 'Dino quiz!',
+          question: 'Which animals alive today are related to dinosaurs?',
+          options: ['Cats', 'Birds', 'Fish', 'Spiders'],
+          correctIndex: 1,
+          celebrationMessage: 'Yes! Birds are tiny modern-day dinosaurs!',
+          hintOnWrong: 'Look up at the sky — they have feathers and lay eggs!',
+        },
+      },
     ],
     checkpoint: {
       id: 'cp-animals',
       topicId: 'animals',
       title: 'Animal Expert Test! 🦁',
-      introNarration: "Let's see if you became an animal expert! 3 questions!",
-      passingScore: 2,
+      introNarration: "You met SO many animals! Time for 5 questions to earn your Animal Expert badge!",
+      passingScore: 3,
       questions: [
         {
           type: 'question',
-          instruction: 'Question 1 of 3',
+          instruction: 'Question 1 of 5',
           question: 'Mammals have what on their body?',
           options: ['Scales', 'Feathers', 'Fur or hair', 'Slime'],
           correctIndex: 2,
@@ -441,21 +516,39 @@ export const JOURNEY: Topic[] = [
         },
         {
           type: 'question',
-          instruction: 'Question 2 of 3',
-          question: 'Where do fish live?',
-          options: ['Trees', 'Water', 'Sky', 'Caves'],
-          correctIndex: 1,
-          celebrationMessage: 'Correct!',
-          hintOnWrong: 'Splash! They need this to swim!',
-        },
-        {
-          type: 'question',
-          instruction: 'Question 3 of 3',
+          instruction: 'Question 2 of 5',
           question: "An animal's home is called a...",
           options: ['Habitat', 'Hotel', 'House', 'Hat'],
           correctIndex: 0,
           celebrationMessage: 'Correct!',
           hintOnWrong: 'Starts with H... HAB-i-tat!',
+        },
+        {
+          type: 'question',
+          instruction: 'Question 3 of 5',
+          question: 'How many legs does an insect have?',
+          options: ['4', '6', '8', '10'],
+          correctIndex: 1,
+          celebrationMessage: 'Correct!',
+          hintOnWrong: 'Count them: head, chest, belly... 6!',
+        },
+        {
+          type: 'question',
+          instruction: 'Question 4 of 5',
+          question: 'A baby frog is called a...',
+          options: ['Puppy', 'Tadpole', 'Cub', 'Kit'],
+          correctIndex: 1,
+          celebrationMessage: 'Correct!',
+          hintOnWrong: 'It swims like a tiny fish before growing legs!',
+        },
+        {
+          type: 'question',
+          instruction: 'Question 5 of 5',
+          question: 'Which animals alive today are related to dinosaurs?',
+          options: ['Cats', 'Fish', 'Birds', 'Spiders'],
+          correctIndex: 2,
+          celebrationMessage: 'Correct!',
+          hintOnWrong: 'They have feathers and lay eggs!',
         },
       ],
       successNarration: "AMAZING! You are an Animal Expert! Time to check the weather!",
