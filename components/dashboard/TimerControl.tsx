@@ -51,7 +51,7 @@ export function TimerControl({ childId, initialDuration, onSaved }: Props) {
   if (!editing) {
     return (
       <button
-        onClick={() => setEditing(true)}
+        onClick={(e) => { e.stopPropagation(); setEditing(true) }}
         className="flex items-center gap-1 text-xs text-on-surface-variant hover:text-on-background transition-colors mt-1"
         aria-label="Edit session timer"
       >
