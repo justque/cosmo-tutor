@@ -69,6 +69,7 @@ export default function DashboardPage() {
   const [newChildAge, setNewChildAge] = useState('')
   const [newChildEmoji, setNewChildEmoji] = useState('🧒')
   const [pinModalChild, setPinModalChild] = useState<Child | null>(null)
+  const [addError, setAddError] = useState<string | null>(null)
 
   useEffect(() => {
     const fetchChildren = async () => {
@@ -94,10 +95,14 @@ export default function DashboardPage() {
 
   const handleAddChild = async (e: React.FormEvent) => {
     e.preventDefault()
+    setAddError(null)
     try {
       const { data: { user } } = await supabase.auth.getUser()
-      if (!user) return
-      const { data } = await supabase
+      if (!user) {
+        setAddError('Not signed in — please sign in again.')
+        return
+      }
+      const { data, error } = await supabase
         .from('children')
         .insert([{
           parent_id: user.id,
@@ -106,7 +111,12 @@ export default function DashboardPage() {
           avatar_emoji: newChildEmoji,
         }])
         .select('id, name, age, avatar_emoji, pin_hash, pin_locked_until')
-      if (data) {
+      if (error) {
+        console.error('Failed to add child:', error)
+        setAddError(error.message)
+        return
+      }
+      if (data && data[0]) {
         setChildren([...children, data[0]])
         setNewChildName('')
         setNewChildAge('')
@@ -115,6 +125,7 @@ export default function DashboardPage() {
       }
     } catch (err) {
       console.error('Failed to add child:', err)
+      setAddError(err instanceof Error ? err.message : 'Unknown error')
     }
   }
 
@@ -336,6 +347,11 @@ export default function DashboardPage() {
                 </div>
               </div>
 
+              {addError && (
+                <p className="text-sm text-rose-400 font-display font-bold text-center">
+                  {addError}
+                </p>
+              )}
               <div className="flex gap-3 pt-2">
                 <button
                   type="button"
