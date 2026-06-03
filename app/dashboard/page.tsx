@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import { AppGuard } from '@/components/AppGuard'
-import { SwitchProfileButton } from '@/components/SwitchProfileButton'
 import { SetPinModal } from '@/components/picker/SetPinModal'
 import { isValidPin } from '@/lib/pinFormat'
 
@@ -197,7 +196,12 @@ export default function DashboardPage() {
           </span>
         </div>
         <div className="flex gap-2">
-          <SwitchProfileButton />
+          <button
+            onClick={() => router.replace('/picker')}
+            className="h-10 px-4 rounded-full bg-surface-container-highest text-on-surface font-display font-bold text-sm"
+          >
+            ← Back
+          </button>
           <button
             onClick={handleLogout}
             className="h-10 px-4 rounded-full bg-surface-container-highest text-on-surface font-display font-bold text-sm"
@@ -221,7 +225,7 @@ export default function DashboardPage() {
             Your Explorers 🚀
           </h1>
           <p className="mt-3 text-on-surface-variant max-w-xl mx-auto">
-            Pick an explorer to launch into their cosmic adventure, or add a new explorer to the crew.
+            Manage your explorers — add new crew members or remove them.
           </p>
         </div>
 
@@ -265,14 +269,7 @@ export default function DashboardPage() {
                 <p className="text-center text-on-surface-variant text-sm mb-5">
                   Age {child.age} 
                 </p>
-                <button
-                  onClick={() => router.push(`/adventure?childId=${child.id}`)}
-                  className="chunky-button w-full bg-primary-container text-on-primary-container font-display font-bold px-4 py-3 rounded-lg border-2 border-white/20 flex items-center justify-center gap-2"
-                  style={{ ['--chunky-shadow' as string]: '#374e00' }}
-                >
-                  🚀 Launch Adventure
-                </button>
-                <div className="flex gap-2 mt-2">
+                <div className="flex gap-2">
                   <button
                     onClick={() => setPinModalChild(child)}
                     className="px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container text-xs font-display font-bold"
