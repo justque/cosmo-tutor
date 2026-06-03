@@ -21,6 +21,7 @@ import { CosmoNarrator } from '@/components/adventure/CosmoNarrator'
 import { TopicIntro } from '@/components/adventure/TopicIntro'
 import { AppGuard } from '@/components/AppGuard'
 import { SwitchProfileButton } from '@/components/SwitchProfileButton'
+import { BreakReminderModal } from '@/components/adventure/BreakReminderModal'
 
 type Mode = 'journey-map' | 'topic-intro' | 'location' | 'checkpoint' | 'finished'
 
@@ -49,6 +50,9 @@ function AdventureInner() {
   // Review state — when set, the user is revisiting a previously-completed topic.
   const [reviewTopicId, setReviewTopicId] = useState<string | null>(null)
   const [reviewLocationIndex, setReviewLocationIndex] = useState(0)
+  const [sessionDuration, setSessionDuration] = useState<number | null>(null)
+  const [secondsLeft, setSecondsLeft] = useState<number | null>(null)
+  const [showBreakModal, setShowBreakModal] = useState(false)
 
   useEffect(() => {
     const init = async () => {
@@ -77,6 +81,13 @@ function AdventureInner() {
       const loaded = await loadProgress(childId!)
       setProgress(loaded)
 
+      const { data: childRow } = await supabase
+        .from('children')
+        .select('session_duration_minutes')
+        .eq('id', childId!)
+        .single()
+      setSessionDuration(childRow?.session_duration_minutes ?? 30)
+
       const { data: session } = await supabase
         .from('sessions')
         .insert([{ child_id: childId }])
@@ -100,6 +111,21 @@ function AdventureInner() {
     }
     init()
   }, [router, searchParams])
+
+  useEffect(() => {
+    if (sessionDuration === null) return
+    setSecondsLeft(sessionDuration * 60)
+  }, [sessionDuration])
+
+  useEffect(() => {
+    if (secondsLeft === null) return
+    if (secondsLeft <= 0) {
+      setShowBreakModal(true)
+      return
+    }
+    const id = setInterval(() => setSecondsLeft((s) => (s ?? 1) - 1), 1000)
+    return () => clearInterval(id)
+  }, [secondsLeft])
 
   if (loading || !progress) {
     return (
@@ -351,6 +377,15 @@ function AdventureInner() {
         />
       )}
     </div>
+    {showBreakModal && sessionDuration !== null && (
+      <BreakReminderModal
+        onKeepGoing={() => {
+          setShowBreakModal(false)
+          setSecondsLeft(sessionDuration * 60)
+        }}
+        onBreak={() => router.push('/picker')}
+      />
+    )}
     </AppGuard>
   )
 }
