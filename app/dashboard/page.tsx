@@ -6,6 +6,7 @@ import { supabase } from '@/lib/supabase'
 import { AppGuard } from '@/components/AppGuard'
 import { SetPinModal } from '@/components/picker/SetPinModal'
 import { isValidPin } from '@/lib/pinFormat'
+import { useActiveProfile } from '@/lib/useActiveProfile'
 
 interface Child {
   id: string
@@ -72,6 +73,7 @@ export default function DashboardPage() {
   const [newChildPinConfirm, setNewChildPinConfirm] = useState('')
   const [pinModalChild, setPinModalChild] = useState<Child | null>(null)
   const [addError, setAddError] = useState<string | null>(null)
+  const { setProfile } = useActiveProfile()
 
   useEffect(() => {
     const fetchChildren = async () => {
@@ -254,7 +256,11 @@ export default function DashboardPage() {
             {children.map((child) => (
               <div
                 key={child.id}
-                className="group relative bg-surface-container/60 backdrop-blur-md rounded-2xl p-6 border border-white/10 shadow-xl hover:border-secondary-container/60 transition-all"
+                className="group relative bg-surface-container/60 backdrop-blur-md rounded-2xl p-6 border border-white/10 shadow-xl hover:border-secondary-container/60 transition-all cursor-pointer"
+                onClick={() => {
+                  setProfile({ kind: 'kid', childId: child.id })
+                  router.push(`/adventure?childId=${child.id}`)
+                }}
               >
                 {/* Glowing avatar */}
                 <div className="relative w-20 h-20 mx-auto mb-4">
@@ -269,7 +275,7 @@ export default function DashboardPage() {
                 <p className="text-center text-on-surface-variant text-sm mb-5">
                   Age {child.age} 
                 </p>
-                <div className="flex gap-2">
+                <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
                   <button
                     onClick={() => setPinModalChild(child)}
                     className="px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container text-xs font-display font-bold"
