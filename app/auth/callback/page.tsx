@@ -19,7 +19,7 @@ export default function CallbackPage() {
         } = await supabase.auth.getUser()
 
         if (user) {
-          router.push('/dashboard')
+          router.push('/picker')
         } else {
           router.push('/auth/login')
         }

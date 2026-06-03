@@ -25,7 +25,7 @@ export default function SignupPage() {
 
       if (error) throw error
 
-      router.push('/dashboard')
+      router.push('/picker')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Signup failed')
     } finally {

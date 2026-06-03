@@ -25,7 +25,7 @@ export default function LoginPage() {
 
       if (error) throw error
 
-      router.push('/dashboard')
+      router.push('/picker')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Login failed')
     } finally {
