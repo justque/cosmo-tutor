@@ -1,6 +1,6 @@
 'use client'
 
-import { Suspense, useEffect, useState } from 'react'
+import { Suspense, useEffect, useRef, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { supabase } from '@/lib/supabase'
@@ -112,19 +112,20 @@ function AdventureInner() {
     init()
   }, [router, searchParams])
 
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+
   useEffect(() => {
-    if (sessionDuration === null) return
+    if (!sessionDuration || sessionDuration <= 0) return
     setSecondsLeft(sessionDuration * 60)
+    intervalRef.current = setInterval(() => setSecondsLeft((s) => (s !== null ? s - 1 : 0)), 1000)
+    return () => { if (intervalRef.current) clearInterval(intervalRef.current) }
   }, [sessionDuration])
 
   useEffect(() => {
-    if (secondsLeft === null) return
-    if (secondsLeft <= 0) {
+    if (secondsLeft !== null && secondsLeft <= 0) {
+      if (intervalRef.current) clearInterval(intervalRef.current)
       setShowBreakModal(true)
-      return
     }
-    const id = setInterval(() => setSecondsLeft((s) => (s ?? 1) - 1), 1000)
-    return () => clearInterval(id)
   }, [secondsLeft])
 
   if (loading || !progress) {
@@ -377,11 +378,15 @@ function AdventureInner() {
         />
       )}
     </div>
-    {showBreakModal && sessionDuration !== null && (
+    {showBreakModal && (
       <BreakReminderModal
         onKeepGoing={() => {
           setShowBreakModal(false)
-          setSecondsLeft(sessionDuration * 60)
+          if (intervalRef.current) clearInterval(intervalRef.current)
+          if (sessionDuration && sessionDuration > 0) {
+            setSecondsLeft(sessionDuration * 60)
+            intervalRef.current = setInterval(() => setSecondsLeft((s) => (s !== null ? s - 1 : 0)), 1000)
+          }
         }}
         onBreak={() => router.push('/picker')}
       />
