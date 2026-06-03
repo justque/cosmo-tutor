@@ -30,7 +30,7 @@ export function clearActiveProfile(): void {
 
 // The parent's Supabase session is already the auth source of truth; we no
 // longer require a separate re-verify password gate. A parent profile is
-// considered "verified" simply by being the active profile.
+// considered "verified" only if it has a non-expired verifiedUntil timestamp.
 export function isParentVerified(p: ActiveProfile | null): boolean {
-  return p?.kind === 'parent'
+  return p?.kind === 'parent' && (p.verifiedUntil ?? 0) > Date.now()
 }

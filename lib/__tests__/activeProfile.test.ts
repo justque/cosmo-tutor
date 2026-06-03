@@ -47,10 +47,11 @@ describe('activeProfile', () => {
     expect(loadActiveProfile()).toBeNull()
   })
 
-  it('isParentVerified is true for any parent profile, false otherwise', () => {
+  it('isParentVerified requires a non-expired verifiedUntil', () => {
     expect(isParentVerified(null)).toBe(false)
     expect(isParentVerified({ kind: 'kid', childId: 'a' })).toBe(false)
-    expect(isParentVerified({ kind: 'parent' })).toBe(true)
-    expect(isParentVerified({ kind: 'parent', verifiedUntil: 1 })).toBe(true)
+    expect(isParentVerified({ kind: 'parent' })).toBe(false)
+    expect(isParentVerified({ kind: 'parent', verifiedUntil: Date.now() - 1 })).toBe(false)
+    expect(isParentVerified({ kind: 'parent', verifiedUntil: Date.now() + 10_000 })).toBe(true)
   })
 })
