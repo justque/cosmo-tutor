@@ -53,4 +53,15 @@ describe('TimerControl', () => {
     expect(screen.queryByRole('button', { name: /^save$/i })).not.toBeInTheDocument()
     expect(mockFrom).not.toHaveBeenCalled()
   })
+
+  it('saves custom input and closes editor', async () => {
+    const user = userEvent.setup()
+    const onSaved = vi.fn()
+    render(<TimerControl childId="abc" initialDuration={30} onSaved={onSaved} />)
+    await user.click(screen.getByRole('button', { name: /edit session timer/i }))
+    await user.click(screen.getByRole('button', { name: /^custom$/i }))
+    await user.type(screen.getByRole('spinbutton'), '35')
+    await user.click(screen.getByRole('button', { name: /^save$/i }))
+    await waitFor(() => expect(onSaved).toHaveBeenCalledWith(35))
+  })
 })
