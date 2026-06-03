@@ -6,6 +6,7 @@ import { supabase } from '@/lib/supabase'
 import { AppGuard } from '@/components/AppGuard'
 import { SwitchProfileButton } from '@/components/SwitchProfileButton'
 import { SetPinModal } from '@/components/picker/SetPinModal'
+import { isValidPin } from '@/lib/pinFormat'
 
 interface Child {
   id: string
@@ -68,6 +69,8 @@ export default function DashboardPage() {
   const [newChildName, setNewChildName] = useState('')
   const [newChildAge, setNewChildAge] = useState('')
   const [newChildEmoji, setNewChildEmoji] = useState('🧒')
+  const [newChildPin, setNewChildPin] = useState('')
+  const [newChildPinConfirm, setNewChildPinConfirm] = useState('')
   const [pinModalChild, setPinModalChild] = useState<Child | null>(null)
   const [addError, setAddError] = useState<string | null>(null)
 
@@ -96,6 +99,14 @@ export default function DashboardPage() {
   const handleAddChild = async (e: React.FormEvent) => {
     e.preventDefault()
     setAddError(null)
+    if (!isValidPin(newChildPin)) {
+      setAddError('PIN must be exactly 4 digits.')
+      return
+    }
+    if (newChildPin !== newChildPinConfirm) {
+      setAddError("PINs don't match.")
+      return
+    }
     try {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) {
@@ -116,13 +127,29 @@ export default function DashboardPage() {
         setAddError(error.message)
         return
       }
-      if (data && data[0]) {
-        setChildren([...children, data[0]])
-        setNewChildName('')
-        setNewChildAge('')
-        setNewChildEmoji('🧒')
-        setShowAddForm(false)
+      if (!data || !data[0]) return
+      const newChild = data[0]
+      const { error: pinErr } = await supabase.rpc('set_child_pin', {
+        p_child_id: newChild.id,
+        p_new_pin: newChildPin,
+      })
+      if (pinErr) {
+        console.error('Failed to set child PIN:', pinErr)
+        setAddError(`Child created but PIN failed: ${pinErr.message}`)
+        return
       }
+      // Refetch so we see the populated pin_hash from the server.
+      const { data: refreshed } = await supabase
+        .from('children')
+        .select('id, name, age, avatar_emoji, pin_hash, pin_locked_until')
+        .eq('parent_id', user.id)
+      setChildren(refreshed ?? [...children, newChild])
+      setNewChildName('')
+      setNewChildAge('')
+      setNewChildEmoji('🧒')
+      setNewChildPin('')
+      setNewChildPinConfirm('')
+      setShowAddForm(false)
     } catch (err) {
       console.error('Failed to add child:', err)
       setAddError(err instanceof Error ? err.message : 'Unknown error')
@@ -344,6 +371,39 @@ export default function DashboardPage() {
                       {emoji}
                     </button>
                   ))}
+                </div>
+              </div>
+
+              <div>
+                <label className="block font-display font-bold text-sm text-on-surface-variant mb-2">
+                  4-digit PIN
+                </label>
+                <p className="text-xs text-on-surface-variant/80 mb-2">
+                  Your explorer will type this PIN to enter the app.
+                </p>
+                <div className="grid grid-cols-2 gap-3">
+                  <input
+                    type="password"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    maxLength={4}
+                    placeholder="New PIN"
+                    value={newChildPin}
+                    onChange={(e) => setNewChildPin(e.target.value.replace(/\D/g, ''))}
+                    className="w-full px-4 py-3 bg-surface-container-low border border-white/10 rounded-lg focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary-container/40 text-on-background placeholder:text-on-surface-variant/50 font-display tracking-widest text-center"
+                    required
+                  />
+                  <input
+                    type="password"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    maxLength={4}
+                    placeholder="Confirm PIN"
+                    value={newChildPinConfirm}
+                    onChange={(e) => setNewChildPinConfirm(e.target.value.replace(/\D/g, ''))}
+                    className="w-full px-4 py-3 bg-surface-container-low border border-white/10 rounded-lg focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary-container/40 text-on-background placeholder:text-on-surface-variant/50 font-display tracking-widest text-center"
+                    required
+                  />
                 </div>
               </div>
 
