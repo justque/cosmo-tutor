@@ -12,7 +12,7 @@ export function BreakReminderModal({ onKeepGoing, onBreak }: Props) {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4"
+      className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
     >
       <motion.div
         initial={{ scale: 0.9, y: 20 }}
@@ -29,6 +29,7 @@ export function BreakReminderModal({ onKeepGoing, onBreak }: Props) {
         </p>
         <div className="flex flex-col gap-3">
           <button
+            type="button"
             onClick={onKeepGoing}
             className="chunky-button bg-primary-container text-on-primary-container font-display font-bold px-6 py-3 rounded-lg border-2 border-white/20 w-full"
             style={{ ['--chunky-shadow' as string]: '#374e00' }}
@@ -36,6 +37,7 @@ export function BreakReminderModal({ onKeepGoing, onBreak }: Props) {
             Keep going
           </button>
           <button
+            type="button"
             onClick={onBreak}
             className="px-6 py-3 rounded-lg bg-surface-container-highest text-on-surface font-display font-bold w-full"
           >
