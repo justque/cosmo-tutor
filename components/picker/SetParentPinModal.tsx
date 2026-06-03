@@ -17,7 +17,7 @@ export function SetParentPinModal({ onCancel, onSuccess }: Props) {
   const [busy, setBusy] = useState(false)
 
   const onComplete = async (pin: string) => {
-    if (!isValidPin(pin)) return
+    if (busy || !isValidPin(pin)) return
     if (first === null) {
       setFirst(pin)
       setError(null)
