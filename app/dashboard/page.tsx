@@ -320,7 +320,7 @@ export default function DashboardPage() {
                 ×
               </button>
             </div>
-            <form onSubmit={handleAddChild} className="space-y-5">
+            <form onSubmit={handleAddChild} autoComplete="off" className="space-y-5">
               <div>
                 <label className="block font-display font-bold text-sm text-on-surface-variant mb-2">
                   Explorer Name
@@ -330,6 +330,7 @@ export default function DashboardPage() {
                   placeholder="e.g. Stella"
                   value={newChildName}
                   onChange={(e) => setNewChildName(e.target.value)}
+                  autoComplete="off"
                   className="w-full px-4 py-3 bg-surface-container-low border border-white/10 rounded-lg focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary-container/40 text-on-background placeholder:text-on-surface-variant/50"
                   required
                 />
@@ -346,6 +347,7 @@ export default function DashboardPage() {
                   onChange={(e) => setNewChildAge(e.target.value)}
                   min="3"
                   max="13"
+                  autoComplete="off"
                   className="w-full px-4 py-3 bg-surface-container-low border border-white/10 rounded-lg focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary-container/40 text-on-background placeholder:text-on-surface-variant/50"
                   required
                 />
@@ -387,6 +389,7 @@ export default function DashboardPage() {
                     inputMode="numeric"
                     pattern="[0-9]*"
                     maxLength={4}
+                    autoComplete="new-password"
                     placeholder="New PIN"
                     value={newChildPin}
                     onChange={(e) => setNewChildPin(e.target.value.replace(/\D/g, ''))}
@@ -398,6 +401,7 @@ export default function DashboardPage() {
                     inputMode="numeric"
                     pattern="[0-9]*"
                     maxLength={4}
+                    autoComplete="new-password"
                     placeholder="Confirm PIN"
                     value={newChildPinConfirm}
                     onChange={(e) => setNewChildPinConfirm(e.target.value.replace(/\D/g, ''))}
