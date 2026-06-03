@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import { AppGuard } from '@/components/AppGuard'
 import { SetPinModal } from '@/components/picker/SetPinModal'
+import { TimerControl } from '@/components/dashboard/TimerControl'
 import { isValidPin } from '@/lib/pinFormat'
 import { useActiveProfile } from '@/lib/useActiveProfile'
 
@@ -15,6 +16,7 @@ interface Child {
   avatar_emoji: string
   pin_hash: string | null
   pin_locked_until: string | null
+  session_duration_minutes: number
 }
 
 interface Star {
@@ -85,7 +87,7 @@ export default function DashboardPage() {
         }
         const { data } = await supabase
           .from('children')
-          .select('id, name, age, avatar_emoji, pin_hash, pin_locked_until')
+          .select('id, name, age, avatar_emoji, pin_hash, pin_locked_until, session_duration_minutes')
           .eq('parent_id', user.id)
         if (data) setChildren(data)
         setLoading(false)
@@ -122,7 +124,7 @@ export default function DashboardPage() {
           age: parseInt(newChildAge),
           avatar_emoji: newChildEmoji,
         }])
-        .select('id, name, age, avatar_emoji, pin_hash, pin_locked_until')
+        .select('id, name, age, avatar_emoji, pin_hash, pin_locked_until, session_duration_minutes')
       if (error) {
         console.error('Failed to add child:', error)
         setAddError(error.message)
@@ -142,7 +144,7 @@ export default function DashboardPage() {
       // Refetch so we see the populated pin_hash from the server.
       const { data: refreshed } = await supabase
         .from('children')
-        .select('id, name, age, avatar_emoji, pin_hash, pin_locked_until')
+        .select('id, name, age, avatar_emoji, pin_hash, pin_locked_until, session_duration_minutes')
         .eq('parent_id', user.id)
       setChildren(refreshed ?? [...children, newChild])
       setNewChildName('')
@@ -272,9 +274,22 @@ export default function DashboardPage() {
                 <h3 className="font-display font-bold text-xl text-center text-on-background">
                   {child.name}
                 </h3>
-                <p className="text-center text-on-surface-variant text-sm mb-5">
-                  Age {child.age} 
+                <p className="text-center text-on-surface-variant text-sm">
+                  Age {child.age}
                 </p>
+                <div className="flex justify-center mb-4">
+                  <TimerControl
+                    childId={child.id}
+                    initialDuration={child.session_duration_minutes}
+                    onSaved={(minutes) =>
+                      setChildren((prev) =>
+                        prev.map((c) =>
+                          c.id === child.id ? { ...c, session_duration_minutes: minutes } : c
+                        )
+                      )
+                    }
+                  />
+                </div>
                 <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
                   <button
                     onClick={() => setPinModalChild(child)}
@@ -455,7 +470,7 @@ export default function DashboardPage() {
             if (!user) return
             const { data } = await supabase
               .from('children')
-              .select('id, name, age, avatar_emoji, pin_hash, pin_locked_until')
+              .select('id, name, age, avatar_emoji, pin_hash, pin_locked_until, session_duration_minutes')
               .eq('parent_id', user.id)
             if (data) setChildren(data)
           }}
