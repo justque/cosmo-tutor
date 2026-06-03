@@ -18,7 +18,7 @@ create index if not exists children_pin_locked_until_idx
 create or replace function verify_child_pin(p_child_id uuid, p_pin text)
 returns table (ok boolean, locked_until timestamptz)
 language plpgsql security definer
-set search_path = public
+set search_path = public, extensions
 as $$
 declare
   v_parent_id uuid;
@@ -77,7 +77,7 @@ grant execute on function verify_child_pin(uuid, text) to authenticated;
 create or replace function set_child_pin(p_child_id uuid, p_new_pin text)
 returns void
 language plpgsql security definer
-set search_path = public
+set search_path = public, extensions
 as $$
 declare
   v_parent_id uuid;
