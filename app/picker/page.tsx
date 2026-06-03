@@ -7,8 +7,9 @@ import { supabase } from '@/lib/supabase'
 import { useActiveProfile } from '@/lib/useActiveProfile'
 import { ProfileTile } from '@/components/picker/ProfileTile'
 import { PinPad } from '@/components/picker/PinPad'
-import { ParentPasswordModal } from '@/components/picker/ParentPasswordModal'
 import { SetPinModal } from '@/components/picker/SetPinModal'
+import { ParentPinModal } from '@/components/picker/ParentPinModal'
+import { SetParentPinModal } from '@/components/picker/SetParentPinModal'
 
 interface Child {
   id: string
@@ -21,7 +22,8 @@ interface Child {
 type Modal =
   | { kind: 'kid-pin'; child: Child; shake: boolean; lockedUntil: number | null }
   | { kind: 'set-pin'; child: Child }
-  | { kind: 'set-pin-needs-parent'; child: Child }
+  | { kind: 'parent-pin'; pendingChild: Child | null }
+  | { kind: 'set-parent-pin'; pendingChild: Child | null }
   | null
 
 export default function PickerPage() {
@@ -30,7 +32,7 @@ export default function PickerPage() {
   const [children, setChildren] = useState<Child[]>([])
   const [loading, setLoading] = useState(true)
   const [modal, setModal] = useState<Modal>(null)
-  const [hasPassword, setHasPassword] = useState(true)
+  const [hasParentPin, setHasParentPin] = useState(false)
 
   useEffect(() => {
     const init = async () => {
@@ -39,23 +41,36 @@ export default function PickerPage() {
         router.replace('/auth/login')
         return
       }
-      setHasPassword(
-        (user.identities ?? []).some((i) => i.provider === 'email')
-      )
-      const { data } = await supabase
-        .from('children')
-        .select('id, name, age, avatar_emoji, pin_hash')
-        .eq('parent_id', user.id)
-        .order('created_at', { ascending: true })
-      setChildren(data ?? [])
+      const [{ data: childData }, { data: pinRow }] = await Promise.all([
+        supabase
+          .from('children')
+          .select('id, name, age, avatar_emoji, pin_hash')
+          .eq('parent_id', user.id)
+          .order('created_at', { ascending: true }),
+        supabase
+          .from('parent_pins')
+          .select('user_id')
+          .eq('user_id', user.id)
+          .maybeSingle(),
+      ])
+      setChildren(childData ?? [])
+      setHasParentPin(!!pinRow)
       setLoading(false)
     }
     init()
   }, [router])
 
+  const openParentGate = (pendingChild: Child | null) => {
+    if (hasParentPin) {
+      setModal({ kind: 'parent-pin', pendingChild })
+    } else {
+      setModal({ kind: 'set-parent-pin', pendingChild })
+    }
+  }
+
   const onPickChild = (child: Child) => {
     if (!child.pin_hash) {
-      setModal({ kind: 'set-pin-needs-parent', child })
+      openParentGate(child)
       return
     }
     setModal({ kind: 'kid-pin', child, shake: false, lockedUntil: null })
@@ -88,14 +103,23 @@ export default function PickerPage() {
     }
   }
 
-  const onParentVerified = () => {
-    setProfile({ kind: 'parent' })
-    if (modal?.kind === 'set-pin-needs-parent') {
-      const c = modal.child
-      setModal({ kind: 'set-pin', child: c })
+  const onParentPinSuccess = () => {
+    const verifiedUntil = Date.now() + 30 * 60 * 1000
+    setProfile({ kind: 'parent', verifiedUntil })
+    const pending =
+      modal?.kind === 'parent-pin' || modal?.kind === 'set-parent-pin'
+        ? modal.pendingChild
+        : null
+    if (pending) {
+      setModal({ kind: 'set-pin', child: pending })
     } else {
       router.replace('/dashboard')
     }
+  }
+
+  const onSetParentPinSuccess = () => {
+    setHasParentPin(true)
+    onParentPinSuccess()
   }
 
   const onPinSet = async () => {
@@ -156,10 +180,7 @@ export default function PickerPage() {
             emoji="🧑‍🚀"
             name="Parent"
             subtitle="Dashboard"
-            onClick={() => {
-              setProfile({ kind: 'parent' })
-              router.replace('/dashboard')
-            }}
+            onClick={() => openParentGate(null)}
           />
         </div>
 
@@ -195,14 +216,17 @@ export default function PickerPage() {
         </div>
       )}
 
-      {modal?.kind === 'set-pin-needs-parent' && (
-        <ParentPasswordModal
-          hasPassword={hasPassword}
+      {modal?.kind === 'parent-pin' && (
+        <ParentPinModal
           onCancel={() => setModal(null)}
-          onSuccess={() => {
-            if (!hasPassword) setHasPassword(true)
-            onParentVerified()
-          }}
+          onSuccess={onParentPinSuccess}
+        />
+      )}
+
+      {modal?.kind === 'set-parent-pin' && (
+        <SetParentPinModal
+          onCancel={() => setModal(null)}
+          onSuccess={onSetParentPinSuccess}
         />
       )}
 
