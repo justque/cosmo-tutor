@@ -79,19 +79,17 @@ returns void
 language plpgsql security definer
 set search_path = public, extensions
 as $$
+declare
+  v_hash text;
 begin
   if p_pin !~ '^[0-9]{4}$' then
     raise exception 'invalid pin format';
   end if;
+  v_hash := crypt(p_pin, gen_salt('bf'));
   insert into parent_pins (user_id, pin_hash, pin_attempts, pin_locked_until)
-    values (
-      auth.uid(),
-      crypt(p_pin, gen_salt('bf')),
-      0,
-      null
-    )
+    values (auth.uid(), v_hash, 0, null)
     on conflict (user_id) do update
-      set pin_hash         = crypt(p_pin, gen_salt('bf')),
+      set pin_hash         = v_hash,
           pin_attempts     = 0,
           pin_locked_until = null;
 end;
