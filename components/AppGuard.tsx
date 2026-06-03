@@ -21,7 +21,7 @@ export function AppGuard({ kind, childId, children }: Props) {
         router.replace('/picker')
       }
     } else {
-      if (!isParentVerified(profile, Date.now())) {
+      if (!isParentVerified(profile)) {
         router.replace('/picker')
       }
     }
@@ -31,7 +31,7 @@ export function AppGuard({ kind, childId, children }: Props) {
     const ok = profile?.kind === 'kid' && (!childId || profile.childId === childId)
     if (!ok) return null
   } else {
-    if (!isParentVerified(profile, Date.now())) return null
+    if (!isParentVerified(profile)) return null
   }
   return <>{children}</>
 }

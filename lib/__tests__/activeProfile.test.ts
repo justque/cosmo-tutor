@@ -23,9 +23,17 @@ describe('activeProfile', () => {
   })
 
   it('round-trips a parent profile', () => {
-    const p: ActiveProfile = { kind: 'parent', verifiedUntil: 1234567 }
+    const p: ActiveProfile = { kind: 'parent' }
     saveActiveProfile(p)
     expect(loadActiveProfile()).toEqual(p)
+  })
+
+  it('accepts a legacy parent profile that still carries verifiedUntil', () => {
+    localStorage.setItem(
+      'activeProfile',
+      JSON.stringify({ kind: 'parent', verifiedUntil: 1234567 })
+    )
+    expect(loadActiveProfile()).toEqual({ kind: 'parent', verifiedUntil: 1234567 })
   })
 
   it('clear removes the value', () => {
@@ -39,14 +47,10 @@ describe('activeProfile', () => {
     expect(loadActiveProfile()).toBeNull()
   })
 
-  it('isParentVerified is true only for unexpired parent profile', () => {
-    expect(isParentVerified(null, 1000)).toBe(false)
-    expect(isParentVerified({ kind: 'kid', childId: 'a' }, 1000)).toBe(false)
-    expect(
-      isParentVerified({ kind: 'parent', verifiedUntil: 2000 }, 1000)
-    ).toBe(true)
-    expect(
-      isParentVerified({ kind: 'parent', verifiedUntil: 500 }, 1000)
-    ).toBe(false)
+  it('isParentVerified is true for any parent profile, false otherwise', () => {
+    expect(isParentVerified(null)).toBe(false)
+    expect(isParentVerified({ kind: 'kid', childId: 'a' })).toBe(false)
+    expect(isParentVerified({ kind: 'parent' })).toBe(true)
+    expect(isParentVerified({ kind: 'parent', verifiedUntil: 1 })).toBe(true)
   })
 })

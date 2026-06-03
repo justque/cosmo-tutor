@@ -20,12 +20,9 @@ interface Child {
 
 type Modal =
   | { kind: 'kid-pin'; child: Child; shake: boolean; lockedUntil: number | null }
-  | { kind: 'parent-password' }
   | { kind: 'set-pin'; child: Child }
   | { kind: 'set-pin-needs-parent'; child: Child }
   | null
-
-const PARENT_VERIFY_TTL_MS = 30 * 60 * 1000
 
 export default function PickerPage() {
   const router = useRouter()
@@ -92,10 +89,7 @@ export default function PickerPage() {
   }
 
   const onParentVerified = () => {
-    setProfile({
-      kind: 'parent',
-      verifiedUntil: Date.now() + PARENT_VERIFY_TTL_MS,
-    })
+    setProfile({ kind: 'parent' })
     if (modal?.kind === 'set-pin-needs-parent') {
       const c = modal.child
       setModal({ kind: 'set-pin', child: c })
@@ -162,7 +156,10 @@ export default function PickerPage() {
             emoji="🧑‍🚀"
             name="Parent"
             subtitle="Dashboard"
-            onClick={() => setModal({ kind: 'parent-password' })}
+            onClick={() => {
+              setProfile({ kind: 'parent' })
+              router.replace('/dashboard')
+            }}
           />
         </div>
 
@@ -196,17 +193,6 @@ export default function PickerPage() {
             </div>
           </div>
         </div>
-      )}
-
-      {modal?.kind === 'parent-password' && (
-        <ParentPasswordModal
-          hasPassword={hasPassword}
-          onCancel={() => setModal(null)}
-          onSuccess={() => {
-            if (!hasPassword) setHasPassword(true)
-            onParentVerified()
-          }}
-        />
       )}
 
       {modal?.kind === 'set-pin-needs-parent' && (

@@ -1,6 +1,6 @@
 export type ActiveProfile =
   | { kind: 'kid'; childId: string }
-  | { kind: 'parent'; verifiedUntil: number }
+  | { kind: 'parent'; verifiedUntil?: number }
 
 const KEY = 'activeProfile'
 
@@ -11,7 +11,7 @@ export function loadActiveProfile(): ActiveProfile | null {
   try {
     const parsed = JSON.parse(raw) as ActiveProfile
     if (parsed.kind === 'kid' && typeof parsed.childId === 'string') return parsed
-    if (parsed.kind === 'parent' && typeof parsed.verifiedUntil === 'number') return parsed
+    if (parsed.kind === 'parent') return parsed
     return null
   } catch {
     return null
@@ -28,6 +28,9 @@ export function clearActiveProfile(): void {
   window.localStorage.removeItem(KEY)
 }
 
-export function isParentVerified(p: ActiveProfile | null, now: number): boolean {
-  return p?.kind === 'parent' && p.verifiedUntil > now
+// The parent's Supabase session is already the auth source of truth; we no
+// longer require a separate re-verify password gate. A parent profile is
+// considered "verified" simply by being the active profile.
+export function isParentVerified(p: ActiveProfile | null): boolean {
+  return p?.kind === 'parent'
 }
