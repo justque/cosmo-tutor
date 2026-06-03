@@ -378,7 +378,7 @@ function AdventureInner() {
         />
       )}
     </div>
-    {showBreakModal && (
+    {showBreakModal && mode !== 'finished' && (
       <BreakReminderModal
         onKeepGoing={() => {
           setShowBreakModal(false)

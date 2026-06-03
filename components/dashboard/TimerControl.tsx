@@ -81,7 +81,7 @@ export function TimerControl({ childId, initialDuration, onSaved }: Props) {
         ))}
         <button
           type="button"
-          onClick={() => setIsCustom(true)}
+          onClick={() => { setIsCustom(true); setCustomValue('') }}
           className={`px-3 py-1 rounded-full text-xs font-display font-bold border-2 transition-all ${
             isCustom
               ? 'bg-primary-container border-primary-container text-on-primary-container'
