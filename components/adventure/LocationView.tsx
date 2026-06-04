@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { Location, VisualKey } from '@/lib/journeyContent'
 import { CosmoNarrator } from './CosmoNarrator'
@@ -75,10 +75,27 @@ interface Props {
   isReview?: boolean
 }
 
+const MORE_LABELS = [
+  'Cool, tell me more!',
+  'Awesome, what else?',
+  'Wow, keep going!',
+  'That\'s amazing! More!',
+  'So cool! What\'s next?',
+  'Tell me more, Cosmo!',
+  'I want to know more!',
+  'Ooh, what else is there?',
+]
+
 type Phase = 'intro' | 'funfact' | 'game'
 
 export function LocationView({ location, onComplete, isReview = false }: Props) {
   const [phase, setPhase] = useState<Phase>('intro')
+  const moreLabel = useMemo(
+    () => MORE_LABELS[Math.floor(Math.random() * MORE_LABELS.length)],
+    // Pick once per location mount — location.id as dep keeps it stable within a location.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [location.id]
+  )
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">
@@ -105,12 +122,18 @@ export function LocationView({ location, onComplete, isReview = false }: Props) 
               <YouTubeEmbed videoId={location.video.youtubeId} title={location.video.title} />
             )}
             {location.visual && <LocationVisual visual={location.visual} />}
-            <div className="text-center">
+            <div className="flex items-center justify-between gap-3">
+              <button
+                onClick={onComplete}
+                className="px-4 py-2.5 bg-slate-700/60 hover:bg-slate-700 rounded-lg text-slate-300 font-bold text-sm"
+              >
+                ← Back
+              </button>
               <button
                 onClick={() => setPhase('funfact')}
                 className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 rounded-lg text-white font-bold"
               >
-                Cool, tell me more!
+                {moreLabel}
               </button>
             </div>
           </motion.div>
