@@ -6,10 +6,21 @@
 // (e.g. missing GOOGLE_TTS_API_KEY in local dev).
 
 let voiceMuted = false
+const muteListeners = new Set<() => void>()
+
+// Register a callback fired when voice is muted mid-speech.
+// Returns an unsubscribe function.
+export function onVoiceMuted(cb: () => void): () => void {
+  muteListeners.add(cb)
+  return () => muteListeners.delete(cb)
+}
 
 export function setVoiceMuted(muted: boolean) {
   voiceMuted = muted
-  if (muted) stopCosmoSpeech()
+  if (muted) {
+    stopCosmoSpeech()
+    muteListeners.forEach((cb) => cb())
+  }
 }
 
 export function isVoiceMuted(): boolean {

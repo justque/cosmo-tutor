@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import { speakAsCosmo, stopCosmoSpeech, hasSpeech, isVoiceMuted } from '@/lib/cosmoVoice'
+import { speakAsCosmo, stopCosmoSpeech, hasSpeech, isVoiceMuted, onVoiceMuted } from '@/lib/cosmoVoice'
 
 interface Props {
   text: string
@@ -57,6 +57,16 @@ export function CosmoNarrator({ text, onComplete, speed = 45, instant = false }:
     }, isVoiceMuted() ? 10 : speed)
     return () => clearInterval(interval)
   }, [text, speed, onComplete, instant])
+
+  // When voice is muted mid-narration, complete the text instantly.
+  useEffect(() => {
+    if (done) return
+    return onVoiceMuted(() => {
+      setDisplayed(text)
+      setDone(true)
+      onComplete?.()
+    })
+  }, [done, text, onComplete])
 
   const skip = () => {
     stopCosmoSpeech()
