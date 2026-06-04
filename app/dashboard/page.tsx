@@ -73,6 +73,9 @@ export default function DashboardPage() {
   const [newChildEmoji, setNewChildEmoji] = useState('🧒')
   const [newChildPin, setNewChildPin] = useState('')
   const [newChildPinConfirm, setNewChildPinConfirm] = useState('')
+  const [newChildDuration, setNewChildDuration] = useState(30)
+  const [newChildDurationCustom, setNewChildDurationCustom] = useState('')
+  const [newChildDurationIsCustom, setNewChildDurationIsCustom] = useState(false)
   const [pinModalChild, setPinModalChild] = useState<Child | null>(null)
   const [addError, setAddError] = useState<string | null>(null)
   const { setProfile } = useActiveProfile()
@@ -123,6 +126,9 @@ export default function DashboardPage() {
           name: newChildName,
           age: parseInt(newChildAge),
           avatar_emoji: newChildEmoji,
+          session_duration_minutes: newChildDurationIsCustom
+            ? (parseInt(newChildDurationCustom, 10) || 30)
+            : newChildDuration,
         }])
         .select('id, name, age, avatar_emoji, pin_hash, pin_locked_until, session_duration_minutes')
       if (error) {
@@ -152,6 +158,9 @@ export default function DashboardPage() {
       setNewChildEmoji('🧒')
       setNewChildPin('')
       setNewChildPinConfirm('')
+      setNewChildDuration(30)
+      setNewChildDurationCustom('')
+      setNewChildDurationIsCustom(false)
       setShowAddForm(false)
     } catch (err) {
       console.error('Failed to add child:', err)
@@ -427,6 +436,56 @@ export default function DashboardPage() {
                     required
                   />
                 </div>
+              </div>
+
+              <div>
+                <label className="block font-display font-bold text-sm text-on-surface-variant mb-2">
+                  ⏱ Session Timer
+                </label>
+                <p className="text-xs text-on-surface-variant/80 mb-2">
+                  A break reminder appears after this many minutes.
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {[15, 20, 30, 45, 60].map((p) => (
+                    <button
+                      key={p}
+                      type="button"
+                      onClick={() => { setNewChildDuration(p); setNewChildDurationIsCustom(false) }}
+                      className={`px-3 py-1 rounded-full text-xs font-display font-bold border-2 transition-all ${
+                        !newChildDurationIsCustom && newChildDuration === p
+                          ? 'bg-primary-container border-primary-container text-on-primary-container'
+                          : 'bg-surface-container border-white/20 text-on-surface-variant'
+                      }`}
+                    >
+                      {p} min
+                    </button>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={() => { setNewChildDurationIsCustom(true); setNewChildDurationCustom('') }}
+                    className={`px-3 py-1 rounded-full text-xs font-display font-bold border-2 transition-all ${
+                      newChildDurationIsCustom
+                        ? 'bg-primary-container border-primary-container text-on-primary-container'
+                        : 'bg-surface-container border-white/20 text-on-surface-variant'
+                    }`}
+                  >
+                    Custom
+                  </button>
+                </div>
+                {newChildDurationIsCustom && (
+                  <div className="flex items-center gap-2 mt-2">
+                    <input
+                      type="number"
+                      min={5}
+                      max={120}
+                      value={newChildDurationCustom}
+                      onChange={(e) => setNewChildDurationCustom(e.target.value)}
+                      placeholder="e.g. 25"
+                      className="w-24 px-3 py-2 bg-surface-container-low border border-white/10 rounded-lg text-sm text-on-background focus:outline-none focus:border-primary-container"
+                    />
+                    <span className="text-xs text-on-surface-variant">minutes (5–120)</span>
+                  </div>
+                )}
               </div>
 
               {addError && (
