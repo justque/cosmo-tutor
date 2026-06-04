@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import type { Location, VisualKey } from '@/lib/journeyContent'
+import type { Location, VisualKey, GameData } from '@/lib/journeyContent'
 import { CosmoNarrator } from './CosmoNarrator'
 import { MiniGame } from './MiniGame'
 import { SolarSystem } from './visuals/SolarSystem'
@@ -86,6 +86,87 @@ const MORE_LABELS = [
   'I want to know more!',
   'Ooh, what else is there?',
 ]
+
+function GameReview({ game }: { game: GameData }) {
+  if (game.type === 'question') {
+    return (
+      <div className="text-left space-y-3">
+        <p className="font-display font-bold text-base text-on-background">{game.question}</p>
+        <ul className="space-y-2">
+          {game.options.map((opt, i) => (
+            <li
+              key={i}
+              className={`px-4 py-2 rounded-lg text-sm font-semibold border-2 ${
+                i === game.correctIndex
+                  ? 'bg-primary-container/20 border-primary-container text-primary-container'
+                  : 'bg-surface-container/40 border-white/10 text-on-surface-variant'
+              }`}
+            >
+              {i === game.correctIndex && <span className="mr-2">✓</span>}
+              {opt}
+            </li>
+          ))}
+        </ul>
+      </div>
+    )
+  }
+
+  if (game.type === 'matching') {
+    return (
+      <div className="text-left space-y-2">
+        <p className="font-display font-bold text-sm text-on-surface-variant uppercase tracking-wide mb-3">
+          Correct matches
+        </p>
+        {game.pairs.map((pair) => (
+          <div key={pair.id} className="flex items-center gap-3 px-4 py-2 rounded-lg bg-primary-container/10 border border-primary-container/30">
+            <span className="font-semibold text-on-background">{pair.left}</span>
+            <span className="text-on-surface-variant">→</span>
+            <span className="font-semibold text-primary-container">{pair.right}</span>
+          </div>
+        ))}
+      </div>
+    )
+  }
+
+  if (game.type === 'ordering') {
+    const ordered = [...game.items].sort(
+      (a, b) => game.correctOrder.indexOf(a.id) - game.correctOrder.indexOf(b.id)
+    )
+    return (
+      <div className="text-left space-y-2">
+        <p className="font-display font-bold text-sm text-on-surface-variant uppercase tracking-wide mb-3">
+          Correct order
+        </p>
+        {ordered.map((item, i) => (
+          <div key={item.id} className="flex items-center gap-3 px-4 py-2 rounded-lg bg-primary-container/10 border border-primary-container/30">
+            <span className="text-primary-container font-bold">{i + 1}.</span>
+            <span className="text-xl">{item.emoji}</span>
+            <span className="font-semibold text-on-background">{item.label}</span>
+          </div>
+        ))}
+      </div>
+    )
+  }
+
+  if (game.type === 'building') {
+    const ordered = [...game.pieces].sort((a, b) => a.slot - b.slot)
+    return (
+      <div className="text-left space-y-2">
+        <p className="font-display font-bold text-sm text-on-surface-variant uppercase tracking-wide mb-3">
+          {game.target}
+        </p>
+        {ordered.map((piece) => (
+          <div key={piece.id} className="flex items-center gap-3 px-4 py-2 rounded-lg bg-primary-container/10 border border-primary-container/30">
+            <span className="text-xl">{piece.emoji}</span>
+            <span className="font-semibold text-on-background">{piece.label}</span>
+          </div>
+        ))}
+      </div>
+    )
+  }
+
+  return null
+}
 
 type Phase = 'intro' | 'funfact' | 'game'
 
@@ -181,19 +262,22 @@ export function LocationView({ location, onComplete, onBack, isReview = false }:
             className="bg-slate-900/60 backdrop-blur border border-slate-700 rounded-2xl p-6"
           >
             {isReview ? (
-              <div className="text-center space-y-5">
-                <div
-                  className="text-6xl text-primary-container"
-                  style={{ filter: 'drop-shadow(0 0 18px rgba(183,247,0,0.7))' }}
-                >
-                  ✓
+              <div className="space-y-5">
+                <div className="text-center">
+                  <div
+                    className="text-6xl text-primary-container inline-block"
+                    style={{ filter: 'drop-shadow(0 0 18px rgba(183,247,0,0.7))' }}
+                  >
+                    ✓
+                  </div>
+                  <p className="font-display font-extrabold text-2xl text-on-background mt-2">
+                    You aced this mission!
+                  </p>
+                  <p className="text-on-surface-variant text-sm mt-1">
+                    Your answer is saved. Keep reviewing or tap the next mission.
+                  </p>
                 </div>
-                <p className="font-display font-extrabold text-2xl text-on-background">
-                  You aced this mission!
-                </p>
-                <p className="text-on-surface-variant text-sm">
-                  Your answer is saved. Keep reviewing or tap the next mission.
-                </p>
+                <GameReview game={location.game} />
                 <button
                   onClick={onComplete}
                   className="chunky-button bg-primary-container text-on-primary-container font-display font-extrabold px-7 py-3 rounded-full border-2 border-white/20"
