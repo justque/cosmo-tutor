@@ -17,7 +17,7 @@ vi.mock('@/lib/pointsEngine', () => ({
 
 import { supabase } from '@/lib/supabase'
 
-const mockRpc = vi.mocked(supabase.rpc as ReturnType<typeof vi.fn>)
+const mockRpc = vi.mocked(supabase.rpc)
 
 beforeEach(() => {
   mockRpc.mockResolvedValue({
@@ -27,7 +27,10 @@ beforeEach(() => {
       { child_id: 'me', child_name: 'Alex', completed_location_ids: ['a', 'b', 'c', 'd'] },
     ],
     error: null,
-  })
+    count: null,
+    status: 200,
+    statusText: 'OK',
+  } as any)
 })
 
 describe('LeaderboardModal', () => {
@@ -56,5 +59,11 @@ describe('LeaderboardModal', () => {
     await waitFor(() => screen.getByText('Liam'))
     await user.click(screen.getByRole('button', { name: /close/i }))
     expect(onClose).toHaveBeenCalledTimes(1)
+  })
+
+  it('shows error message when RPC fails', async () => {
+    mockRpc.mockResolvedValueOnce({ data: null, error: { message: 'db error', details: '', hint: '', code: '500' }, count: null, status: 500, statusText: 'Error' } as any)
+    render(<LeaderboardModal childId="me" onClose={vi.fn()} />)
+    await waitFor(() => expect(screen.getByText(/couldn't load/i)).toBeInTheDocument())
   })
 })

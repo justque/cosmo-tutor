@@ -18,17 +18,30 @@ interface Props {
   onClose: () => void
 }
 
+const medals = ['🥈', '🥇', '🥉']
+const podiumColors = [
+  'bg-slate-600/60',
+  'bg-gradient-to-b from-amber-400 to-amber-600',
+  'bg-slate-700/60',
+]
+const textColors = ['text-slate-200', 'text-amber-950', 'text-slate-300']
+const podiumHeights = [72, 96, 56]
+
 export function LeaderboardModal({ childId, onClose }: Props) {
   const [entries, setEntries] = useState<LeaderboardEntry[] | null>(null)
   const [myEntry, setMyEntry] = useState<LeaderboardEntry | null>(null)
+  const [loadError, setLoadError] = useState(false)
 
   useEffect(() => {
     const load = async () => {
       const { data, error } = await supabase.rpc('get_leaderboard')
-      if (error || !data) return
+      if (error || !data) {
+        setLoadError(true)
+        return
+      }
 
       const ranked = (data as { child_id: string; child_name: string; completed_location_ids: string[] }[])
-        .map((row) => ({ ...row, points: computePoints(row.completed_location_ids) }))
+        .map((row) => ({ ...row, points: computePoints(row.completed_location_ids ?? []) }))
         .sort((a, b) => b.points - a.points)
         .map((row, i) => ({ ...row, rank: i + 1 }))
 
@@ -39,8 +52,13 @@ export function LeaderboardModal({ childId, onClose }: Props) {
     load()
   }, [childId])
 
-  const podiumOrder = entries ? [entries[1], entries[0], entries[2]].filter(Boolean) : []
-  const podiumHeights = [72, 96, 56] // silver, gold, bronze
+  const podiumSlots = entries
+    ? [
+        { entry: entries[1], medalIdx: 0 }, // silver
+        { entry: entries[0], medalIdx: 1 }, // gold
+        { entry: entries[2], medalIdx: 2 }, // bronze
+      ].filter((slot) => slot.entry != null) as { entry: LeaderboardEntry; medalIdx: number }[]
+    : []
 
   return (
     <motion.div
@@ -72,30 +90,25 @@ export function LeaderboardModal({ childId, onClose }: Props) {
           </button>
         </div>
 
-        {!entries ? (
+        {loadError ? (
+          <p className="text-center text-on-surface-variant py-12">Couldn&apos;t load leaderboard 😔</p>
+        ) : !entries ? (
           <p className="text-center text-on-surface-variant py-12">Loading…</p>
         ) : (
           <div className="px-5 pb-5 space-y-4">
             {/* Podium — top 3 */}
             {entries.length >= 1 && (
               <div className="flex items-end justify-center gap-3">
-                {podiumOrder.map((entry, i) => {
-                  const height = podiumHeights[i]
-                  const medals = ['🥈', '🥇', '🥉']
-                  const colors = [
-                    'bg-slate-600/60',
-                    'bg-gradient-to-b from-amber-400 to-amber-600',
-                    'bg-slate-700/60',
-                  ]
-                  const textColors = ['text-slate-200', 'text-amber-950', 'text-slate-300']
+                {podiumSlots.map((slot) => {
+                  const { entry, medalIdx } = slot
                   return (
                     <div key={entry.child_id} className="flex flex-col items-center gap-1">
-                      <span className="text-lg">{medals[i]}</span>
-                      <span className={`text-xs font-bold ${textColors[i]}`}>{entry.child_name}</span>
+                      <span className="text-lg">{medals[medalIdx]}</span>
+                      <span className={`text-xs font-bold ${textColors[medalIdx]}`}>{entry.child_name}</span>
                       <span className="text-xs text-on-surface-variant">{entry.points} pts</span>
                       <div
-                        className={`w-20 rounded-t-lg ${colors[i]} flex items-center justify-center font-display font-extrabold text-lg ${textColors[i]}`}
-                        style={{ height }}
+                        className={`w-20 rounded-t-lg ${podiumColors[medalIdx]} flex items-center justify-center font-display font-extrabold text-lg ${textColors[medalIdx]}`}
+                        style={{ height: podiumHeights[medalIdx] }}
                       >
                         #{entry.rank}
                       </div>
