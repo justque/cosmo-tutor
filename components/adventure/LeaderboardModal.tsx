@@ -24,7 +24,7 @@ const podiumColors = [
   'bg-gradient-to-b from-amber-400 to-amber-600',
   'bg-slate-700/60',
 ]
-const textColors = ['text-slate-200', 'text-amber-950', 'text-slate-300']
+const textColors = ['text-slate-200', 'text-white', 'text-slate-300']
 const podiumHeights = [72, 96, 56]
 
 export function LeaderboardModal({ childId, onClose }: Props) {
