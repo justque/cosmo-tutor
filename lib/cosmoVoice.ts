@@ -5,6 +5,17 @@
 // Falls back to the browser's SpeechSynthesis API if the server route fails
 // (e.g. missing GOOGLE_TTS_API_KEY in local dev).
 
+let voiceMuted = false
+
+export function setVoiceMuted(muted: boolean) {
+  voiceMuted = muted
+  if (muted) stopCosmoSpeech()
+}
+
+export function isVoiceMuted(): boolean {
+  return voiceMuted
+}
+
 // Cache MP3 blob URLs per text so re-narrating the same line is instant.
 const audioCache = new Map<string, string>()
 let currentAudio: HTMLAudioElement | null = null
@@ -68,6 +79,10 @@ function fallbackSpeak(text: string, opts: SpeakOptions) {
 }
 
 export async function speakAsCosmo(text: string, opts: SpeakOptions = {}) {
+  if (voiceMuted) {
+    opts.onEnd?.()
+    return
+  }
   const clean = cleanForSpeech(text)
   if (!clean) {
     opts.onEnd?.()

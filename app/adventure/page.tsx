@@ -22,6 +22,7 @@ import { TopicIntro } from '@/components/adventure/TopicIntro'
 import { AppGuard } from '@/components/AppGuard'
 import { SwitchProfileButton } from '@/components/SwitchProfileButton'
 import { BreakReminderModal } from '@/components/adventure/BreakReminderModal'
+import { setVoiceMuted, isVoiceMuted } from '@/lib/cosmoVoice'
 
 type Mode = 'journey-map' | 'topic-intro' | 'location' | 'checkpoint' | 'finished'
 
@@ -50,6 +51,7 @@ function AdventureInner() {
   // Review state — when set, the user is revisiting a previously-completed topic.
   const [reviewTopicId, setReviewTopicId] = useState<string | null>(null)
   const [reviewLocationIndex, setReviewLocationIndex] = useState(0)
+  const [voiceOn, setVoiceOn] = useState(() => !isVoiceMuted())
   const [sessionDuration, setSessionDuration] = useState<number | null>(null)
   const [secondsLeft, setSecondsLeft] = useState<number | null>(null)
   const [showBreakModal, setShowBreakModal] = useState(false)
@@ -270,17 +272,31 @@ function AdventureInner() {
         >
           Cosmo&apos;s Science Adventure
         </span>
-        {isLearningMode ? (
+        <div className="flex items-center gap-2">
           <button
-            onClick={isReview ? exitReview : () => setMode('journey-map')}
-            className="h-10 px-4 rounded-full bg-secondary-container text-on-secondary-container hover:scale-105 transition-transform active:translate-y-0.5 font-display font-bold text-sm"
-            title={isReview ? 'Exit review' : 'Back to journey map'}
+            onClick={() => {
+              const next = !voiceOn
+              setVoiceOn(next)
+              setVoiceMuted(!next)
+            }}
+            className="h-10 w-10 rounded-full bg-surface-container-highest text-on-surface hover:scale-105 transition-transform active:translate-y-0.5 flex items-center justify-center text-lg"
+            title={voiceOn ? 'Mute Cosmo' : 'Unmute Cosmo'}
+            aria-label={voiceOn ? 'Mute voice' : 'Unmute voice'}
           >
-            {isReview ? '🔁 Exit Review' : '🗺️ Map'}
+            {voiceOn ? '🔊' : '🔇'}
           </button>
-        ) : (
-          <div className="w-24" />
-        )}
+          {isLearningMode ? (
+            <button
+              onClick={isReview ? exitReview : () => setMode('journey-map')}
+              className="h-10 px-4 rounded-full bg-secondary-container text-on-secondary-container hover:scale-105 transition-transform active:translate-y-0.5 font-display font-bold text-sm"
+              title={isReview ? 'Exit review' : 'Back to journey map'}
+            >
+              {isReview ? '🔁 Exit Review' : '🗺️ Map'}
+            </button>
+          ) : (
+            <div className="w-24" />
+          )}
+        </div>
       </header>
 
       <div className="max-w-5xl mx-auto px-4 pt-24 pb-12 space-y-6">
