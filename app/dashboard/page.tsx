@@ -196,7 +196,7 @@ export default function DashboardPage() {
             className="font-display font-extrabold text-xl md:text-2xl text-primary-container"
             style={{ textShadow: '0 2px 0 #506e00' }}
           >
-            Cosmo&apos;s Adventure
+            Cosmo&apos;s Science Adventure
           </span>
         </div>
         <div className="flex gap-2">

@@ -87,7 +87,7 @@ export default function Home() {
           className="font-display font-extrabold text-xl md:text-2xl text-primary-container"
           style={{ textShadow: '0 2px 0 #506e00' }}
         >
-          Cosmo&apos;s Adventure
+          Cosmo&apos;s Science Adventure
         </span>
         <div className="flex items-center gap-2">
           <button
@@ -119,7 +119,7 @@ export default function Home() {
           className="font-display font-extrabold text-5xl md:text-7xl leading-tight text-primary-container"
           style={{ textShadow: '0 4px 0 #506e00', letterSpacing: '-0.02em' }}
         >
-          Cosmo&apos;s Cosmic
+          Cosmo&apos;s Science
           <br />
           Adventure
         </h1>
@@ -231,7 +231,7 @@ export default function Home() {
 
         {/* Footer */}
         <footer className="mt-12 text-xs text-on-surface-variant/70">
-          © {new Date().getFullYear()} Cosmo&apos;s Cosmic Adventure
+          © {new Date().getFullYear()} Cosmo&apos;s Science Adventure
         </footer>
       </main>
     </>

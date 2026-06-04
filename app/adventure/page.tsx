@@ -268,7 +268,7 @@ function AdventureInner() {
           className="font-display font-extrabold text-lg md:text-xl text-primary-container"
           style={{ textShadow: '0 2px 0 #506e00' }}
         >
-          Cosmo&apos;s Adventure
+          Cosmo&apos;s Science Adventure
         </span>
         {isLearningMode ? (
           <button
