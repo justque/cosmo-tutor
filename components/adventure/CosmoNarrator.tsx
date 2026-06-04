@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import { speakAsCosmo, stopCosmoSpeech, hasSpeech } from '@/lib/cosmoVoice'
+import { speakAsCosmo, stopCosmoSpeech, hasSpeech, isVoiceMuted } from '@/lib/cosmoVoice'
 
 interface Props {
   text: string
@@ -27,7 +27,7 @@ export function CosmoNarrator({ text, onComplete, speed = 45, instant = false }:
     setDone(false)
 
     // Prefer voice-synced reveal: words appear as Cosmo speaks them.
-    if (hasSpeech()) {
+    if (hasSpeech() && !isVoiceMuted()) {
       speakAsCosmo(text, {
         onProgress: (ratio) => {
           const upto = Math.floor(ratio * text.length)
@@ -54,7 +54,7 @@ export function CosmoNarrator({ text, onComplete, speed = 45, instant = false }:
         setDone(true)
         onComplete?.()
       }
-    }, speed)
+    }, isVoiceMuted() ? 10 : speed)
     return () => clearInterval(interval)
   }, [text, speed, onComplete, instant])
 
