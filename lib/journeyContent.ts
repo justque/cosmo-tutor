@@ -74,6 +74,7 @@ export interface Location {
   game: GameData
   visual?: VisualKey
   video?: LocationVideo
+  points?: number
 }
 
 export interface Checkpoint {
