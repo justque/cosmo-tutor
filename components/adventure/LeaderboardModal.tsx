@@ -122,8 +122,8 @@ export function LeaderboardModal({ childId, onClose }: Props) {
               </div>
             )}
 
-            {/* Current child — always shown */}
-            {myEntry && myEntry.rank > 10 && (
+            {/* Current child — always shown at bottom */}
+            {myEntry && (
               <div className="rounded-2xl overflow-hidden border-2 border-blue-400/50">
                 <div className="flex items-center justify-between px-4 py-2.5 bg-blue-500/10">
                   <span className="text-blue-300 font-bold text-sm">
@@ -132,11 +132,6 @@ export function LeaderboardModal({ childId, onClose }: Props) {
                   <span className="text-blue-300 font-bold text-sm">{myEntry.points} pts</span>
                 </div>
               </div>
-            )}
-            {myEntry && myEntry.rank <= 10 && (
-              <p className="text-center text-xs text-on-surface-variant">
-                You&apos;re #{myEntry.rank} — keep going! 🚀
-              </p>
             )}
           </div>
         )}

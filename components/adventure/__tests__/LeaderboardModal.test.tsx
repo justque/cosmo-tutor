@@ -45,7 +45,8 @@ describe('LeaderboardModal', () => {
   it('highlights the current child', async () => {
     render(<LeaderboardModal childId="me" onClose={vi.fn()} />)
     await waitFor(() => screen.getByText('Alex'))
-    expect(screen.getByText(/you/i)).toBeInTheDocument()
+    // The current child always gets a blue highlighted row at the bottom
+    expect(screen.getByText(/you \(alex\)/i)).toBeInTheDocument()
   })
 
   it('calls onClose when × is clicked', async () => {
