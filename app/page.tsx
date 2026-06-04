@@ -149,7 +149,7 @@ export default function Home() {
             <div className="md:hidden absolute -top-3 left-1/2 -translate-x-1/2 w-6 h-6 bg-surface-container/60 backdrop-blur-md rotate-45 border-l-2 border-t-2 border-primary-container/30" />
             <p className="font-display font-bold text-xl md:text-2xl text-on-background text-left">
               Hey there! I&apos;m <span className="text-primary-container">Cosmo</span>.
-              Ready to explore the universe with me?
+              Ready to explore the wonders of science with me?
             </p>
           </div>
         </div>
