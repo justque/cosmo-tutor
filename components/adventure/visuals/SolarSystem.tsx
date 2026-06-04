@@ -29,11 +29,10 @@ const PLANETS: Planet[] = [
 const SIZE = 760
 
 export function SolarSystem() {
-  const [speed, setSpeed] = useState(1)
   const [paused, setPaused] = useState(false)
   const [selected, setSelected] = useState<Planet | null>(null)
 
-  const effectiveSpeed = paused ? 0 : speed
+  const effectiveSpeed = paused ? 0 : 1
 
   return (
     <div className="w-full bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-950 rounded-2xl border border-slate-700 overflow-hidden">
@@ -180,21 +179,7 @@ export function SolarSystem() {
         >
           {paused ? '▶ Play' : '⏸ Pause'}
         </button>
-        <div className="flex items-center gap-2">
-          <span className="text-xs text-gray-400">Slow</span>
-          <input
-            type="range"
-            min={0.25}
-            max={4}
-            step={0.25}
-            value={speed}
-            onChange={(e) => setSpeed(parseFloat(e.target.value))}
-            className="w-32 accent-blue-400"
-          />
-          <span className="text-xs text-gray-400">Fast</span>
-          <span className="text-xs text-blue-300 font-mono w-10">{speed.toFixed(2)}x</span>
-        </div>
-        <p className="text-xs text-gray-400 w-full text-center">Tap any planet or the Sun to learn about it! 👆</p>
+<p className="text-xs text-gray-400 w-full text-center">Tap any planet or the Sun to learn about it! 👆</p>
       </div>
     </div>
   )
