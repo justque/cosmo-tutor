@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import { speakAsCosmo, stopCosmoSpeech, hasSpeech, isVoiceMuted, onVoiceMuted } from '@/lib/cosmoVoice'
 
 interface Props {
   text: string
@@ -11,7 +10,7 @@ interface Props {
   instant?: boolean
 }
 
-export function CosmoNarrator({ text, onComplete, speed = 45, instant = false }: Props) {
+export function CosmoNarrator({ text, onComplete, speed = 70, instant = false }: Props) {
   const [displayed, setDisplayed] = useState(instant ? text : '')
   const [done, setDone] = useState(instant)
 
@@ -26,25 +25,6 @@ export function CosmoNarrator({ text, onComplete, speed = 45, instant = false }:
     setDisplayed('')
     setDone(false)
 
-    // Prefer voice-synced reveal: words appear as Cosmo speaks them.
-    if (hasSpeech() && !isVoiceMuted()) {
-      speakAsCosmo(text, {
-        onProgress: (ratio) => {
-          const upto = Math.floor(ratio * text.length)
-          setDisplayed(text.slice(0, upto))
-        },
-        onEnd: () => {
-          setDisplayed(text)
-          setDone(true)
-          onComplete?.()
-        },
-      })
-      return () => {
-        stopCosmoSpeech()
-      }
-    }
-
-    // Fallback: time-based typewriter when speech is unavailable.
     let i = 0
     const interval = setInterval(() => {
       i++
@@ -54,22 +34,11 @@ export function CosmoNarrator({ text, onComplete, speed = 45, instant = false }:
         setDone(true)
         onComplete?.()
       }
-    }, isVoiceMuted() ? 10 : speed)
+    }, speed)
     return () => clearInterval(interval)
   }, [text, speed, onComplete, instant])
 
-  // When voice is muted mid-narration, complete the text instantly.
-  useEffect(() => {
-    if (done) return
-    return onVoiceMuted(() => {
-      setDisplayed(text)
-      setDone(true)
-      onComplete?.()
-    })
-  }, [done, text, onComplete])
-
   const skip = () => {
-    stopCosmoSpeech()
     setDisplayed(text)
     setDone(true)
     onComplete?.()
