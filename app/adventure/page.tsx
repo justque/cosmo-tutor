@@ -50,6 +50,8 @@ function AdventureInner() {
   // Review state — when set, the user is revisiting a previously-completed topic.
   const [reviewTopicId, setReviewTopicId] = useState<string | null>(null)
   const [reviewLocationIndex, setReviewLocationIndex] = useState(0)
+  // True when the user navigated back within the current topic flow.
+  const [isBackNav, setIsBackNav] = useState(false)
   const [sessionDuration, setSessionDuration] = useState<number | null>(null)
   const [secondsLeft, setSecondsLeft] = useState<number | null>(null)
   const [showBreakModal, setShowBreakModal] = useState(false)
@@ -167,8 +169,10 @@ function AdventureInner() {
     }
 
     if (progress.currentLocationIndex === 0) {
+      setIsBackNav(false)
       setMode('topic-intro')
     } else {
+      setIsBackNav(true)
       const updated: JourneyProgress = {
         ...progress,
         currentLocationIndex: progress.currentLocationIndex - 1,
@@ -179,6 +183,7 @@ function AdventureInner() {
   }
 
   const handleLocationComplete = () => {
+    setIsBackNav(false)
     if (isReview) {
       const nextIndex = reviewLocationIndex + 1
       if (nextIndex >= activeTopic.locations.length) {
@@ -364,11 +369,11 @@ function AdventureInner() {
 
           {mode === 'location' && activeLocation && (
             <LocationView
-              key={`${activeTopic.id}-${activeLocation.id}-${isReview ? 'r' : 'p'}`}
+              key={`${activeTopic.id}-${activeLocation.id}-${isReview ? 'r' : isBackNav ? 'b' : 'p'}`}
               location={activeLocation}
               onComplete={handleLocationComplete}
               onBack={handleLocationBack}
-              isReview={isReview}
+              isReview={isReview || isBackNav}
             />
           )}
 
