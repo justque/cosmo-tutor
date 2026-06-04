@@ -4,7 +4,7 @@ import { Suspense, useEffect, useRef, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { supabase } from '@/lib/supabase'
-import { JOURNEY } from '@/lib/journeyContent'
+import { JOURNEY, type Location } from '@/lib/journeyContent'
 import {
   loadProgress,
   saveProgress,
@@ -37,6 +37,21 @@ export default function AdventurePage() {
       <AdventureInner />
     </Suspense>
   )
+}
+
+function suggestedQuestionsForLocation(location: Location): string[] {
+  const questions: string[] = []
+
+  if (location.game.type === 'question') {
+    questions.push(location.game.question)
+  }
+
+  questions.push(`What is ${location.name}?`)
+  questions.push(`Why is ${location.name} so special?`)
+  questions.push(`Can you tell me a fun fact about ${location.name}?`)
+
+  // Deduplicate and return 3
+  return [...new Set(questions)].slice(0, 3)
 }
 
 function AdventureInner() {
@@ -420,6 +435,11 @@ function AdventureInner() {
             mode === 'location' && activeLocation
               ? `${activeTopic.name} — ${activeLocation.name}`
               : `${activeTopic.name} — Checkpoint`
+          }
+          suggestedQuestions={
+            mode === 'location' && activeLocation
+              ? suggestedQuestionsForLocation(activeLocation)
+              : []
           }
         />
       )}

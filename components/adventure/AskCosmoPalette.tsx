@@ -8,6 +8,7 @@ interface Props {
   childId: string
   topicSlug: string
   locationContext: string
+  suggestedQuestions?: string[]
 }
 
 interface Msg {
@@ -15,17 +16,18 @@ interface Msg {
   content: string
 }
 
-export function AskCosmoPalette({ sessionId, childId, topicSlug, locationContext }: Props) {
+export function AskCosmoPalette({ sessionId, childId, topicSlug, locationContext, suggestedQuestions = [] }: Props) {
   const [open, setOpen] = useState(false)
   const [messages, setMessages] = useState<Msg[]>([])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
 
-  const send = async () => {
-    if (!input.trim() || loading) return
-    const userMsg: Msg = { role: 'user', content: input }
+  const send = async (override?: string) => {
+    const text = override ?? input
+    if (!text.trim() || loading) return
+    const userMsg: Msg = { role: 'user', content: text }
     setMessages((m) => [...m, userMsg, { role: 'assistant', content: '' }])
-    const question = input
+    const question = text
     setInput('')
     setLoading(true)
     try {
@@ -110,9 +112,25 @@ export function AskCosmoPalette({ sessionId, childId, topicSlug, locationContext
 
             <div className="flex-1 overflow-y-auto p-4 space-y-3">
               {messages.length === 0 && (
-                <p className="text-center text-gray-500 text-sm mt-8">
-                  Ask me anything! I&apos;ll help and then we&apos;ll get back to the adventure.
-                </p>
+                <div className="space-y-4 mt-4">
+                  <p className="text-center text-gray-500 text-sm">
+                    Ask me anything! I&apos;ll help and then we&apos;ll get back to the adventure.
+                  </p>
+                  {suggestedQuestions.length > 0 && (
+                    <div className="space-y-2">
+                      <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold text-center">Suggested questions</p>
+                      {suggestedQuestions.map((q, i) => (
+                        <button
+                          key={i}
+                          onClick={() => send(q)}
+                          className="w-full text-left px-3 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-600 hover:border-purple-400 text-gray-200 text-sm transition-colors"
+                        >
+                          {q}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
               )}
               {messages.map((m, i) => (
                 <div
@@ -137,12 +155,12 @@ export function AskCosmoPalette({ sessionId, childId, topicSlug, locationContext
               <input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && send()}
+                onKeyDown={(e) => e.key === 'Enter' && send(undefined)}
                 placeholder="Ask a quick question..."
                 className="flex-1 px-3 py-2 bg-slate-800 text-white rounded-lg border border-slate-600 focus:border-blue-400 focus:outline-none"
               />
               <button
-                onClick={send}
+                onClick={() => send(undefined)}
                 disabled={!input.trim() || loading}
                 className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 disabled:opacity-40 rounded-lg text-white font-bold"
               >
