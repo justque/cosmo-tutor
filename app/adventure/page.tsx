@@ -40,17 +40,35 @@ export default function AdventurePage() {
 }
 
 function suggestedQuestionsForLocation(location: Location): string[] {
+  const { game } = location
   const questions: string[] = []
 
-  if (location.game.type === 'question') {
-    questions.push(location.game.question)
+  if (game.type === 'question') {
+    questions.push(game.question)
+  } else if (game.type === 'matching' && game.pairs.length > 0) {
+    // Pick up to two pairs and ask about each left-side item
+    const picks = game.pairs.slice(0, 2)
+    for (const pair of picks) {
+      questions.push(`What is ${pair.left}?`)
+    }
+    if (game.pairs.length > 1) {
+      questions.push(
+        `What is the difference between ${game.pairs[0].left} and ${game.pairs[1].left}?`
+      )
+    }
+  } else if (game.type === 'ordering' && game.items.length > 0) {
+    const ordered = [...game.items].sort(
+      (a, b) => game.correctOrder.indexOf(a.id) - game.correctOrder.indexOf(b.id)
+    )
+    const labels = ordered.map((i) => i.label)
+    questions.push(`Why does ${labels[0]} come before ${labels[1]}?`)
+    questions.push(`Can you explain the order of ${labels.slice(0, 3).join(', ')}?`)
   }
 
   questions.push(`What is ${location.name}?`)
   questions.push(`Why is ${location.name} so special?`)
   questions.push(`Can you tell me a fun fact about ${location.name}?`)
 
-  // Deduplicate and return 3
   return [...new Set(questions)].slice(0, 3)
 }
 
