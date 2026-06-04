@@ -1,5 +1,18 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { computePoints } from '@/lib/pointsEngine'
+
+// Mock journeyContent
+vi.mock('@/lib/journeyContent', () => ({
+  JOURNEY: [
+    {
+      locations: [
+        { id: 'loc-a', points: undefined },
+        { id: 'loc-b', points: undefined },
+        { id: 'special-loc', points: 50 },
+      ],
+    },
+  ],
+}))
 
 describe('computePoints', () => {
   it('returns 0 for an empty completed list', () => {
@@ -7,9 +20,7 @@ describe('computePoints', () => {
   })
 
   it('returns 100 per completed location using the default', () => {
-    // 'sun' and 'mercury' are real location IDs in the Space topic
-    const result = computePoints(['space-sun', 'space-planets'])
-    expect(result).toBe(200)
+    expect(computePoints(['loc-a', 'loc-b'])).toBe(200)
   })
 
   it('ignores unknown location IDs', () => {
@@ -17,7 +28,6 @@ describe('computePoints', () => {
   })
 
   it('uses a custom points value when the location defines one', () => {
-    const result = computePoints(['space-sun'])
-    expect(result).toBe(100)
+    expect(computePoints(['special-loc'])).toBe(50)
   })
 })

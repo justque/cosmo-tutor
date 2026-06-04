@@ -1,8 +1,10 @@
 import { JOURNEY } from './journeyContent'
 
+const DEFAULT_LOCATION_POINTS = 100
+
 const locationPointsMap: Map<string, number> = new Map(
   JOURNEY.flatMap((topic) =>
-    topic.locations.map((loc) => [loc.id, loc.points ?? 100])
+    topic.locations.map((loc) => [loc.id, loc.points ?? DEFAULT_LOCATION_POINTS])
   )
 )
 
