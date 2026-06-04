@@ -81,26 +81,8 @@ export default function Home() {
     <>
       <Starfield />
 
-      {/* Top App Bar */}
-      <header className="fixed top-0 inset-x-0 z-50 flex justify-between items-center px-6 h-16 bg-surface-container/80 backdrop-blur-xl border-b border-white/10 shadow-lg">
-        <span
-          className="font-display font-extrabold text-xl md:text-2xl text-primary-container"
-          style={{ textShadow: '0 2px 0 #506e00' }}
-        >
-          Cosmo&apos;s Science Adventure
-        </span>
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => router.push('/auth/login')}
-            className="h-10 px-4 rounded-full bg-surface-container-highest text-on-surface hover:scale-105 transition-transform active:translate-y-0.5 font-display font-bold text-sm"
-          >
-            Parent Log In
-          </button>
-        </div>
-      </header>
-
       {/* Hero */}
-      <main className="relative z-10 pt-28 pb-20 px-6 flex flex-col items-center text-center max-w-6xl mx-auto">
+      <main className="relative z-10 pt-16 pb-20 px-6 flex flex-col items-center text-center max-w-6xl mx-auto">
         <div
           className="text-[110px] md:text-[140px] leading-none mb-2"
           style={{
