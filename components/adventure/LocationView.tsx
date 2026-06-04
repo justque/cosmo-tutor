@@ -72,6 +72,7 @@ function LocationVisual({ visual }: { visual: VisualKey }) {
 interface Props {
   location: Location
   onComplete: () => void
+  onBack?: () => void
   isReview?: boolean
 }
 
@@ -88,7 +89,7 @@ const MORE_LABELS = [
 
 type Phase = 'intro' | 'funfact' | 'game'
 
-export function LocationView({ location, onComplete, isReview = false }: Props) {
+export function LocationView({ location, onComplete, onBack, isReview = false }: Props) {
   const [phase, setPhase] = useState<Phase>('intro')
   const moreLabel = useMemo(
     () => MORE_LABELS[Math.floor(Math.random() * MORE_LABELS.length)],
@@ -124,7 +125,7 @@ export function LocationView({ location, onComplete, isReview = false }: Props) 
             {location.visual && <LocationVisual visual={location.visual} />}
             <div className="flex items-center justify-between gap-3">
               <button
-                onClick={onComplete}
+                onClick={onBack}
                 className="px-4 py-2.5 bg-slate-700/60 hover:bg-slate-700 rounded-lg text-slate-300 font-bold text-sm"
               >
                 ← Back

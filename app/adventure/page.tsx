@@ -156,6 +156,28 @@ function AdventureInner() {
     setMode('journey-map')
   }
 
+  const handleLocationBack = () => {
+    if (isReview) {
+      if (reviewLocationIndex === 0) {
+        setMode('topic-intro')
+      } else {
+        setReviewLocationIndex(reviewLocationIndex - 1)
+      }
+      return
+    }
+
+    if (progress.currentLocationIndex === 0) {
+      setMode('topic-intro')
+    } else {
+      const updated: JourneyProgress = {
+        ...progress,
+        currentLocationIndex: progress.currentLocationIndex - 1,
+      }
+      setProgress(updated)
+      saveProgress(updated)
+    }
+  }
+
   const handleLocationComplete = () => {
     if (isReview) {
       const nextIndex = reviewLocationIndex + 1
@@ -345,6 +367,7 @@ function AdventureInner() {
               key={`${activeTopic.id}-${activeLocation.id}-${isReview ? 'r' : 'p'}`}
               location={activeLocation}
               onComplete={handleLocationComplete}
+              onBack={handleLocationBack}
               isReview={isReview}
             />
           )}
