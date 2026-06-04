@@ -35,7 +35,7 @@ The goal: let kids access the learning app independently on any device (shared f
 |---|---|
 | Device situations supported | Both shared family devices AND per-kid devices |
 | Kid credential | 4-digit PIN per child + tap their avatar to pick their name |
-| Parent vs kid identity on a device | Unified "Who's playing?" launch screen with all profiles |
+| Parent vs kid identity on a device | Unified "Who's learning?" launch screen with all profiles |
 | How a fresh device gets linked to the family | Parent signs in first (Netflix model) |
 | Implementation model | Parent-session + client-side active-profile filter (no schema-level kid identity) |
 

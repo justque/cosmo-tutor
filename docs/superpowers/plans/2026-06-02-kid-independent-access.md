@@ -1687,7 +1687,7 @@ export default function PickerPage() {
           className="font-display font-extrabold text-3xl md:text-4xl text-primary-container"
           style={{ textShadow: '0 3px 0 #506e00' }}
         >
-          Who's playing?
+          Who's learning?
         </motion.h1>
 
         <div className="flex flex-wrap gap-4 justify-center">
@@ -1869,7 +1869,7 @@ export function SwitchProfileButton({ className }: Props) {
         'h-10 px-4 rounded-full bg-surface-container-highest text-on-surface hover:scale-105 transition-transform active:translate-y-0.5 font-display font-bold text-sm'
       }
     >
-      🔁 Switch profile
+      Switch profile
     </button>
   )
 }
