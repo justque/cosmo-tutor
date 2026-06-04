@@ -242,7 +242,13 @@ export function LocationView({ location, onComplete, onBack, isReview = false }:
                 </p>
               </div>
             </div>
-            <div className="text-center">
+            <div className="flex items-center justify-between gap-3">
+              <button
+                onClick={() => setPhase('intro')}
+                className="px-4 py-2.5 bg-slate-700/60 hover:bg-slate-700 rounded-lg text-slate-300 font-bold text-sm"
+              >
+                ← Back
+              </button>
               <button
                 onClick={() => setPhase('game')}
                 className="px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 rounded-lg text-white font-bold"
