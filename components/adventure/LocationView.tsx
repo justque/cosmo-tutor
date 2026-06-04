@@ -278,16 +278,32 @@ export function LocationView({ location, onComplete, onBack, isReview = false }:
                   </p>
                 </div>
                 <GameReview game={location.game} />
-                <button
-                  onClick={onComplete}
-                  className="chunky-button bg-primary-container text-on-primary-container font-display font-extrabold px-7 py-3 rounded-full border-2 border-white/20"
-                  style={{ ['--chunky-shadow' as string]: '#374e00' }}
-                >
-                  Next →
-                </button>
+                <div className="flex items-center justify-between gap-3 pt-2">
+                  <button
+                    onClick={() => setPhase('funfact')}
+                    className="px-4 py-2.5 bg-slate-700/60 hover:bg-slate-700 rounded-lg text-slate-300 font-bold text-sm"
+                  >
+                    ← Back
+                  </button>
+                  <button
+                    onClick={onComplete}
+                    className="chunky-button bg-primary-container text-on-primary-container font-display font-extrabold px-7 py-3 rounded-full border-2 border-white/20"
+                    style={{ ['--chunky-shadow' as string]: '#374e00' }}
+                  >
+                    Next →
+                  </button>
+                </div>
               </div>
             ) : (
-              <MiniGame game={location.game} onCorrect={onComplete} />
+              <div className="space-y-4">
+                <MiniGame game={location.game} onCorrect={onComplete} />
+                <button
+                  onClick={() => setPhase('funfact')}
+                  className="px-4 py-2.5 bg-slate-700/60 hover:bg-slate-700 rounded-lg text-slate-300 font-bold text-sm"
+                >
+                  ← Back
+                </button>
+              </div>
             )}
           </motion.div>
         )}
