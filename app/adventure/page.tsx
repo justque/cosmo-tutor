@@ -22,6 +22,9 @@ import { TopicIntro } from '@/components/adventure/TopicIntro'
 import { AppGuard } from '@/components/AppGuard'
 import { SwitchProfileButton } from '@/components/SwitchProfileButton'
 import { BreakReminderModal } from '@/components/adventure/BreakReminderModal'
+import { PointsBadge } from '@/components/adventure/PointsBadge'
+import { LeaderboardModal } from '@/components/adventure/LeaderboardModal'
+import { computePoints } from '@/lib/pointsEngine'
 
 type Mode = 'journey-map' | 'topic-intro' | 'location' | 'checkpoint' | 'finished'
 
@@ -88,6 +91,7 @@ function AdventureInner() {
   const [sessionDuration, setSessionDuration] = useState<number | null>(null)
   const [secondsLeft, setSecondsLeft] = useState<number | null>(null)
   const [showBreakModal, setShowBreakModal] = useState(false)
+  const [showLeaderboard, setShowLeaderboard] = useState(false)
 
   useEffect(() => {
     const init = async () => {
@@ -316,6 +320,7 @@ function AdventureInner() {
   }
 
   const isLearningMode = mode === 'topic-intro' || mode === 'location' || mode === 'checkpoint'
+  const points = computePoints(progress.completedLocationIds)
 
   return (
     <AppGuard kind="kid" childId={progress.childId}>
@@ -331,6 +336,19 @@ function AdventureInner() {
           Cosmo&apos;s Science Adventure
         </span>
         <div className="flex items-center gap-2">
+          {isLearningMode && (
+            <>
+              <PointsBadge points={points} />
+              <button
+                onClick={() => setShowLeaderboard(true)}
+                className="h-10 w-10 rounded-full bg-surface-container-highest text-on-surface hover:scale-105 transition-transform active:translate-y-0.5 flex items-center justify-center text-lg"
+                title="Leaderboard"
+                aria-label="Open leaderboard"
+              >
+                🏆
+              </button>
+            </>
+          )}
           {isLearningMode ? (
             <button
               onClick={isReview ? exitReview : () => setMode('journey-map')}
@@ -473,6 +491,12 @@ function AdventureInner() {
           }
         }}
         onBreak={() => router.push('/picker')}
+      />
+    )}
+    {showLeaderboard && (
+      <LeaderboardModal
+        childId={progress.childId}
+        onClose={() => setShowLeaderboard(false)}
       />
     )}
     </AppGuard>
