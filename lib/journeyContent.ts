@@ -59,6 +59,11 @@ export type VisualKey =
   | 'reptile-rock'
   | 'frog-pond'
   | 'dino-walk'
+  | 'water-cycle'
+  | 'lightning-storm'
+  | 'cloud-types'
+  | 'four-seasons'
+  | 'snowflake-fall'
 
 export interface LocationVideo {
   youtubeId: string
@@ -651,6 +656,7 @@ const RAW_JOURNEY: Topic[] = [
         id: 'weather-rain',
         name: 'The Water Cycle',
         emoji: '💧',
+        visual: 'water-cycle',
         introNarration:
           "Look UP at the sky, cadet! Sunshine, clouds, rain — but where does it all come from? Here's a magical secret: water goes on a forever JOURNEY called the WATER CYCLE. The Sun heats up oceans and lakes, the warm water rises UP as invisible steam, it gathers into fluffy clouds, and when the clouds get heavy enough — SPLASH! — it rains back down. Then the whole journey starts over again. The water you drank today might've been a raindrop yesterday!",
         funFact: 'The water you drink today might be the same water a dinosaur drank long ago!',
@@ -671,6 +677,7 @@ const RAW_JOURNEY: Topic[] = [
         id: 'weather-storms',
         name: 'Stormy Skies',
         emoji: '⛈️',
+        visual: 'lightning-storm',
         introNarration:
           "Sometimes those rain clouds get extra HUGE and dark — and then the sky throws a wild party called a THUNDERSTORM! Inside a storm cloud, billions of tiny ice crystals rub against each other so fast they make ELECTRICITY. That electricity ZAPS down as LIGHTNING, a giant blue-white spark hotter than the Sun! The lightning is SO hot it makes the air explode, and that explosion is the loud BOOM of THUNDER. You always see lightning before you hear thunder because light zooms faster than sound!",
         funFact: 'Lightning is hotter than the surface of the Sun!',
@@ -688,6 +695,7 @@ const RAW_JOURNEY: Topic[] = [
         id: 'weather-clouds',
         name: 'Cloud Watching',
         emoji: '☁️',
+        visual: 'cloud-types',
         introNarration:
           "Now that the storm has passed, let's look at the CLOUDS more closely. Did you know clouds are made of millions of itty-bitty water drops and ice crystals floating in the air? Even though clouds look soft and pillowy, a regular puffy cloud can weigh as much as a hundred elephants! Different cloud shapes tell you different weather stories: fluffy white = sunny day, dark gray = rain coming, and thin wispy ones way up high mean fair skies ahead.",
         funFact: 'A small puffy cloud can weigh as much as a HUNDRED elephants!',
@@ -706,6 +714,7 @@ const RAW_JOURNEY: Topic[] = [
         id: 'weather-seasons',
         name: 'Four Seasons',
         emoji: '🍂',
+        visual: 'four-seasons',
         introNarration:
           "Clouds and storms come and go each day — but Earth's weather also changes in a BIGGER pattern across the whole year. We call these the four SEASONS! In SPRING, flowers bloom and animals wake up. SUMMER is hot and sunny — perfect for swimming. In FALL, the leaves turn fiery orange and red, then float down. WINTER blankets everything in cold, white snow. The seasons take turns because Earth is TILTED like a spinning top, and that little tilt is the secret recipe for our seasons!",
         funFact: 'Earth is tilted! That tilt is what gives us our seasons.',
@@ -726,6 +735,7 @@ const RAW_JOURNEY: Topic[] = [
         id: 'weather-snow',
         name: 'Snowflake Magic',
         emoji: '❄️',
+        visual: 'snowflake-fall',
         introNarration:
           "And speaking of winter — when the air gets really REALLY cold, the rain freezes into something straight out of a fairy tale: SNOWFLAKES! Each snowflake is a teeny six-sided star made of ice crystals. And here's the wildest thing of all: NO TWO SNOWFLAKES have ever been exactly the same. Every single one is a unique tiny work of art quietly drifting down from the clouds. Catch one on your tongue — it's a one-of-a-kind treasure!",
         funFact: 'The biggest snowflake ever recorded was 15 inches wide — bigger than a frisbee!',

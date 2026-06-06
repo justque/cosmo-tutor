@@ -24,6 +24,11 @@ import { OceanReef } from './visuals/OceanReef'
 import { ReptileRock } from './visuals/ReptileRock'
 import { FrogPond } from './visuals/FrogPond'
 import { DinoWalk } from './visuals/DinoWalk'
+import { WaterCycle } from './visuals/WaterCycle'
+import { LightningStorm } from './visuals/LightningStorm'
+import { CloudTypes } from './visuals/CloudTypes'
+import { FourSeasons } from './visuals/FourSeasons'
+import { SnowflakeFall } from './visuals/SnowflakeFall'
 import { YouTubeEmbed } from './YouTubeEmbed'
 
 function LocationVisual({ visual }: { visual: VisualKey }) {
@@ -66,6 +71,16 @@ function LocationVisual({ visual }: { visual: VisualKey }) {
       return <FrogPond />
     case 'dino-walk':
       return <DinoWalk />
+    case 'water-cycle':
+      return <WaterCycle />
+    case 'lightning-storm':
+      return <LightningStorm />
+    case 'cloud-types':
+      return <CloudTypes />
+    case 'four-seasons':
+      return <FourSeasons />
+    case 'snowflake-fall':
+      return <SnowflakeFall />
   }
 }
 
