@@ -29,6 +29,16 @@ import { LightningStorm } from './visuals/LightningStorm'
 import { CloudTypes } from './visuals/CloudTypes'
 import { FourSeasons } from './visuals/FourSeasons'
 import { SnowflakeFall } from './visuals/SnowflakeFall'
+import { SeedSprout } from './visuals/SeedSprout'
+import { PlantParts } from './visuals/PlantParts'
+import { FlowerPollination } from './visuals/FlowerPollination'
+import { SeedTravel } from './visuals/SeedTravel'
+import { TallTree } from './visuals/TallTree'
+import { BeatingHeart } from './visuals/BeatingHeart'
+import { BrainActivity } from './visuals/BrainActivity'
+import { SkeletonBody } from './visuals/SkeletonBody'
+import { FiveSenses } from './visuals/FiveSenses'
+import { BreathingLungs } from './visuals/BreathingLungs'
 import { YouTubeEmbed } from './YouTubeEmbed'
 
 function LocationVisual({ visual }: { visual: VisualKey }) {
@@ -81,6 +91,26 @@ function LocationVisual({ visual }: { visual: VisualKey }) {
       return <FourSeasons />
     case 'snowflake-fall':
       return <SnowflakeFall />
+    case 'seed-sprout':
+      return <SeedSprout />
+    case 'plant-parts':
+      return <PlantParts />
+    case 'flower-pollination':
+      return <FlowerPollination />
+    case 'seed-travel':
+      return <SeedTravel />
+    case 'tall-tree':
+      return <TallTree />
+    case 'beating-heart':
+      return <BeatingHeart />
+    case 'brain-activity':
+      return <BrainActivity />
+    case 'skeleton-body':
+      return <SkeletonBody />
+    case 'five-senses':
+      return <FiveSenses />
+    case 'breathing-lungs':
+      return <BreathingLungs />
   }
 }
 

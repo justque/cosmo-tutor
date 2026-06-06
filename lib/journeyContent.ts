@@ -64,6 +64,16 @@ export type VisualKey =
   | 'cloud-types'
   | 'four-seasons'
   | 'snowflake-fall'
+  | 'seed-sprout'
+  | 'plant-parts'
+  | 'flower-pollination'
+  | 'seed-travel'
+  | 'tall-tree'
+  | 'beating-heart'
+  | 'brain-activity'
+  | 'skeleton-body'
+  | 'five-senses'
+  | 'breathing-lungs'
 
 export interface LocationVideo {
   youtubeId: string
@@ -806,6 +816,7 @@ const RAW_JOURNEY: Topic[] = [
         id: 'body-heart',
         name: 'The Mighty Heart',
         emoji: '❤️',
+        visual: 'beating-heart',
         introNarration:
           "Ready for the smallest, coolest adventure yet? We're going INSIDE your own body! Put your hand right on your chest. Feel that? THUMP THUMP, THUMP THUMP. That's your HEART! Your heart is a tireless muscle about the size of your fist. Its full-time job is to PUMP blood through your whole body — like a tiny brave engine that NEVER takes a break, not even when you're sleeping. Your heart is the captain of Team You!",
         funFact: 'Your heart beats about 100,000 times every day!',
@@ -823,6 +834,7 @@ const RAW_JOURNEY: Topic[] = [
         id: 'body-brain',
         name: 'The Big Brain',
         emoji: '🧠',
+        visual: 'brain-activity',
         introNarration:
           "Now let's travel UP from your heart, all the way to your head. There, snuggled safely inside your skull, is the BOSS of your whole body: your BRAIN! Your brain is like a squishy supercomputer. It tells your heart to pump, your legs to run, your eyes to blink, and even helps you remember your best friend's name. Right this second, your brain is doing something amazing — it's learning all about ITSELF!",
         funFact: 'Your brain has more connections than there are stars in the sky!',
@@ -841,6 +853,7 @@ const RAW_JOURNEY: Topic[] = [
         id: 'body-bones',
         name: 'The Skeleton Crew',
         emoji: '🦴',
+        visual: 'skeleton-body',
         introNarration:
           "Your brain is the boss and your heart is the engine — but how do you stand up tall? With your skeleton! Inside your body is a strong frame made of 206 BONES, all working together. Without bones, you'd flop down like a wet noodle! Some bones are SUPER tiny — the smallest one is inside your ear and is smaller than a grain of rice. The biggest is in your leg, and it helps you run, jump, and dance. Bones are awesome!",
         funFact: 'Babies are born with about 300 bones — some fuse together as they grow!',
@@ -858,6 +871,7 @@ const RAW_JOURNEY: Topic[] = [
         id: 'body-senses',
         name: 'Five Super Senses',
         emoji: '👁️',
+        visual: 'five-senses',
         introNarration:
           "Okay! Bones hold you up, your heart pumps, and your brain bosses everything — but how do you actually KNOW what's happening around you? With FIVE super-powers called SENSES! You SEE with your eyes, HEAR with your ears, SMELL with your nose, TASTE with your tongue, and FEEL with your skin. Each sense rushes little messages up to your brain, faster than a text message, so you always know what's going on in the world. Your senses are like Team You's spies!",
         funFact: 'Your tongue has about 10,000 tiny taste buds!',
@@ -877,6 +891,7 @@ const RAW_JOURNEY: Topic[] = [
         id: 'body-lungs',
         name: 'The Big Breath',
         emoji: '🫁',
+        visual: 'breathing-lungs',
         introNarration:
           "There's one last hero to meet on Team You! Take a big breath in... and slowly out. That was your LUNGS at work! Lungs are like two big squishy balloons inside your chest. When you breathe in, they grab OXYGEN from the air — the magic gas your blood carries to every part of your body, including your heart and brain. Without lungs, the whole team would run out of fuel. So next time you take a deep breath — thank your lungs!",
         funFact: 'You take about 20,000 breaths every single day!',
@@ -947,6 +962,7 @@ const RAW_JOURNEY: Topic[] = [
         id: 'plants-growing',
         name: 'How Plants Grow',
         emoji: '🌱',
+        visual: 'seed-sprout',
         introNarration:
           "Look around! Green leaves, soft grass, towering trees — plants are EVERYWHERE on Earth. But how does a tiny seed turn into a giant plant? Here's the recipe: plants need just 3 ingredients! SUNLIGHT to make food, WATER to drink, and SOIL to grow in. Roots slurp up the water, leaves catch the sunlight, and slowly... slowly... they grow up, up, UP. The wildest secret? Plants actually EAT sunlight — they're the only living things that can!",
         funFact: 'The tallest tree in the world is taller than the Statue of Liberty!',
@@ -967,6 +983,7 @@ const RAW_JOURNEY: Topic[] = [
         id: 'plants-parts',
         name: 'Parts of a Plant',
         emoji: '🌻',
+        visual: 'plant-parts',
         introNarration:
           "Now that we know what plants NEED, let's meet the team that does all the work! Every plant has 4 parts working together. The ROOTS dig down deep into the soil and slurp up water like a thousand little straws. The STEM stands tall and carries water up to the top. The LEAVES are flat green solar panels that catch sunlight and turn it into food. And the FLOWERS are where new SEEDS are made to start the next generation. Teamwork!",
         funFact: 'Some plants can eat bugs! Like the Venus flytrap!',
@@ -984,6 +1001,7 @@ const RAW_JOURNEY: Topic[] = [
         id: 'plants-flowers',
         name: 'Pretty Flowers',
         emoji: '🌸',
+        visual: 'flower-pollination',
         introNarration:
           "Let's zoom in on those FLOWERS for a closer look! Flowers aren't just pretty — they have a secret sneaky mission. Their bright colors and sweet smells are like a sign saying 'BEES, COME HERE!' When a bee lands to slurp sugary nectar, it accidentally collects yellow dust called POLLEN on its furry legs. When the bee flies to the next flower, the pollen drops off, and that's how new seeds start! Bees and flowers are best friends helping each other.",
         funFact: 'A single sunflower can have up to 2,000 tiny seeds inside it!',
@@ -1001,6 +1019,7 @@ const RAW_JOURNEY: Topic[] = [
         id: 'plants-seeds',
         name: 'Seed Travelers',
         emoji: '🌰',
+        visual: 'seed-travel',
         introNarration:
           "After bees help flowers make SEEDS, here's the next big question — how do seeds get to NEW places to grow? Plants can't walk, so they got SUPER clever! Some seeds have tiny fluffy parachutes and FLY on the wind for miles. Some seeds are sticky burrs that hitchhike on the fur of animals walking by. And some seeds are bright tasty berries that birds gobble up, then... ahem... plant in their poop! 💩 Seeds are sneaky little travelers.",
         funFact: 'A coconut seed can FLOAT across an entire ocean before growing into a tree!',
@@ -1019,6 +1038,7 @@ const RAW_JOURNEY: Topic[] = [
         id: 'plants-trees',
         name: 'Tall Trees',
         emoji: '🌳',
+        visual: 'tall-tree',
         introNarration:
           "When a tiny seed lands in the perfect spot — sunny, watered, snuggled into rich soil — it can grow into the biggest plant of all: a TREE! Trees can live for hundreds, even THOUSANDS of years and grow taller than tall buildings. They give us shade on hot days, fruit to eat, and cozy homes for birds, squirrels, and bugs. And best of all? Their leaves make OXYGEN — the same magic gas your lungs LOVE. Thank you, trees!",
         funFact: 'The oldest tree in the world is over 5,000 years old — older than the pyramids!',
